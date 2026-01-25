@@ -1,0 +1,5 @@
+source ~/.local/share/omakub-szamski/defaults/bash/shell
+source ~/.local/share/omakub-szamski/defaults/bash/aliases
+source ~/.local/share/omakub-szamski/defaults/bash/functions
+source ~/.local/share/omakub-szamski/defaults/bash/prompt
+source ~/.local/share/omakub-szamski/defaults/bash/init

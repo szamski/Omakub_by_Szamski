@@ -1,0 +1,35 @@
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate bash)"
+fi
+
+if command -v starship >/dev/null 2>&1; then
+  eval "$(starship init bash)"
+fi
+
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init bash)"
+fi
+
+if command -v fzf >/dev/null 2>&1; then
+  for fzf_bindings in \
+    /usr/share/fzf/key-bindings.bash \
+    /usr/share/doc/fzf/examples/key-bindings.bash; do
+    if [[ -f "$fzf_bindings" ]]; then
+      source "$fzf_bindings"
+      break
+    fi
+  done
+
+  for fzf_completion in \
+    /usr/share/fzf/completion.bash \
+    /usr/share/doc/fzf/examples/completion.bash; do
+    if [[ -f "$fzf_completion" ]]; then
+      source "$fzf_completion"
+      break
+    fi
+  done
+fi
+
+if command -v batcat >/dev/null 2>&1 && ! command -v bat >/dev/null 2>&1; then
+  alias bat=batcat
+fi

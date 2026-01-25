@@ -1,0 +1,8 @@
+source ~/.local/share/omakub-szamski/defaults/bash/rc
+
+# Editor used by CLI
+export EDITOR="nvim"
+export SUDO_EDITOR="$EDITOR"
+
+# OpenCode
+export PATH=/home/szamski/.opencode/bin:$PATH

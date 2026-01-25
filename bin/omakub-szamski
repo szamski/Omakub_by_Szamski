@@ -1,0 +1,71 @@
+#!/bin/bash
+
+OMAKUB_SZAMSKI_PATH="$HOME/.local/share/omakub-szamski"
+
+case "$1" in
+  help|--help|-h)
+    echo "Omakub_by_Szamski - Post-install utility"
+    echo ""
+    echo "Commands:"
+    echo "  help          Show this help"
+    echo "  version       Show installed version"
+    echo "  update        Pull latest changes from repo"
+    echo "  reinstall     Re-run full installation"
+    echo "  backup        Create backup of current configs"
+    echo "  list-backups  Show available backups"
+    echo "  restore       Restore from backup"
+    ;;
+
+  version)
+    cat "$OMAKUB_SZAMSKI_PATH/version"
+    ;;
+
+  update)
+    cd "$OMAKUB_SZAMSKI_PATH" || exit 1
+    git pull origin main
+    ;;
+
+  reinstall)
+    source "$OMAKUB_SZAMSKI_PATH/install.sh"
+    ;;
+
+  backup)
+    BACKUP_DATE=$(date +%Y%m%d_%H%M%S)
+    BACKUP_DIR="$HOME/.config-backup-$BACKUP_DATE"
+    mkdir -p "$BACKUP_DIR"
+
+    cp -r ~/.config/nvim "$BACKUP_DIR/" 2>/dev/null
+    cp -r ~/.config/ghostty "$BACKUP_DIR/" 2>/dev/null
+    cp -r ~/.config/btop "$BACKUP_DIR/" 2>/dev/null
+    cp ~/.config/starship.toml "$BACKUP_DIR/" 2>/dev/null
+    cp ~/.bashrc "$BACKUP_DIR/" 2>/dev/null
+    cp ~/.inputrc "$BACKUP_DIR/" 2>/dev/null
+
+    echo "✓ Backup created: $BACKUP_DIR"
+    ;;
+
+  list-backups)
+    ls -d ~/.config-backup-* 2>/dev/null || echo "No backups found"
+    ;;
+
+  restore)
+    if [[ -z "$2" ]]; then
+      echo "Usage: omakub-szamski restore <backup-dir>"
+      echo "Available backups:"
+      ls -d ~/.config-backup-* 2>/dev/null
+    else
+      RESTORE_FROM="$2"
+      if [[ -d "$RESTORE_FROM" ]]; then
+        cp -ri "$RESTORE_FROM"/* ~/ 2>/dev/null
+        echo "✓ Restored from $RESTORE_FROM"
+      else
+        echo "Error: Backup directory not found"
+      fi
+    fi
+    ;;
+
+  *)
+    echo "Unknown command: $1"
+    echo "Run 'omakub-szamski help' for usage"
+    ;;
+esac

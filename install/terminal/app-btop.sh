@@ -1,0 +1,15 @@
+#!/bin/bash
+
+sudo apt install -y btop
+
+mkdir -p ~/.config/btop/themes
+cp "$OMAKUB_SZAMSKI_PATH/themes/catppuccin-mocha/btop.theme" ~/.config/btop/themes/catppuccin-mocha.theme
+
+if [ -f "$HOME/.config/btop/btop.conf" ]; then
+  if [[ "$AUTO_BACKUP" == true ]]; then
+    backup_config "$HOME/.config/btop/btop.conf"
+    cp "$OMAKUB_SZAMSKI_PATH/configs/btop.conf" ~/.config/btop/btop.conf
+  fi
+else
+  cp "$OMAKUB_SZAMSKI_PATH/configs/btop.conf" ~/.config/btop/btop.conf
+fi

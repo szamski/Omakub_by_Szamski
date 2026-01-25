@@ -1,0 +1,19 @@
+# File system
+alias ls='eza -lh --group-directories-first --icons=auto'
+alias lsa='eza -lha --group-directories-first --icons=auto'
+alias lt='eza --tree --level=2 --long --icons --git'
+alias lta='eza --tree --level=2 --long --icons --git -a'
+alias l='eza -lh --group-directories-first --icons=auto'
+alias fd='fdfind'
+
+# Directories
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
+# Tools
+alias c='opencode'
+alias d='docker'
+alias g='git'
+alias lzg='lazygit'
+alias lzd='lazydocker'
