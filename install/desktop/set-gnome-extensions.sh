@@ -2,6 +2,8 @@
 
 sudo apt install -y gnome-shell-extension-manager gir1.2-gtop-2.0 gir1.2-clutter-1.0
 
+EXTENSIONS_DIR="$HOME/.local/share/gnome-shell/extensions"
+
 if command -v gext >/dev/null 2>&1; then
   echo "⏭️  gnome-extensions-cli already installed"
 else
@@ -16,35 +18,68 @@ else
   [[ "$confirm" =~ ^[Yy]$ ]] || return 0
 fi
 
-# Install new extensions
-gext install just-perfection-desktop@just-perfection || true
-gext install blur-my-shell@aunetx || true
-gext install AlphabeticalAppGrid@stuarthayhurst || true
-gext install tophat@fflewddur.github.io || true
+install_extension() {
+  local uuid="$1"
+  gext install "$uuid" || true
+  if [[ ! -d "$EXTENSIONS_DIR/$uuid" ]]; then
+    echo "Warning: Extension not found after install: $uuid"
+  fi
+}
 
-# Compile gsettings schemas in order to be able to set them
-sudo cp ~/.local/share/gnome-shell/extensions/just-perfection-desktop\@just-perfection/schemas/org.gnome.shell.extensions.just-perfection.gschema.xml /usr/share/glib-2.0/schemas/
-sudo cp ~/.local/share/gnome-shell/extensions/blur-my-shell\@aunetx/schemas/org.gnome.shell.extensions.blur-my-shell.gschema.xml /usr/share/glib-2.0/schemas/
-sudo cp ~/.local/share/gnome-shell/extensions/tophat\@fflewddur.github.io/schemas/org.gnome.shell.extensions.tophat.gschema.xml /usr/share/glib-2.0/schemas/
-sudo cp ~/.local/share/gnome-shell/extensions/AlphabeticalAppGrid\@stuarthayhurst/schemas/org.gnome.shell.extensions.AlphabeticalAppGrid.gschema.xml /usr/share/glib-2.0/schemas/
-sudo glib-compile-schemas /usr/share/glib-2.0/schemas/
+# Install new extensions
+install_extension "just-perfection-desktop@just-perfection"
+install_extension "blur-my-shell@aunetx"
+install_extension "AlphabeticalAppGrid@stuarthayhurst"
+install_extension "tophat@fflewddur.github.io"
+
+find_schema_dir() {
+  for dir in "$@"; do
+    if [[ -d "$dir" ]]; then
+      echo "$dir"
+      return 0
+    fi
+  done
+  return 1
+}
+
+gsettings_set() {
+  local schema_dir="$1"
+  local schema="$2"
+  local key="$3"
+  local value="$4"
+  if [[ -n "$schema_dir" && -d "$schema_dir" ]]; then
+    gsettings --schemadir "$schema_dir" set "$schema" "$key" "$value"
+  else
+    gsettings set "$schema" "$key" "$value"
+  fi
+}
+
+just_perfection_schema_dir="$(find_schema_dir \
+  "$EXTENSIONS_DIR/just-perfection-desktop@just-perfection/schemas")"
 
 # Configure Just Perfection
-gsettings set org.gnome.shell.extensions.just-perfection animation 2
-gsettings set org.gnome.shell.extensions.just-perfection dash-app-running true
-gsettings set org.gnome.shell.extensions.just-perfection workspace true
-gsettings set org.gnome.shell.extensions.just-perfection workspace-popup false
+gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection animation 2
+gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection dash-app-running true
+gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection workspace true
+gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection workspace-popup false
+
+top_hat_schema_dir="$(find_schema_dir \
+  "$EXTENSIONS_DIR/tophat@fflewddur.github.io/schemas")"
 
 # Configure TopHat
-gsettings set org.gnome.shell.extensions.tophat show-icons false
-gsettings set org.gnome.shell.extensions.tophat show-cpu false
-gsettings set org.gnome.shell.extensions.tophat show-disk false
-gsettings set org.gnome.shell.extensions.tophat show-mem false
-gsettings set org.gnome.shell.extensions.tophat show-fs false
-gsettings set org.gnome.shell.extensions.tophat network-usage-unit bits
+gsettings_set "$top_hat_schema_dir" org.gnome.shell.extensions.tophat show-icons false
+gsettings_set "$top_hat_schema_dir" org.gnome.shell.extensions.tophat show-cpu false
+gsettings_set "$top_hat_schema_dir" org.gnome.shell.extensions.tophat show-disk false
+gsettings_set "$top_hat_schema_dir" org.gnome.shell.extensions.tophat show-mem false
+gsettings_set "$top_hat_schema_dir" org.gnome.shell.extensions.tophat show-fs false
+gsettings_set "$top_hat_schema_dir" org.gnome.shell.extensions.tophat network-usage-unit bits
+
+alphabetical_schema_dir="$(find_schema_dir \
+  "$EXTENSIONS_DIR/AlphabeticalAppGrid@stuarthayhurst/schemas" \
+  "$EXTENSIONS_DIR/alphabetical-app-grid@stuarthayhurst/schemas")"
 
 # Configure AlphabeticalAppGrid
-gsettings set org.gnome.shell.extensions.alphabetical-app-grid folder-order-position 'end'
+gsettings_set "$alphabetical_schema_dir" org.gnome.shell.extensions.alphabetical-app-grid folder-order-position 'end'
 
 enable_extension() {
   local target="$1"
@@ -58,12 +93,16 @@ enable_extension() {
   fi
 }
 
-# Enable extensions (ignore failures if not supported)
-enable_extension "just-perfection-desktop@just-perfection"
-enable_extension "blur-my-shell@aunetx"
-enable_extension "alphabetical-app-grid@stuarthayhurst"
-enable_extension "AlphabeticalAppGrid@stuarthayhurst"
-enable_extension "tophat@fflewddur.github.io"
+if gnome-extensions list >/dev/null 2>&1; then
+  # Enable extensions (ignore failures if not supported)
+  enable_extension "just-perfection-desktop@just-perfection"
+  enable_extension "blur-my-shell@aunetx"
+  enable_extension "alphabetical-app-grid@stuarthayhurst"
+  enable_extension "AlphabeticalAppGrid@stuarthayhurst"
+  enable_extension "tophat@fflewddur.github.io"
+else
+  echo "Warning: GNOME Shell not detected (no DBus session). Skipping extension enable."
+fi
 
 # Configure Blur My Shell from saved settings
 OMAKUB_SZAMSKI_PATH="${OMAKUB_SZAMSKI_PATH:-$HOME/.local/share/omakub-szamski}"

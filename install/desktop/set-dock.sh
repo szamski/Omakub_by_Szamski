@@ -1,25 +1,20 @@
 #!/bin/bash
 
-# Desired order of applications in Dash
-# Format: "display_name:desktop_file_variants"
-# First found variant will be used
-apps=(
-  "ghostty:ghostty_ghostty.desktop,ghostty.desktop"
-  "files:org.gnome.Nautilus.desktop"
-  "chromium:org.chromium.Chromium.desktop,chromium-browser.desktop,chromium.desktop,google-chrome.desktop"
-  "vscode:code.desktop"
-  "spotify:spotify_spotify.desktop,spotify.desktop"
-  "riff:dev.diegovsky.Riff.desktop"
-  "discord:discord.desktop"
-  "slack:slack_slack.desktop,slack.desktop"
-  "libreoffice:libreoffice-startcenter.desktop"
-  "localsend:org.localsend.localsend_app.desktop"
+# Desired order of applications in Dash (stable across apt/snap/flatpak/source)
+app_order=(
+  "ghostty"
+  "files"
+  "chromium"
+  "vscode"
+  "spotify"
+  "riff"
+  "discord"
+  "slack"
+  "libreoffice"
+  "localsend"
 )
 
-installed_apps=()
-
 # Search directories for .desktop files
-# Including snap directory
 desktop_dirs=(
   "/var/lib/snapd/desktop/applications"
   "/var/lib/flatpak/exports/share/applications"
@@ -29,85 +24,154 @@ desktop_dirs=(
   "$HOME/.local/share/applications"
 )
 
-# Find and add installed apps in order
-for app_entry in "${apps[@]}"; do
-  # Split "display_name:variants" format
-  IFS=':' read -r display_name variants <<< "$app_entry"
-  
-  # Split variants by comma
-  IFS=',' read -ra variant_list <<< "$variants"
-  
-  # Try each variant until we find an installed one
-  found=false
-  for variant in "${variant_list[@]}"; do
-    for dir in "${desktop_dirs[@]}"; do
-      if [ -f "$dir/$variant" ]; then
-        installed_apps+=("$variant")
-        found=true
-        break 2  # Break both loops
+declare -A desktop_path
+declare -A desktop_name
+declare -A desktop_exec
+declare -A desktop_wmclass
+desktop_ids=()
+
+for dir in "${desktop_dirs[@]}"; do
+  [[ -d "$dir" ]] || continue
+  for file in "$dir"/*.desktop; do
+    [[ -f "$file" ]] || continue
+    id="$(basename "$file")"
+    desktop_ids+=("$id")
+    desktop_path["$id"]="$file"
+    desktop_name["$id"]="$(awk -F= '/^Name=/{print $2; exit}' "$file")"
+    desktop_exec["$id"]="$(awk -F= '/^Exec=/{print $2; exit}' "$file")"
+    desktop_wmclass["$id"]="$(awk -F= '/^StartupWMClass=/{print $2; exit}' "$file")"
+  done
+done
+
+if [[ ${#desktop_ids[@]} -eq 0 ]]; then
+  echo "No .desktop entries found. Skipping GNOME Dash favorites."
+  exit 0
+fi
+
+declare -A app_id_variants
+declare -A app_exec_regex
+declare -A app_wmclass_regex
+declare -A app_name_regex
+
+app_id_variants["ghostty"]="ghostty_ghostty.desktop,ghostty.desktop,com.mitchellh.ghostty.desktop"
+app_id_variants["files"]="org.gnome.Nautilus.desktop"
+app_id_variants["chromium"]="org.chromium.Chromium.desktop,chromium-browser.desktop,chromium.desktop,chromium_chromium.desktop,google-chrome.desktop,google-chrome-stable.desktop"
+app_id_variants["vscode"]="code.desktop,code_code.desktop,com.visualstudio.code.desktop,com.visualstudio.code.oss.desktop"
+app_id_variants["spotify"]="spotify_spotify.desktop,spotify.desktop,com.spotify.Client.desktop"
+app_id_variants["riff"]="dev.diegovsky.Riff.desktop"
+app_id_variants["discord"]="discord.desktop,com.discordapp.Discord.desktop"
+app_id_variants["slack"]="slack_slack.desktop,slack.desktop,com.slack.Slack.desktop"
+app_id_variants["libreoffice"]="libreoffice-startcenter.desktop,org.libreoffice.LibreOffice.desktop"
+app_id_variants["localsend"]="org.localsend.localsend_app.desktop,org.localsend.localsend.desktop"
+
+app_exec_regex["ghostty"]="ghostty"
+app_exec_regex["files"]="nautilus"
+app_exec_regex["chromium"]="chromium|google-chrome"
+app_exec_regex["vscode"]="code|code-oss"
+app_exec_regex["spotify"]="spotify"
+app_exec_regex["riff"]="riff"
+app_exec_regex["discord"]="discord"
+app_exec_regex["slack"]="slack"
+app_exec_regex["libreoffice"]="libreoffice"
+app_exec_regex["localsend"]="localsend"
+
+app_wmclass_regex["ghostty"]="ghostty"
+app_wmclass_regex["files"]="nautilus"
+app_wmclass_regex["chromium"]="chromium|google-chrome"
+app_wmclass_regex["vscode"]="code|code-oss"
+app_wmclass_regex["spotify"]="spotify"
+app_wmclass_regex["riff"]="riff"
+app_wmclass_regex["discord"]="discord"
+app_wmclass_regex["slack"]="slack"
+app_wmclass_regex["libreoffice"]="libreoffice"
+app_wmclass_regex["localsend"]="localsend"
+
+app_name_regex["ghostty"]="ghostty"
+app_name_regex["files"]="files|nautilus"
+app_name_regex["chromium"]="chromium|chrome"
+app_name_regex["vscode"]="code|visual studio code"
+app_name_regex["spotify"]="spotify"
+app_name_regex["riff"]="riff"
+app_name_regex["discord"]="discord"
+app_name_regex["slack"]="slack"
+app_name_regex["libreoffice"]="libreoffice"
+app_name_regex["localsend"]="localsend"
+
+match_by_regex() {
+  local value="$1"
+  local regex="$2"
+  [[ -n "$value" && -n "$regex" ]] || return 1
+  local value_lc="${value,,}"
+  [[ "$value_lc" =~ $regex ]]
+}
+
+find_desktop_for_app() {
+  local app="$1"
+  local id_variants="${app_id_variants[$app]}"
+  local exec_re="${app_exec_regex[$app]}"
+  local wmclass_re="${app_wmclass_regex[$app]}"
+  local name_re="${app_name_regex[$app]}"
+
+  IFS=',' read -ra id_list <<< "$id_variants"
+  for id in "${id_list[@]}"; do
+    if [[ -n "${desktop_path[$id]:-}" ]]; then
+      echo "$id"
+      return 0
+    fi
+  done
+
+  if [[ -n "$exec_re" ]]; then
+    for id in "${desktop_ids[@]}"; do
+      if match_by_regex "${desktop_exec[$id]}" "$exec_re"; then
+        echo "$id"
+        return 0
       fi
     done
-  done
-done
+  fi
 
-# Define preferred order - this will be order we try to achieve
-preferred_order=(
-  "ghostty_ghostty.desktop"
-  "org.gnome.Nautilus.desktop" 
-  "org.chromium.Chromium.desktop"
-  "google-chrome.desktop"
-  "code.desktop"
-  "spotify_spotify.desktop"
-  "dev.diegovsky.Riff.desktop"
-  "discord.desktop"
-  "slack_slack.desktop"
-  "libreoffice-startcenter.desktop"
-  "org.localsend.localsend_app.desktop"
-)
+  if [[ -n "$wmclass_re" ]]; then
+    for id in "${desktop_ids[@]}"; do
+      if match_by_regex "${desktop_wmclass[$id]}" "$wmclass_re"; then
+        echo "$id"
+        return 0
+      fi
+    done
+  fi
 
-# Create ordered list - maintain original order but sort by preferred order
+  if [[ -n "$name_re" ]]; then
+    for id in "${desktop_ids[@]}"; do
+      if match_by_regex "${desktop_name[$id]}" "$name_re"; then
+        echo "$id"
+        return 0
+      fi
+    done
+  fi
+
+  return 1
+}
+
 ordered_apps=()
-for preferred_app in "${preferred_order[@]}"; do
-  for installed_app in "${installed_apps[@]}"; do
-    if [[ "$installed_app" == "$preferred_app" ]]; then
-      ordered_apps+=("$installed_app")
-      break
-    fi
-  done
-done
+declare -A chosen
 
-# Add any remaining apps not in preferred order
-for installed_app in "${installed_apps[@]}"; do
-  found=false
-  for ordered_app in "${ordered_apps[@]}"; do
-    if [[ "$installed_app" == "$ordered_app" ]]; then
-      found=true
-      break
-    fi
-  done
-  if [[ "$found" == false ]]; then
-    ordered_apps+=("$installed_app")
+for app in "${app_order[@]}"; do
+  id="$(find_desktop_for_app "$app" 2>/dev/null || true)"
+  if [[ -n "$id" && -z "${chosen[$id]:-}" ]]; then
+    ordered_apps+=("$id")
+    chosen["$id"]=1
   fi
 done
 
-# Create favorites list
+if [[ ${#ordered_apps[@]} -eq 0 ]]; then
+  echo "No matching apps found for GNOME Dash favorites."
+  exit 0
+fi
+
 favorites_list=$(printf "'%s'," "${ordered_apps[@]}")
 favorites_list="[${favorites_list%,}]"
 
-# Set GNOME favorites
 gsettings set org.gnome.shell favorite-apps "$favorites_list"
 
-echo "✓ GNOME Dash favorites set:"
+echo "OK: GNOME Dash favorites set:"
 for app in "${ordered_apps[@]}"; do
   echo "  - $app"
 done
-
-echo ""
-echo "📋 Final order in GNOME Dash:"
-echo "  1. Ghostty"
-echo "  2. Files (Nautilus)"
-echo "  3. Chrome/Chromium"
-echo "  4. VS Code"
-echo "  5. Spotify"
-echo "  6. Discord"
-echo "  7. Slack"
