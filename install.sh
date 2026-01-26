@@ -123,7 +123,8 @@ log_info "Logging install output to: $LOG_FILE"
 log_info "Sudo authentication required..."
 sudo -v
 
-run_step "Configure git" "source '$OMAKUB_SZAMSKI_PATH/install/setup-git.sh'"
+log_info "Configuring git..."
+source "$OMAKUB_SZAMSKI_PATH/install/setup-git.sh"
 
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   run_step "Disable screen lock" "gsettings set org.gnome.desktop.screensaver lock-enabled false"
