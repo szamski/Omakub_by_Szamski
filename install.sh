@@ -8,6 +8,7 @@ if [[ -d "$SCRIPT_DIR/install" ]]; then
 else
   OMAKUB_SZAMSKI_PATH="${OMAKUB_SZAMSKI_PATH:-$HOME/.local/share/omakub-szamski}"
 fi
+export OMAKUB_SZAMSKI_PATH
 BACKUP_DATE=$(date +%Y%m%d_%H%M%S)
 export BACKUP_DIR="$HOME/.config-backup-$BACKUP_DATE"
 export DRY_RUN=false
@@ -22,6 +23,7 @@ source "$OMAKUB_SZAMSKI_PATH/install/backup-configs.sh"
 
 LOG_DIR="$HOME/.local/share/omakub-szamski/logs"
 LOG_FILE="$LOG_DIR/install-$(date +%Y%m%d_%H%M%S).log"
+mkdir -p "$LOG_DIR"
 
 log_info() {
   if [[ -n "${OMAKUB_STDOUT_FD:-}" ]]; then
@@ -31,12 +33,25 @@ log_info() {
   fi
 }
 
+run_step() {
+  local title="$1"
+  shift
+  local cmd="$*"
+
+  if command -v gum >/dev/null 2>&1; then
+    gum spin --title "$title" -- bash -c "$cmd" >>"$LOG_FILE" 2>&1
+  else
+    log_info "→ $title"
+    bash -c "$cmd" >>"$LOG_FILE" 2>&1
+  fi
+}
+
 trap 'log_info "Omakub_by_Szamski installation failed! You can retry by running: source $OMAKUB_SZAMSKI_PATH/install.sh"' ERR
 
 source "$OMAKUB_SZAMSKI_PATH/install/check-version.sh"
 
 log_info "Installing interactive menu system..."
-source "$OMAKUB_SZAMSKI_PATH/install/terminal/required/app-gum.sh" >/dev/null
+run_step "Install gum" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/required/app-gum.sh'"
 
 log_info "Get ready to make a few choices..."
 source "$OMAKUB_SZAMSKI_PATH/install/first-run-choices.sh"
@@ -94,28 +109,26 @@ if [[ "$DRY_RUN" == true ]]; then
   return 0
 fi
 
-mkdir -p "$LOG_DIR"
 exec 3>&1 4>&2
 export OMAKUB_STDOUT_FD=3
-exec >>"$LOG_FILE" 2>&1
 log_info ""
 log_info "Logging install output to: $LOG_FILE"
 
-source "$OMAKUB_SZAMSKI_PATH/install/setup-git.sh"
+run_step "Configure git" "source '$OMAKUB_SZAMSKI_PATH/install/setup-git.sh'"
 
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
-  gsettings set org.gnome.desktop.screensaver lock-enabled false
-  gsettings set org.gnome.desktop.session idle-delay 0
+  run_step "Disable screen lock" "gsettings set org.gnome.desktop.screensaver lock-enabled false"
+  run_step "Disable idle timeout" "gsettings set org.gnome.desktop.session idle-delay 0"
 
   log_info "Installing terminal and desktop tools..."
-  source "$OMAKUB_SZAMSKI_PATH/install/terminal.sh"
-  source "$OMAKUB_SZAMSKI_PATH/install/desktop.sh"
+  run_step "Install terminal tools" "source '$OMAKUB_SZAMSKI_PATH/install/terminal.sh'"
+  run_step "Configure desktop" "source '$OMAKUB_SZAMSKI_PATH/install/desktop.sh'"
 
-  gsettings set org.gnome.desktop.screensaver lock-enabled true
-  gsettings set org.gnome.desktop.session idle-delay 300
+  run_step "Restore screen lock" "gsettings set org.gnome.desktop.screensaver lock-enabled true"
+  run_step "Restore idle timeout" "gsettings set org.gnome.desktop.session idle-delay 300"
 else
   log_info "Only installing terminal tools..."
-  source "$OMAKUB_SZAMSKI_PATH/install/terminal.sh"
+  run_step "Install terminal tools" "source '$OMAKUB_SZAMSKI_PATH/install/terminal.sh'"
 fi
 
 log_info ""
