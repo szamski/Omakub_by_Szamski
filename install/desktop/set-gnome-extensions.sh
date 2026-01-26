@@ -21,7 +21,9 @@ fi
 install_extension() {
   local uuid="$1"
   gext install "$uuid" || true
-  if [[ ! -d "$EXTENSIONS_DIR/$uuid" ]]; then
+  if [[ -d "$EXTENSIONS_DIR/$uuid" ]]; then
+    chmod -R go-w "$EXTENSIONS_DIR/$uuid" >/dev/null 2>&1 || true
+  else
     echo "Warning: Extension not found after install: $uuid"
   fi
 }

@@ -54,7 +54,7 @@ declare -A app_name_regex
 
 app_id_variants["ghostty"]="ghostty_ghostty.desktop,ghostty.desktop,com.mitchellh.ghostty.desktop"
 app_id_variants["files"]="org.gnome.Nautilus.desktop"
-app_id_variants["chromium"]="org.chromium.Chromium.desktop,chromium-browser.desktop,chromium.desktop,chromium_chromium.desktop,google-chrome.desktop,google-chrome-stable.desktop"
+app_id_variants["chromium"]="chromium_chromium.desktop,org.chromium.Chromium.desktop,chromium-browser.desktop,chromium.desktop,google-chrome.desktop,google-chrome-stable.desktop"
 app_id_variants["vscode"]="code.desktop,code_code.desktop,com.visualstudio.code.desktop,com.visualstudio.code.oss.desktop"
 app_id_variants["spotify"]="spotify_spotify.desktop,spotify.desktop,com.spotify.Client.desktop"
 app_id_variants["riff"]="dev.diegovsky.Riff.desktop"
