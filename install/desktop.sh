@@ -35,6 +35,8 @@ run_interactive "Install GNOME extensions" "source '$OMAKUB_SZAMSKI_PATH/install
 
 run_step "Set Ghostty as default terminal" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/set-ghostty-default.sh'"
 
+run_step "Install GNOME Software (Flatpak/Snap)" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/app-gnome-store.sh'"
+
 run_step "Install Papirus icon theme" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/app-papirus.sh'"
 
 run_step "Set Ghostty icon" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/set-ghostty-icon.sh'"
