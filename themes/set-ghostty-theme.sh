@@ -65,15 +65,11 @@ if not background or not foreground:
 if len(palette) != 16:
     raise SystemExit("Palette must contain 16 colors")
 
-replacements = {
-    "{{BACKGROUND}}": background,
-    "{{FOREGROUND}}": foreground,
-}
-for i, color in enumerate(palette):
-    replacements[f"{{{{P{i}}}}}"] = color
+palette_lines = "\n".join([f"palette = {i}={color}" for i, color in enumerate(palette)])
 
-for key, value in replacements.items():
-    template = template.replace(key, value)
+template = template.replace("{{BACKGROUND}}", background)
+template = template.replace("{{FOREGROUND}}", foreground)
+template = template.replace("{{PALETTE}}", palette_lines)
 
 with open(output_path, "w", encoding="utf-8") as out:
     out.write(template)
