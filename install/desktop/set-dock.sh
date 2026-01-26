@@ -6,7 +6,7 @@
 apps=(
   "ghostty:ghostty_ghostty.desktop,ghostty.desktop"
   "files:org.gnome.Nautilus.desktop"
-  "chrome:google-chrome.desktop,org.chromium.Chromium.desktop,chromium-browser.desktop,chromium.desktop"
+  "chromium:org.chromium.Chromium.desktop,chromium-browser.desktop,chromium.desktop,google-chrome.desktop"
   "vscode:code.desktop"
   "spotify:spotify_spotify.desktop,spotify.desktop"
   "discord:discord.desktop"

@@ -43,7 +43,12 @@ set_folder_icon() {
   if [[ -d "$folder_path" ]]; then
     if [[ -f "$ICON_BASE/${icon_name}.svg" ]]; then
       if command -v gio >/dev/null 2>&1; then
+        local icon_path="/usr/share/icons/Papirus-Dark/128x128/places/${icon_name}.svg"
+        if [[ ! -f "$icon_path" ]]; then
+          icon_path="$ICON_BASE/${icon_name}.svg"
+        fi
         gio set "$folder_path" metadata::custom-icon-name "$icon_name" 2>/dev/null || true
+        gio set "$folder_path" metadata::custom-icon "file://$icon_path" 2>/dev/null || true
       fi
       cat > "$folder_path/.directory" << EOF
 [Desktop Entry]
