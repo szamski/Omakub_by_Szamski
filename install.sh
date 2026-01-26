@@ -193,7 +193,7 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
     TERMINAL_STEPS=$((TERMINAL_STEPS+1))
   fi
 
-  DESKTOP_STEPS=7
+  DESKTOP_STEPS=8
   if [[ -n "${OMAKUB_THEME:-}" ]]; then
     DESKTOP_STEPS=$((DESKTOP_STEPS+1))
   fi
@@ -231,9 +231,11 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
     DESKTOP_STEPS=$((DESKTOP_STEPS+1))
   fi
 
-  TOTAL_STEPS=$((1 + 4 + TERMINAL_STEPS + DESKTOP_STEPS))
+  TOTAL_STEPS=$((1 + 5 + TERMINAL_STEPS + DESKTOP_STEPS))
 fi
 start_progress "$TOTAL_STEPS"
+
+run_step "Fix script permissions" "chmod +x '$OMAKUB_SZAMSKI_PATH/bin/omakub-szamski' '$OMAKUB_SZAMSKI_PATH/bin/omakub-sub/theme.sh' '$OMAKUB_SZAMSKI_PATH/bin/omakub-sub/theme-gui.sh' '$OMAKUB_SZAMSKI_PATH/install.sh' '$OMAKUB_SZAMSKI_PATH/install/desktop/set-dock.sh' '$OMAKUB_SZAMSKI_PATH/install/desktop/set-ghostty-default.sh' '$OMAKUB_SZAMSKI_PATH/themes/apply-theme.sh' '$OMAKUB_SZAMSKI_PATH/themes/set-ghostty-theme.sh' '$OMAKUB_SZAMSKI_PATH/themes/set-btop-theme.sh' '$OMAKUB_SZAMSKI_PATH/themes/set-neovim-theme.sh' '$OMAKUB_SZAMSKI_PATH/themes/set-starship-theme.sh' '$OMAKUB_SZAMSKI_PATH/themes/gen-ghostty-from-alacritty.sh' 2>/dev/null || true"
 
 log_info "Configuring git..."
 source "$OMAKUB_SZAMSKI_PATH/install/setup-git.sh"

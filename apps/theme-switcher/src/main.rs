@@ -1,9 +1,6 @@
 use gtk4::prelude::*;
 use gtk4::{Application, ApplicationWindow, Box as GtkBox, Button, Label, ListBox, ListBoxRow, Orientation};
-use std::cell::RefCell;
 use std::fs;
-use std::path::Path;
-use std::rc::Rc;
 use std::process::Command;
 
 fn theme_root() -> String {
@@ -52,7 +49,7 @@ fn list_themes(base: &str) -> Vec<String> {
 fn build_ui(app: &Application) {
     let base = theme_root();
     let themes = list_themes(&base);
-    let themes_rc = Rc::new(themes);
+    let themes_rc = themes;
 
     let window = ApplicationWindow::builder()
         .application(app)
@@ -89,11 +86,11 @@ fn build_ui(app: &Application) {
     let button = Button::with_label("Apply theme");
     button.add_css_class("suggested-action");
 
-    let base_rc = Rc::new(base);
     let status_rc = status.clone();
     let button_rc = button.clone();
     let list_rc = list.clone();
     let themes_for_apply = themes_rc.clone();
+    let base_path = base.clone();
 
     button.connect_clicked(move |_| {
         let selected = list_rc.selected_row();
@@ -112,30 +109,22 @@ fn build_ui(app: &Application) {
         status_rc.set_text(&format!("Applying {}...", title_case(&theme)));
         button_rc.set_sensitive(false);
 
-        let base_path = base_rc.clone();
-        let status_done = status_rc.clone();
-        let button_done = button_rc.clone();
+        let apply_path = format!("{}/themes/apply-theme.sh", base_path);
+        let command = format!("source \"{}\" \"{}\"", apply_path, theme);
+        let result = Command::new("bash")
+            .arg("-lc")
+            .arg(command)
+            .env("OMAKUB_SZAMSKI_PATH", &base_path)
+            .status();
 
-        std::thread::spawn(move || {
-            let apply_path = format!("{}/themes/apply-theme.sh", base_path);
-            let command = format!("source \"{}\" \"{}\"", apply_path, theme);
-            let result = Command::new("bash")
-                .arg("-lc")
-                .arg(command)
-                .env("OMAKUB_SZAMSKI_PATH", &*base_path)
-                .status();
+        let message = match result {
+            Ok(status) if status.success() => "Theme applied.".to_string(),
+            Ok(status) => format!("Failed (exit {}).", status.code().unwrap_or(1)),
+            Err(err) => format!("Failed: {}", err),
+        };
 
-            let message = match result {
-                Ok(status) if status.success() => "Theme applied.".to_string(),
-                Ok(status) => format!("Failed (exit {}).", status.code().unwrap_or(1)),
-                Err(err) => format!("Failed: {}", err),
-            };
-
-            glib::MainContext::default().invoke(move || {
-                status_done.set_text(&message);
-                button_done.set_sensitive(true);
-            });
-        });
+        status_rc.set_text(&message);
+        button_rc.set_sensitive(true);
     });
 
     container.append(&header);
