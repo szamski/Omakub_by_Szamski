@@ -3,7 +3,8 @@
 font-family = CaskaydiaCove Nerd Font Mono
 font-size = 12
 window-padding-x = 5
-window-size = 150x55
+window-width = 150
+window-height = 55
 background-opacity = 0.95
 background-blur = 20
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OMAKUB_SZAMSKI_PATH="$HOME/.local/share/omakub-szamski"
+OMAKUB_SZAMSKI_PATH="${OMAKUB_SZAMSKI_PATH:-$HOME/.local/share/omakub-szamski}"
 
 case "$1" in
   help|--help|-h)
@@ -46,7 +46,11 @@ case "$1" in
     ;;
 
   theme)
-    source "$OMAKUB_SZAMSKI_PATH/bin/omakub-sub/theme.sh"
+    if "$OMAKUB_SZAMSKI_PATH/bin/omakub-sub/theme-gui.sh"; then
+      true
+    else
+      source "$OMAKUB_SZAMSKI_PATH/bin/omakub-sub/theme.sh"
+    fi
     ;;
 
   list-backups)

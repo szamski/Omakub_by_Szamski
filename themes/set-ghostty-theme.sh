@@ -60,15 +60,22 @@ with open(theme_colors, "r", encoding="utf-8") as f:
             if color:
                 palette.append(color)
 
+def normalize(value: str) -> str:
+    if value.startswith("0x"):
+        return "#" + value[2:]
+    if value.startswith("#"):
+        return value
+    return "#" + value
+
 if not background or not foreground:
     raise SystemExit("Missing background/foreground in ghostty.toml")
 if len(palette) != 16:
     raise SystemExit("Palette must contain 16 colors")
 
-palette_lines = "\n".join([f"palette = {i}={color}" for i, color in enumerate(palette)])
+palette_lines = "\n".join([f"palette = {i}={normalize(color)}" for i, color in enumerate(palette)])
 
-template = template.replace("{{BACKGROUND}}", background)
-template = template.replace("{{FOREGROUND}}", foreground)
+template = template.replace("{{BACKGROUND}}", normalize(background))
+template = template.replace("{{FOREGROUND}}", normalize(foreground))
 template = template.replace("{{PALETTE}}", palette_lines)
 
 with open(output_path, "w", encoding="utf-8") as out:

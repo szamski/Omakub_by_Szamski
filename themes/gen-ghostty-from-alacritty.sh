@@ -57,14 +57,21 @@ for theme_name in os.listdir(themes_dir):
         missing = [color_order[i % 8] for i, p in enumerate(palette) if p is None]
         raise SystemExit(f"Missing colors in {alacritty_path}: {missing}")
 
+    def normalize(value: str) -> str:
+        if value.startswith("0x"):
+            return "#" + value[2:]
+        if value.startswith("#"):
+            return value
+        return "#" + value
+
     ghostty_path = os.path.join(theme_path, "ghostty.toml")
     with open(ghostty_path, "w", encoding="utf-8") as out:
-        out.write(f"background = \"{background}\"\n")
-        out.write(f"foreground = \"{foreground}\"\n")
+        out.write(f"background = \"{normalize(background)}\"\n")
+        out.write(f"foreground = \"{normalize(foreground)}\"\n")
         out.write("palette = [\n")
         for idx, color in enumerate(palette):
             comma = "," if idx < len(palette) - 1 else ""
-            out.write(f"  \"{color}\"{comma}\n")
+            out.write(f"  \"{normalize(color)}\"{comma}\n")
         out.write("]\n")
 
     print(f"Generated {ghostty_path}")

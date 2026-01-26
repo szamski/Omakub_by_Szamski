@@ -71,7 +71,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/ma
 
 Themes apply to GNOME (GTK + wallpaper), Ghostty, Neovim, btop, and Starship.
 
-Change theme:
+Change theme (GTK app):
 
 ```bash
 omakub-szamski theme
