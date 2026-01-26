@@ -3,8 +3,8 @@
 # Install Nerd Fonts (CascadiaCode/CaskaydiaCove for Ghostty and terminal use)
 
 # Check if fonts are already installed - skip if found
-if [[ -d ~/.local/share/fonts/CascadiaCodeNerdFont ]] && \
-   [[ $(find ~/.local/share/fonts/CascadiaCodeNerdFont -name "*.ttf" 2>/dev/null | wc -l) -gt 0 ]]; then
+if [[ -d ~/.fonts/CaskaydiaCove ]] && \
+   [[ $(find ~/.fonts/CaskaydiaCove -name "*.ttf" 2>/dev/null | wc -l) -gt 0 ]]; then
   echo "⏭️  CaskaydiaCove Nerd Font already installed, skipping..."
   return 0
 fi
@@ -18,7 +18,7 @@ if ! command -v unzip >/dev/null 2>&1; then
   sudo apt install -y unzip
 fi
 
-mkdir -p ~/.local/share/fonts
+mkdir -p ~/.fonts
 cd /tmp
 
 # CascadiaCode Nerd Font (contains CaskaydiaCove with ligatures)
@@ -39,11 +39,11 @@ if ! unzip -q CascadiaCode.zip -d CascadiaFont; then
   return 0
 fi
 
-mkdir -p ~/.local/share/fonts/CascadiaCodeNerdFont
+mkdir -p ~/.fonts/CaskaydiaCove
 
 # Copy .ttf files (check if any exist)
 if ls CascadiaFont/*.ttf 1> /dev/null 2>&1; then
-  cp CascadiaFont/*.ttf ~/.local/share/fonts/CascadiaCodeNerdFont/
+  cp CascadiaFont/*.ttf ~/.fonts/CaskaydiaCove/
   echo "✓ CaskaydiaCove Nerd Font installed ($(ls CascadiaFont/*.ttf | wc -l) files)"
 else
   echo "⚠️  No .ttf files found in archive"
@@ -54,12 +54,12 @@ rm -rf CascadiaCode.zip CascadiaFont
 # Refresh font cache
 if command -v fc-cache >/dev/null 2>&1; then
   echo "Refreshing font cache..."
-  fc-cache -f ~/.local/share/fonts
+  fc-cache -fv ~/.fonts
   echo "✓ Font cache refreshed"
 else
   echo "⚠️  fc-cache not found, installing fontconfig..."
   sudo apt install -y fontconfig
-  fc-cache -f ~/.local/share/fonts
+  fc-cache -fv ~/.fonts
   echo "✓ Font cache refreshed"
 fi
 

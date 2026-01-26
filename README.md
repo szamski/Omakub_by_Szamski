@@ -54,8 +54,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/ma
 - Discord (snap lub .deb)
 - Slack (snap)
 - Spotify (snap lub .deb)
-- Ulauncher
-- Google Chrome lub Chromium
+- Google Chrome lub Chromium (Flatpak + Google Sync)
 - 1Password
 - Dropbox
 

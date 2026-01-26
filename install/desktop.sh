@@ -18,11 +18,6 @@ if command -v ghostty >/dev/null 2>&1; then
   source "$OMAKUB_SZAMSKI_PATH/install/desktop/set-ghostty-default.sh"
 fi
 
-if [[ "$SETUP_ULAUNCHER" == true ]]; then
-  echo "→ Installing Ulauncher..."
-  source "$OMAKUB_SZAMSKI_PATH/install/desktop/app-ulauncher.sh"
-fi
-
 if [[ "$SETUP_VSCODE" == true ]]; then
   echo "→ Installing VS Code..."
   source "$OMAKUB_SZAMSKI_PATH/install/desktop/app-vscode.sh"

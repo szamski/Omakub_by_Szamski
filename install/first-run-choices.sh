@@ -25,19 +25,17 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
     "Discord"
     "Slack"
     "Spotify"
-    "Ulauncher"
     "1Password"
     "Dropbox"
   )
 
-  DEFAULT_APPS="VS Code,Ulauncher"
+  DEFAULT_APPS="VS Code"
   SELECTED_APPS=$(gum choose "${DESKTOP_APPS[@]}" --no-limit --selected "$DEFAULT_APPS" --header "Select desktop apps to install")
 
   export SETUP_VSCODE=false
   export SETUP_DISCORD=false
   export SETUP_SLACK=false
   export SETUP_SPOTIFY=false
-  export SETUP_ULAUNCHER=false
   export SETUP_1PASSWORD=false
   export SETUP_DROPBOX=false
 
@@ -52,9 +50,6 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   fi
   if printf '%s\n' "$SELECTED_APPS" | grep -Fxq "Spotify"; then
     export SETUP_SPOTIFY=true
-  fi
-  if printf '%s\n' "$SELECTED_APPS" | grep -Fxq "Ulauncher"; then
-    export SETUP_ULAUNCHER=true
   fi
   if printf '%s\n' "$SELECTED_APPS" | grep -Fxq "1Password"; then
     export SETUP_1PASSWORD=true

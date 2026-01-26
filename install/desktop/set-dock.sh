@@ -5,12 +5,12 @@
 # First found variant will be used
 apps=(
   "ghostty:ghostty_ghostty.desktop,ghostty.desktop"
-  "chrome:google-chrome.desktop,chromium-browser.desktop,chromium.desktop"
+  "files:org.gnome.Nautilus.desktop"
+  "chrome:google-chrome.desktop,org.chromium.Chromium.desktop,chromium-browser.desktop,chromium.desktop"
   "vscode:code.desktop"
   "spotify:spotify_spotify.desktop,spotify.desktop"
   "discord:discord.desktop"
   "slack:slack_slack.desktop,slack.desktop"
-  "files:org.gnome.Nautilus.desktop"
 )
 
 installed_apps=()
@@ -46,14 +46,60 @@ for app_entry in "${apps[@]}"; do
   done
 done
 
+# Define preferred order - this will be order we try to achieve
+preferred_order=(
+  "ghostty_ghostty.desktop"
+  "org.gnome.Nautilus.desktop" 
+  "google-chrome.desktop"
+  "code.desktop"
+  "spotify_spotify.desktop"
+  "discord.desktop"
+  "slack_slack.desktop"
+)
+
+# Create ordered list - maintain original order but sort by preferred order
+ordered_apps=()
+for preferred_app in "${preferred_order[@]}"; do
+  for installed_app in "${installed_apps[@]}"; do
+    if [[ "$installed_app" == "$preferred_app" ]]; then
+      ordered_apps+=("$installed_app")
+      break
+    fi
+  done
+done
+
+# Add any remaining apps not in preferred order
+for installed_app in "${installed_apps[@]}"; do
+  found=false
+  for ordered_app in "${ordered_apps[@]}"; do
+    if [[ "$installed_app" == "$ordered_app" ]]; then
+      found=true
+      break
+    fi
+  done
+  if [[ "$found" == false ]]; then
+    ordered_apps+=("$installed_app")
+  fi
+done
+
 # Create favorites list
-favorites_list=$(printf "'%s'," "${installed_apps[@]}")
+favorites_list=$(printf "'%s'," "${ordered_apps[@]}")
 favorites_list="[${favorites_list%,}]"
 
 # Set GNOME favorites
 gsettings set org.gnome.shell favorite-apps "$favorites_list"
 
 echo "✓ GNOME Dash favorites set:"
-for app in "${installed_apps[@]}"; do
+for app in "${ordered_apps[@]}"; do
   echo "  - $app"
 done
+
+echo ""
+echo "📋 Final order in GNOME Dash:"
+echo "  1. Ghostty"
+echo "  2. Files (Nautilus)"
+echo "  3. Chrome/Chromium"
+echo "  4. VS Code"
+echo "  5. Spotify"
+echo "  6. Discord"
+echo "  7. Slack"

@@ -52,9 +52,6 @@ if [[ "$DRY_RUN" == true ]]; then
   fi
   if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
     echo "  Desktop: GNOME settings and hotkeys"
-    if [[ "$SETUP_ULAUNCHER" == true ]]; then
-      echo "  Desktop app: ulauncher"
-    fi
     if [[ "$SETUP_VSCODE" == true ]]; then
       echo "  Desktop app: VS Code"
     fi
