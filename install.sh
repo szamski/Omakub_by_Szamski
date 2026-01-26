@@ -169,7 +169,47 @@ log_info "Logging install output to: $LOG_FILE"
 
 TOTAL_STEPS=2
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
-  TOTAL_STEPS=7
+  TERMINAL_STEPS=17
+  if [[ "$SETUP_TAILSCALE" == true ]]; then
+    TERMINAL_STEPS=$((TERMINAL_STEPS+1))
+  fi
+  if [[ "$SETUP_NORDVPN" == true ]]; then
+    TERMINAL_STEPS=$((TERMINAL_STEPS+1))
+  fi
+  if [[ "$SETUP_TLP" == true ]]; then
+    TERMINAL_STEPS=$((TERMINAL_STEPS+1))
+  fi
+
+  DESKTOP_STEPS=6
+  if [[ -n "${OMAKUB_THEME:-}" ]]; then
+    DESKTOP_STEPS=$((DESKTOP_STEPS+1))
+  fi
+  if [[ "$SETUP_VSCODE" == true ]]; then
+    DESKTOP_STEPS=$((DESKTOP_STEPS+1))
+  fi
+  if [[ "$SETUP_CHROME" == true ]]; then
+    DESKTOP_STEPS=$((DESKTOP_STEPS+1))
+  fi
+  if [[ "$SETUP_CHROMIUM" == true ]]; then
+    DESKTOP_STEPS=$((DESKTOP_STEPS+1))
+  fi
+  if [[ "$SETUP_DISCORD" == true ]]; then
+    DESKTOP_STEPS=$((DESKTOP_STEPS+1))
+  fi
+  if [[ "$SETUP_SLACK" == true ]]; then
+    DESKTOP_STEPS=$((DESKTOP_STEPS+1))
+  fi
+  if [[ "$SETUP_SPOTIFY" == true ]]; then
+    DESKTOP_STEPS=$((DESKTOP_STEPS+1))
+  fi
+  if [[ "$SETUP_1PASSWORD" == true ]]; then
+    DESKTOP_STEPS=$((DESKTOP_STEPS+1))
+  fi
+  if [[ "$SETUP_DROPBOX" == true ]]; then
+    DESKTOP_STEPS=$((DESKTOP_STEPS+1))
+  fi
+
+  TOTAL_STEPS=$((1 + 4 + TERMINAL_STEPS + DESKTOP_STEPS))
 fi
 start_progress "$TOTAL_STEPS"
 
@@ -181,15 +221,18 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   run_step "Disable screen lock" "gsettings set org.gnome.desktop.screensaver lock-enabled false"
   run_step "Disable idle timeout" "gsettings set org.gnome.desktop.session idle-delay 0"
 
-  log_info "Installing terminal and desktop tools..."
-  run_step "Install terminal tools" "source '$OMAKUB_SZAMSKI_PATH/install/terminal.sh'"
-  run_step "Configure desktop" "source '$OMAKUB_SZAMSKI_PATH/install/desktop.sh'"
+  log_info "Installing terminal tools..."
+  source "$OMAKUB_SZAMSKI_PATH/install/terminal.sh"
+
+  log_info "Configuring desktop..."
+  source "$OMAKUB_SZAMSKI_PATH/install/desktop.sh"
 
   run_step "Restore screen lock" "gsettings set org.gnome.desktop.screensaver lock-enabled true"
   run_step "Restore idle timeout" "gsettings set org.gnome.desktop.session idle-delay 300"
 else
   log_info "Only installing terminal tools..."
-  run_step "Install terminal tools" "source '$OMAKUB_SZAMSKI_PATH/install/terminal.sh'"
+  log_info "Installing terminal tools..."
+  source "$OMAKUB_SZAMSKI_PATH/install/terminal.sh"
 fi
 
 finish_progress

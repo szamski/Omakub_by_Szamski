@@ -33,7 +33,7 @@ case "$OMAKUB_THEME" in
 esac
 
 if command -v papirus-folders >/dev/null 2>&1; then
-  papirus-folders -C "$PAPIRUS_COLOR" --theme Papirus-Dark >/dev/null 2>&1 || true
+  sudo papirus-folders -C "$PAPIRUS_COLOR" --theme Papirus-Dark >/dev/null 2>&1 || true
 fi
 
 ICON_BASE="/usr/share/icons/Papirus-Dark/48x48/places"
@@ -42,6 +42,9 @@ set_folder_icon() {
   local icon_name="$2"
   if [[ -d "$folder_path" ]]; then
     if [[ -f "$ICON_BASE/${icon_name}.svg" ]]; then
+      if command -v gio >/dev/null 2>&1; then
+        gio set "$folder_path" metadata::custom-icon-name "$icon_name" 2>/dev/null || true
+      fi
       cat > "$folder_path/.directory" << EOF
 [Desktop Entry]
 Icon=$icon_name
@@ -55,6 +58,9 @@ set_folder_icon "$HOME/snap" "folder-snap"
 set_folder_icon "$HOME/Dropbox" "folder-dropbox"
 
 WORK_ICON="folder-${PAPIRUS_COLOR}-projects"
+if [[ ! -f "$ICON_BASE/${WORK_ICON}.svg" ]]; then
+  WORK_ICON="folder-${PAPIRUS_COLOR}"
+fi
 if [[ -f "$ICON_BASE/${WORK_ICON}.svg" ]]; then
   set_folder_icon "$HOME/Work" "$WORK_ICON"
 fi
