@@ -39,7 +39,7 @@ run_step() {
   local cmd="$*"
 
   if command -v gum >/dev/null 2>&1; then
-    gum spin --title "$title" -- bash -c "$cmd" >>"$LOG_FILE" 2>&1
+    gum spin --title "$title" -- bash -c "$cmd >>\"$LOG_FILE\" 2>&1" >&$OMAKUB_STDOUT_FD
   else
     log_info "→ $title"
     bash -c "$cmd" >>"$LOG_FILE" 2>&1
@@ -113,6 +113,9 @@ exec 3>&1 4>&2
 export OMAKUB_STDOUT_FD=3
 log_info ""
 log_info "Logging install output to: $LOG_FILE"
+
+log_info "Sudo authentication required..."
+sudo -v
 
 run_step "Configure git" "source '$OMAKUB_SZAMSKI_PATH/install/setup-git.sh'"
 

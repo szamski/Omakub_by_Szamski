@@ -1,6 +1,9 @@
 #!/bin/bash
 
 GHOSTTY_BIN="$(command -v ghostty 2>/dev/null || true)"
+if [[ -x "/snap/bin/ghostty" ]]; then
+  GHOSTTY_BIN="/snap/bin/ghostty"
+fi
 if [[ -z "$GHOSTTY_BIN" ]]; then
   echo "⚠️  Ghostty not found, skipping default terminal"
   return 0
