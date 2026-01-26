@@ -46,11 +46,24 @@ gsettings set org.gnome.shell.extensions.tophat network-usage-unit bits
 # Configure AlphabeticalAppGrid
 gsettings set org.gnome.shell.extensions.alphabetical-app-grid folder-order-position 'end'
 
+enable_extension() {
+  local target="$1"
+  local installed
+  installed=$(gnome-extensions list 2>/dev/null | grep -i "^${target}$" || true)
+  if [[ -z "$installed" ]]; then
+    installed=$(gnome-extensions list 2>/dev/null | grep -i "${target}" | head -1 || true)
+  fi
+  if [[ -n "$installed" ]]; then
+    gnome-extensions enable "$installed" >/dev/null 2>&1 || true
+  fi
+}
+
 # Enable extensions (ignore failures if not supported)
-gnome-extensions enable just-perfection-desktop@just-perfection >/dev/null 2>&1 || true
-gnome-extensions enable blur-my-shell@aunetx >/dev/null 2>&1 || true
-gnome-extensions enable AlphabeticalAppGrid@stuarthayhurst >/dev/null 2>&1 || true
-gnome-extensions enable tophat@fflewddur.github.io >/dev/null 2>&1 || true
+enable_extension "just-perfection-desktop@just-perfection"
+enable_extension "blur-my-shell@aunetx"
+enable_extension "alphabetical-app-grid@stuarthayhurst"
+enable_extension "AlphabeticalAppGrid@stuarthayhurst"
+enable_extension "tophat@fflewddur.github.io"
 
 # Configure Blur My Shell from saved settings
 OMAKUB_SZAMSKI_PATH="${OMAKUB_SZAMSKI_PATH:-$HOME/.local/share/omakub-szamski}"

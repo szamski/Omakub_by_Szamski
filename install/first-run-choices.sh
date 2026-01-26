@@ -18,6 +18,23 @@ case "$BROWSER_SELECTED" in
     ;;
 esac
 
+# Ghostty window size
+GHOSTTY_SIZE=$(gum choose "Full HD (150x45)" "1440p (170x50)" "4K (200x60)" --header "Ghostty window size")
+case "$GHOSTTY_SIZE" in
+  "Full HD (150x45)")
+    export GHOSTTY_WINDOW_WIDTH=150
+    export GHOSTTY_WINDOW_HEIGHT=45
+    ;;
+  "1440p (170x50)")
+    export GHOSTTY_WINDOW_WIDTH=170
+    export GHOSTTY_WINDOW_HEIGHT=50
+    ;;
+  "4K (200x60)")
+    export GHOSTTY_WINDOW_WIDTH=200
+    export GHOSTTY_WINDOW_HEIGHT=60
+    ;;
+esac
+
 # Desktop apps (GNOME only)
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   THEME_NAMES=(

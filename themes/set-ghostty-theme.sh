@@ -74,8 +74,13 @@ if len(palette) != 16:
 
 palette_lines = "\n".join([f"palette = {i}={normalize(color)}" for i, color in enumerate(palette)])
 
+window_width = os.environ.get("GHOSTTY_WINDOW_WIDTH", "150")
+window_height = os.environ.get("GHOSTTY_WINDOW_HEIGHT", "55")
+
 template = template.replace("{{BACKGROUND}}", normalize(background))
 template = template.replace("{{FOREGROUND}}", normalize(foreground))
+template = template.replace("{{WINDOW_WIDTH}}", str(window_width))
+template = template.replace("{{WINDOW_HEIGHT}}", str(window_height))
 template = template.replace("{{PALETTE}}", palette_lines)
 
 with open(output_path, "w", encoding="utf-8") as out:
