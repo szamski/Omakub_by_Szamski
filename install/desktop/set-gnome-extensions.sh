@@ -114,6 +114,7 @@ if gnome-extensions list >/dev/null 2>&1; then
   enable_extension "alphabetical-app-grid@stuarthayhurst"
   enable_extension "AlphabeticalAppGrid@stuarthayhurst"
   enable_extension "tophat@fflewddur.github.io"
+  enable_extension "omakub-theme@szamski"
 else
   echo "Warning: GNOME Shell not detected (no DBus session). Skipping extension enable."
 fi
@@ -122,4 +123,12 @@ fi
 OMAKUB_SZAMSKI_PATH="${OMAKUB_SZAMSKI_PATH:-$HOME/.local/share/omakub-szamski}"
 if [[ -f "$OMAKUB_SZAMSKI_PATH/configs/gnome/blur-my-shell.dconf" ]]; then
   dconf load /org/gnome/shell/extensions/blur-my-shell/ < "$OMAKUB_SZAMSKI_PATH/configs/gnome/blur-my-shell.dconf"
+fi
+# Install local theme switcher extension
+LOCAL_THEME_EXT_SRC="$OMAKUB_SZAMSKI_PATH/extensions/omakub-theme@szamski"
+LOCAL_THEME_EXT_DST="$EXTENSIONS_DIR/omakub-theme@szamski"
+if [[ -d "$LOCAL_THEME_EXT_SRC" ]]; then
+  rm -rf "$LOCAL_THEME_EXT_DST"
+  cp -r "$LOCAL_THEME_EXT_SRC" "$LOCAL_THEME_EXT_DST"
+  chmod -R go-w "$LOCAL_THEME_EXT_DST" >/dev/null 2>&1 || true
 fi

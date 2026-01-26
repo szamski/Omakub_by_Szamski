@@ -7,6 +7,8 @@ DESKTOP_SRC="$APP_DIR/omakub-theme-switcher.desktop"
 DESKTOP_DST="$HOME/.local/share/applications/omakub-theme-switcher.desktop"
 ICON_SRC="$OMAKUB_SZAMSKI_PATH/icons/omacom.png"
 ICON_DST="$HOME/.local/share/icons/hicolor/512x512/apps/omacom.png"
+WRAPPER_SRC="$OMAKUB_SZAMSKI_PATH/bin/omakub-theme-switcher"
+WRAPPER_DST="$HOME/.local/bin/omakub-theme-switcher"
 
 if ! command -v cargo >/dev/null 2>&1; then
   echo "Rust toolchain not found. Skipping GUI build."
@@ -37,5 +39,11 @@ if [[ -x "$BIN" ]]; then
     mkdir -p "$(dirname "$ICON_DST")"
     cp "$ICON_SRC" "$ICON_DST"
     echo "✓ Theme switcher icon installed"
+  fi
+  if [[ -f "$WRAPPER_SRC" ]]; then
+    mkdir -p "$(dirname "$WRAPPER_DST")"
+    cp "$WRAPPER_SRC" "$WRAPPER_DST"
+    chmod +x "$WRAPPER_DST"
+    echo "✓ Theme switcher launcher installed"
   fi
 fi
