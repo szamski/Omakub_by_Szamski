@@ -1,6 +1,11 @@
 #!/bin/bash
 
-OMAKUB_SZAMSKI_PATH="${OMAKUB_SZAMSKI_PATH:-$HOME/.local/share/omakub-szamski}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -d "$SCRIPT_DIR/../install" ]]; then
+  OMAKUB_SZAMSKI_PATH="$(cd "$SCRIPT_DIR/.." && pwd)"
+else
+  OMAKUB_SZAMSKI_PATH="${OMAKUB_SZAMSKI_PATH:-$HOME/.local/share/omakub-szamski}"
+fi
 
 case "$1" in
   help|--help|-h)
