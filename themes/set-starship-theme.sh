@@ -22,7 +22,7 @@ if [[ ! -f "$HOME/.config/starship.toml" ]]; then
   cp "$OMAKUB_PATH/configs/starship.toml" "$HOME/.config/starship.toml"
 fi
 
-python3 << 'PY'
+OMAKUB_THEME="$OMAKUB_THEME" THEME_COLORS="$THEME_COLORS" python3 << 'PY'
 import os
 import re
 
