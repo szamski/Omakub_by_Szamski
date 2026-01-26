@@ -83,3 +83,7 @@ with open(output_path, "w", encoding="utf-8") as out:
 
 print(f"✓ Ghostty theme applied: {os.environ.get('OMAKUB_THEME')}")
 PY
+
+if command -v ghostty >/dev/null 2>&1; then
+  ghostty +reload-config >/dev/null 2>&1 || true
+fi

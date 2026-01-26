@@ -68,13 +68,20 @@ def normalize(value):
 def pick(idx, fallback):
     return normalize(palette[idx]) if idx < len(palette) else normalize(fallback)
 
+def pick_bright(bright_idx, normal_idx, fallback):
+    if bright_idx < len(palette) and normal_idx < len(palette):
+        if palette[bright_idx] != palette[normal_idx]:
+            return normalize(palette[bright_idx])
+        return normalize(palette[normal_idx])
+    return normalize(fallback)
+
 palette_map = {
-    "red": pick(1, "#ff0000"),
-    "peach": pick(3, "#ffaa00"),
-    "yellow": pick(11, pick(3, "#ffff00")),
-    "green": pick(2, "#00ff00"),
-    "sapphire": pick(4, "#00aaff"),
-    "lavender": pick(5, "#aa00ff"),
+    "red": pick_bright(9, 1, "#ff5f5f"),
+    "peach": pick_bright(11, 3, "#ffaf5f"),
+    "yellow": pick_bright(11, 3, "#ffd75f"),
+    "green": pick_bright(10, 2, "#5fff87"),
+    "sapphire": pick_bright(12, 4, "#5fafff"),
+    "lavender": pick_bright(13, 5, "#af87ff"),
     "crust": normalize(background),
     "text": normalize(foreground or "#ffffff"),
 }
