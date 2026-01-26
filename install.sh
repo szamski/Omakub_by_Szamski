@@ -100,6 +100,9 @@ trap 'log_info "Omakub_by_Szamski installation failed! You can retry by running:
 
 source "$OMAKUB_SZAMSKI_PATH/install/check-version.sh"
 
+log_info "Sudo authentication required..."
+sudo -v
+
 log_info "Installing interactive menu system..."
 run_step "Install gum" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/required/app-gum.sh'"
 
@@ -163,9 +166,6 @@ exec 3>&1 4>&2
 export OMAKUB_STDOUT_FD=3
 log_info ""
 log_info "Logging install output to: $LOG_FILE"
-
-log_info "Sudo authentication required..."
-sudo -v
 
 TOTAL_STEPS=2
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
