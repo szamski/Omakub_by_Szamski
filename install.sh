@@ -182,7 +182,7 @@ log_info "Logging install output to: $LOG_FILE"
 
 TOTAL_STEPS=2
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
-  TERMINAL_STEPS=17
+  TERMINAL_STEPS=18
   if [[ "$SETUP_TAILSCALE" == true ]]; then
     TERMINAL_STEPS=$((TERMINAL_STEPS+1))
   fi
@@ -193,7 +193,7 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
     TERMINAL_STEPS=$((TERMINAL_STEPS+1))
   fi
 
-  DESKTOP_STEPS=6
+  DESKTOP_STEPS=7
   if [[ -n "${OMAKUB_THEME:-}" ]]; then
     DESKTOP_STEPS=$((DESKTOP_STEPS+1))
   fi

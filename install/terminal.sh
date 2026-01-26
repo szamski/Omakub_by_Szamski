@@ -48,6 +48,8 @@ run_step "Install Docker" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/docker.
 
 run_step "Install mise" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/mise.sh'"
 
+run_step "Install Rust toolchain" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-rust.sh'"
+
 if [[ "$SETUP_TAILSCALE" == true ]]; then
   run_step "Install Tailscale" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/optional/app-tailscale.sh'"
 fi
