@@ -75,13 +75,25 @@ def pick_bright(bright_idx, normal_idx, fallback):
         return normalize(palette[normal_idx])
     return normalize(fallback)
 
+def lighten(hex_color: str, amount: float = 0.18) -> str:
+    hex_color = hex_color.lstrip("#")
+    if len(hex_color) != 6:
+        return "#" + hex_color
+    r = int(hex_color[0:2], 16)
+    g = int(hex_color[2:4], 16)
+    b = int(hex_color[4:6], 16)
+    r = int(r + (255 - r) * amount)
+    g = int(g + (255 - g) * amount)
+    b = int(b + (255 - b) * amount)
+    return f"#{r:02x}{g:02x}{b:02x}"
+
 palette_map = {
-    "red": pick_bright(9, 1, "#ff5f5f"),
-    "peach": pick_bright(11, 3, "#ffaf5f"),
-    "yellow": pick_bright(11, 3, "#ffd75f"),
-    "green": pick_bright(10, 2, "#5fff87"),
-    "sapphire": pick_bright(12, 4, "#5fafff"),
-    "lavender": pick_bright(13, 5, "#af87ff"),
+    "red": lighten(pick_bright(9, 1, "#ff5f5f")),
+    "peach": lighten(pick_bright(11, 3, "#ffaf5f")),
+    "yellow": lighten(pick_bright(11, 3, "#ffd75f")),
+    "green": lighten(pick_bright(10, 2, "#5fff87")),
+    "sapphire": lighten(pick_bright(12, 4, "#5fafff")),
+    "lavender": lighten(pick_bright(13, 5, "#af87ff")),
     "crust": normalize(background),
     "text": normalize(foreground or "#ffffff"),
 }

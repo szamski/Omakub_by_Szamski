@@ -85,5 +85,9 @@ print(f"✓ Ghostty theme applied: {os.environ.get('OMAKUB_THEME')}")
 PY
 
 if command -v ghostty >/dev/null 2>&1; then
-  ghostty +reload-config >/dev/null 2>&1 || true
+  if command -v xdotool >/dev/null 2>&1 && [[ -n "${DISPLAY:-}" ]]; then
+    xdotool search --class ghostty key --window %@ ctrl+shift+comma >/dev/null 2>&1 || true
+  else
+    echo "ℹ️  Reload Ghostty with Ctrl+Shift+,"
+  fi
 fi
