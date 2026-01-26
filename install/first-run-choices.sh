@@ -19,7 +19,7 @@ case "$BROWSER_SELECTED" in
 esac
 
 # Ghostty window size
-GHOSTTY_SIZE=$(gum choose "Full HD (150x45)" "1440p (170x50)" "4K (200x60)" --header "Ghostty window size")
+GHOSTTY_SIZE=$(gum choose "Full HD (150x45)" "1440p (170x50)" "4K (200x60)" "Custom" --header "Ghostty window size")
 case "$GHOSTTY_SIZE" in
   "Full HD (150x45)")
     export GHOSTTY_WINDOW_WIDTH=150
@@ -32,6 +32,12 @@ case "$GHOSTTY_SIZE" in
   "4K (200x60)")
     export GHOSTTY_WINDOW_WIDTH=200
     export GHOSTTY_WINDOW_HEIGHT=60
+    ;;
+  "Custom")
+    CUSTOM_WIDTH=$(gum input --header "Ghostty window width (columns)" --placeholder "150")
+    CUSTOM_HEIGHT=$(gum input --header "Ghostty window height (rows)" --placeholder "55")
+    export GHOSTTY_WINDOW_WIDTH="${CUSTOM_WIDTH:-150}"
+    export GHOSTTY_WINDOW_HEIGHT="${CUSTOM_HEIGHT:-55}"
     ;;
 esac
 
