@@ -46,9 +46,35 @@ run_step() {
   if command -v gum >/dev/null 2>&1; then
     local out_fd="${OMAKUB_STDOUT_FD:-1}"
     gum spin --title "$title" -- bash -c "$cmd >>\"$LOG_FILE\" 2>&1" >&$out_fd
+    progress_tick
   else
     log_info "→ $title"
     bash -c "$cmd" >>"$LOG_FILE" 2>&1
+    progress_tick
+  fi
+}
+
+start_progress() {
+  local total="$1"
+  if command -v gum >/dev/null 2>&1; then
+    PROGRESS_FIFO="$(mktemp -u)"
+    mkfifo "$PROGRESS_FIFO"
+    gum progress --total "$total" --title "Installation progress" <"$PROGRESS_FIFO" &
+    PROGRESS_PID=$!
+  fi
+}
+
+progress_tick() {
+  if [[ -n "${PROGRESS_FIFO:-}" ]]; then
+    printf '1\n' >"$PROGRESS_FIFO" || true
+  fi
+}
+
+finish_progress() {
+  if [[ -n "${PROGRESS_FIFO:-}" ]]; then
+    exec 9>"$PROGRESS_FIFO" 2>/dev/null || true
+    rm -f "$PROGRESS_FIFO" || true
+    wait "$PROGRESS_PID" 2>/dev/null || true
   fi
 }
 
@@ -123,8 +149,15 @@ log_info "Logging install output to: $LOG_FILE"
 log_info "Sudo authentication required..."
 sudo -v
 
+TOTAL_STEPS=2
+if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
+  TOTAL_STEPS=7
+fi
+start_progress "$TOTAL_STEPS"
+
 log_info "Configuring git..."
 source "$OMAKUB_SZAMSKI_PATH/install/setup-git.sh"
+progress_tick
 
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   run_step "Disable screen lock" "gsettings set org.gnome.desktop.screensaver lock-enabled false"
@@ -140,6 +173,8 @@ else
   log_info "Only installing terminal tools..."
   run_step "Install terminal tools" "source '$OMAKUB_SZAMSKI_PATH/install/terminal.sh'"
 fi
+
+finish_progress
 
 log_info ""
 log_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

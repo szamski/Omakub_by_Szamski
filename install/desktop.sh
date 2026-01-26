@@ -18,6 +18,9 @@ if command -v ghostty >/dev/null 2>&1; then
   source "$OMAKUB_SZAMSKI_PATH/install/desktop/set-ghostty-default.sh"
 fi
 
+echo "→ Installing Papirus icon theme..."
+source "$OMAKUB_SZAMSKI_PATH/install/desktop/app-papirus.sh"
+
 if [[ -n "${OMAKUB_THEME:-}" ]]; then
   echo "→ Applying theme: $OMAKUB_THEME"
   source "$OMAKUB_SZAMSKI_PATH/themes/apply-theme.sh" "$OMAKUB_THEME"
