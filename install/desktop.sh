@@ -37,6 +37,8 @@ run_step "Set Ghostty as default terminal" "source '$OMAKUB_SZAMSKI_PATH/install
 
 run_step "Install Papirus icon theme" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/app-papirus.sh'"
 
+run_step "Set Ghostty icon" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/set-ghostty-icon.sh'"
+
 run_step "Install GTK4 development libraries" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/app-gtk4-dev.sh'"
 
 run_step "Build theme switcher GUI" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/build-theme-switcher.sh'"

@@ -9,8 +9,11 @@ apps=(
   "chromium:org.chromium.Chromium.desktop,chromium-browser.desktop,chromium.desktop,google-chrome.desktop"
   "vscode:code.desktop"
   "spotify:spotify_spotify.desktop,spotify.desktop"
+  "riff:dev.diegovsky.Riff.desktop"
   "discord:discord.desktop"
   "slack:slack_slack.desktop,slack.desktop"
+  "libreoffice:libreoffice-startcenter.desktop"
+  "localsend:org.localsend.localsend_app.desktop"
 )
 
 installed_apps=()
@@ -55,8 +58,11 @@ preferred_order=(
   "google-chrome.desktop"
   "code.desktop"
   "spotify_spotify.desktop"
+  "dev.diegovsky.Riff.desktop"
   "discord.desktop"
   "slack_slack.desktop"
+  "libreoffice-startcenter.desktop"
+  "org.localsend.localsend_app.desktop"
 )
 
 # Create ordered list - maintain original order but sort by preferred order

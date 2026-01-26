@@ -17,10 +17,10 @@ else
 fi
 
 # Install new extensions
-gext install just-perfection-desktop@just-perfection
-gext install blur-my-shell@aunetx
-gext install AlphabeticalAppGrid@stuarthayhurst
-gext install tophat@fflewddur.github.io
+gext install just-perfection-desktop@just-perfection || true
+gext install blur-my-shell@aunetx || true
+gext install AlphabeticalAppGrid@stuarthayhurst || true
+gext install tophat@fflewddur.github.io || true
 
 # Compile gsettings schemas in order to be able to set them
 sudo cp ~/.local/share/gnome-shell/extensions/just-perfection-desktop\@just-perfection/schemas/org.gnome.shell.extensions.just-perfection.gschema.xml /usr/share/glib-2.0/schemas/
@@ -45,6 +45,12 @@ gsettings set org.gnome.shell.extensions.tophat network-usage-unit bits
 
 # Configure AlphabeticalAppGrid
 gsettings set org.gnome.shell.extensions.alphabetical-app-grid folder-order-position 'end'
+
+# Enable extensions (ignore failures if not supported)
+gnome-extensions enable just-perfection-desktop@just-perfection >/dev/null 2>&1 || true
+gnome-extensions enable blur-my-shell@aunetx >/dev/null 2>&1 || true
+gnome-extensions enable AlphabeticalAppGrid@stuarthayhurst >/dev/null 2>&1 || true
+gnome-extensions enable tophat@fflewddur.github.io >/dev/null 2>&1 || true
 
 # Configure Blur My Shell from saved settings
 OMAKUB_SZAMSKI_PATH="${OMAKUB_SZAMSKI_PATH:-$HOME/.local/share/omakub-szamski}"

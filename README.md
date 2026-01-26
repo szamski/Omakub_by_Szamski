@@ -10,13 +10,13 @@ My Ubuntu setup, inspired by Omakub but tailored to my workflow (Ghostty, Starsh
 ## Install
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/main/boot.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/master/boot.sh)
 ```
 
 ### Dry run (no changes)
 
 ```bash
-OMAKUB_SZAMSKI_DRY_RUN=1 bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/main/boot.sh)
+OMAKUB_SZAMSKI_DRY_RUN=1 bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/master/boot.sh)
 ```
 
 Local dry run:
@@ -29,8 +29,8 @@ Use a different repo or branch:
 
 ```bash
 OMAKUB_SZAMSKI_REPO="https://github.com/YourUser/Omakub_by_Szamski.git" \
-OMAKUB_SZAMSKI_REF="main" \
-bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/main/boot.sh)
+OMAKUB_SZAMSKI_REF="master" \
+bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/master/boot.sh)
 ```
 
 ## What it installs
