@@ -2,6 +2,7 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 
+import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import * as QuickSettings from 'resource:///org/gnome/shell/ui/quickSettings.js';
@@ -28,19 +29,15 @@ function listThemes(basePath) {
     return themes;
 
   const dir = Gio.File.new_for_path(themeDir);
-  try {
-    const enumerator = dir.enumerate_children('standard::name,standard::type', Gio.FileQueryInfoFlags.NONE, null);
-    let info;
-    while ((info = enumerator.next_file(null)) !== null) {
-      if (info.get_file_type() !== Gio.FileType.DIRECTORY)
-        continue;
-      const name = info.get_name();
-      const gnomePath = `${themeDir}/${name}/gnome.sh`;
-      if (GLib.file_test(gnomePath, GLib.FileTest.EXISTS))
-        themes.push(name);
-    }
-  } catch (err) {
-    return themes;
+  const enumerator = dir.enumerate_children('standard::name,standard::type', Gio.FileQueryInfoFlags.NONE, null);
+  let info;
+  while ((info = enumerator.next_file(null)) !== null) {
+    if (info.get_file_type() !== Gio.FileType.DIRECTORY)
+      continue;
+    const name = info.get_name();
+    const gnomePath = `${themeDir}/${name}/gnome.sh`;
+    if (GLib.file_test(gnomePath, GLib.FileTest.EXISTS))
+      themes.push(name);
   }
 
   themes.sort();
@@ -109,16 +106,16 @@ class ThemeIndicator extends QuickSettings.SystemIndicator {
   }
 });
 
-let indicator = null;
+export default class OmakubThemeExtension extends Extension {
+  enable() {
+    this._indicator = new ThemeIndicator();
+    Main.panel.statusArea.quickSettings.addExternalIndicator(this._indicator);
+  }
 
-export function enable() {
-  indicator = new ThemeIndicator();
-  Main.panel.statusArea.quickSettings.addExternalIndicator(indicator);
-}
-
-export function disable() {
-  if (indicator) {
-    indicator.destroy();
-    indicator = null;
+  disable() {
+    if (this._indicator) {
+      this._indicator.destroy();
+      this._indicator = null;
+    }
   }
 }
