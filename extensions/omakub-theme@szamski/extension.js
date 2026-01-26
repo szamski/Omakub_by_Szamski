@@ -1,7 +1,10 @@
-const {Gio, GLib, GObject} = imports.gi;
-const Main = imports.ui.main;
-const PopupMenu = imports.ui.popupMenu;
-const QuickSettings = imports.ui.quickSettings;
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import GObject from 'gi://GObject';
+
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
+import * as QuickSettings from 'resource:///org/gnome/shell/ui/quickSettings.js';
 
 function getBasePath() {
   const envPath = GLib.getenv('OMAKUB_SZAMSKI_PATH');
@@ -66,6 +69,16 @@ class ThemeIndicator extends QuickSettings.SystemIndicator {
       menuEnabled: true,
     });
 
+    try {
+      this._toggle.setToggleMode(false);
+    } catch (_) {
+      this._toggle.toggleMode = false;
+    }
+
+    this._toggle.connect('clicked', () => {
+      this._toggle.menu.open();
+    });
+
     this._toggle.menu.connect('open-state-changed', () => {
       this._rebuildMenu();
     });
@@ -98,12 +111,12 @@ class ThemeIndicator extends QuickSettings.SystemIndicator {
 
 let indicator = null;
 
-function enable() {
+export function enable() {
   indicator = new ThemeIndicator();
   Main.panel.statusArea.quickSettings.addExternalIndicator(indicator);
 }
 
-function disable() {
+export function disable() {
   if (indicator) {
     indicator.destroy();
     indicator = null;
