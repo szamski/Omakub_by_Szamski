@@ -62,7 +62,7 @@ class ThemeIndicator extends QuickSettings.SystemIndicator {
 
     this._toggle = new QuickSettings.QuickMenuToggle({
       title: 'Omakub Theme',
-      iconName: 'preference-desktop-appearance-symbolic',
+      iconName: 'omakub-theme-symbolic',
       menuEnabled: true,
     });
 

@@ -130,8 +130,14 @@ fi
 # Install local theme switcher extension
 LOCAL_THEME_EXT_SRC="$OMAKUB_SZAMSKI_PATH/extensions/omakub-theme@szamski"
 LOCAL_THEME_EXT_DST="$EXTENSIONS_DIR/omakub-theme@szamski"
+THEME_ICON_SRC="$OMAKUB_SZAMSKI_PATH/icons/omakub-theme-symbolic.svg"
+THEME_ICON_DST="$HOME/.local/share/icons/hicolor/scalable/apps/omakub-theme-symbolic.svg"
 if [[ -d "$LOCAL_THEME_EXT_SRC" ]]; then
   rm -rf "$LOCAL_THEME_EXT_DST"
   cp -r "$LOCAL_THEME_EXT_SRC" "$LOCAL_THEME_EXT_DST"
   chmod -R go-w "$LOCAL_THEME_EXT_DST" >/dev/null 2>&1 || true
+fi
+if [[ -f "$THEME_ICON_SRC" ]]; then
+  mkdir -p "$(dirname "$THEME_ICON_DST")"
+  cp "$THEME_ICON_SRC" "$THEME_ICON_DST"
 fi
