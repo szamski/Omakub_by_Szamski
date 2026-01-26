@@ -202,6 +202,9 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   if [[ "$SETUP_SPOTIFY" == true ]]; then
     DESKTOP_STEPS=$((DESKTOP_STEPS+1))
   fi
+  if [[ "$SETUP_RIFF" == true ]]; then
+    DESKTOP_STEPS=$((DESKTOP_STEPS+1))
+  fi
   if [[ "$SETUP_1PASSWORD" == true ]]; then
     DESKTOP_STEPS=$((DESKTOP_STEPS+1))
   fi

@@ -21,6 +21,8 @@ run_step "Apply GNOME settings" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/gn
 
 run_step "Set GNOME hotkeys" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/gnome-hotkeys.sh'"
 
+run_step "Install GNOME extensions" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/set-gnome-extensions.sh'"
+
 run_step "Set Ghostty as default terminal" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/set-ghostty-default.sh'"
 
 run_step "Install Papirus icon theme" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/app-papirus.sh'"
@@ -51,6 +53,10 @@ fi
 
 if [[ "$SETUP_SPOTIFY" == true ]]; then
   run_step "Install Spotify" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/optional/app-spotify.sh'"
+fi
+
+if [[ "$SETUP_RIFF" == true ]]; then
+  run_step "Install Riff (Spotify GTK)" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/optional/app-riff.sh'"
 fi
 
 if [[ "$SETUP_1PASSWORD" == true ]]; then

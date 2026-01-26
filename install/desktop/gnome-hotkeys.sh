@@ -23,6 +23,10 @@ gsettings set org.gnome.desktop.wm.keybindings begin-resize "['<Super>BackSpace'
 # For keyboards that only have a start/stop button for music, like Logitech MX Keys Mini
 gsettings set org.gnome.settings-daemon.plugins.media-keys next "['<Shift>AudioPlay']"
 
+# Terminal and browser shortcuts
+gsettings set org.gnome.settings-daemon.plugins.media-keys terminal "['<Super>Return']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys www "['<Shift><Super>b']"
+
 # Full-screen with title/navigation bar
 gsettings set org.gnome.desktop.wm.keybindings toggle-fullscreen "['<Shift>F11']"
 

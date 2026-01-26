@@ -20,6 +20,7 @@ installed_apps=()
 desktop_dirs=(
   "/var/lib/snapd/desktop/applications"
   "/var/lib/flatpak/exports/share/applications"
+  "$HOME/.local/share/flatpak/exports/share/applications"
   "/usr/share/applications"
   "/usr/local/share/applications"
   "$HOME/.local/share/applications"
@@ -50,6 +51,7 @@ done
 preferred_order=(
   "ghostty_ghostty.desktop"
   "org.gnome.Nautilus.desktop" 
+  "org.chromium.Chromium.desktop"
   "google-chrome.desktop"
   "code.desktop"
   "spotify_spotify.desktop"

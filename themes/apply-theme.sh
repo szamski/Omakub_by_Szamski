@@ -22,5 +22,6 @@ source "$OMAKUB_PATH/themes/$OMAKUB_THEME/gnome.sh"
 source "$OMAKUB_PATH/themes/set-ghostty-theme.sh" "$OMAKUB_THEME"
 source "$OMAKUB_PATH/themes/set-neovim-theme.sh" "$OMAKUB_THEME"
 source "$OMAKUB_PATH/themes/set-btop-theme.sh" "$OMAKUB_THEME"
+source "$OMAKUB_PATH/themes/set-starship-theme.sh" "$OMAKUB_THEME"
 
 echo "✓ Theme applied: $OMAKUB_THEME"
