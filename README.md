@@ -92,6 +92,10 @@ All settings live in `configs/` and are copied into `~/.config`. Before overwrit
 
 ## Post-install
 
+### GNOME
+
+Log out and back in so GNOME extensions apply.
+
 ### Tailscale
 
 ```bash

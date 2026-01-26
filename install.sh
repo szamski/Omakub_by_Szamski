@@ -270,8 +270,11 @@ log_info "Backups saved to: $BACKUP_DIR"
 log_info ""
 log_info "Next steps:"
 log_info "  1. Restart your terminal or run: source ~/.bashrc"
+if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
+  log_info "  2. Log out and back in to apply GNOME extensions"
+fi
 if ! command -v ghostty >/dev/null 2>&1; then
-  log_info "  2. Install Ghostty manually: sudo snap install ghostty --classic"
+  log_info "  3. Install Ghostty manually: sudo snap install ghostty --classic"
 fi
 log_info ""
 log_info "Enjoy your new development environment! 🚀"

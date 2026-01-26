@@ -10,7 +10,6 @@ app_order=(
   "riff"
   "discord"
   "slack"
-  "localsend"
 )
 
 # Search directories for .desktop files
@@ -60,7 +59,6 @@ app_id_variants["spotify"]="spotify_spotify.desktop,spotify.desktop,com.spotify.
 app_id_variants["riff"]="dev.diegovsky.Riff.desktop"
 app_id_variants["discord"]="discord.desktop,com.discordapp.Discord.desktop"
 app_id_variants["slack"]="slack_slack.desktop,slack.desktop,com.slack.Slack.desktop"
-app_id_variants["localsend"]="org.localsend.localsend_app.desktop,org.localsend.localsend.desktop"
 
 app_exec_regex["ghostty"]="ghostty"
 app_exec_regex["files"]="nautilus"
@@ -70,7 +68,6 @@ app_exec_regex["spotify"]="spotify"
 app_exec_regex["riff"]="riff"
 app_exec_regex["discord"]="discord"
 app_exec_regex["slack"]="slack"
-app_exec_regex["localsend"]="localsend"
 
 app_wmclass_regex["ghostty"]="ghostty"
 app_wmclass_regex["files"]="nautilus"
@@ -80,7 +77,6 @@ app_wmclass_regex["spotify"]="spotify"
 app_wmclass_regex["riff"]="riff"
 app_wmclass_regex["discord"]="discord"
 app_wmclass_regex["slack"]="slack"
-app_wmclass_regex["localsend"]="localsend"
 
 app_name_regex["ghostty"]="ghostty"
 app_name_regex["files"]="files|nautilus"
@@ -90,7 +86,6 @@ app_name_regex["spotify"]="spotify"
 app_name_regex["riff"]="riff"
 app_name_regex["discord"]="discord"
 app_name_regex["slack"]="slack"
-app_name_regex["localsend"]="localsend"
 
 match_by_regex() {
   local value="$1"
