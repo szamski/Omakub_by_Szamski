@@ -39,7 +39,8 @@ run_step() {
   local cmd="$*"
 
   if command -v gum >/dev/null 2>&1; then
-    gum spin --title "$title" -- bash -c "$cmd >>\"$LOG_FILE\" 2>&1" >&$OMAKUB_STDOUT_FD
+    local out_fd="${OMAKUB_STDOUT_FD:-1}"
+    gum spin --title "$title" -- bash -c "$cmd >>\"$LOG_FILE\" 2>&1" >&$out_fd
   else
     log_info "→ $title"
     bash -c "$cmd" >>"$LOG_FILE" 2>&1
