@@ -3,6 +3,11 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ "$EUID" -eq 0 ]]; then
+  echo "Error: Do not run install.sh with sudo."
+  echo "Run: ./install.sh"
+  exit 1
+fi
 if [[ -d "$SCRIPT_DIR/install" ]]; then
   OMAKUB_SZAMSKI_PATH="$SCRIPT_DIR"
 else
