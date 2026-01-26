@@ -1,13 +1,13 @@
 #!/bin/bash
 
-OMAKUB_SZAMSKI_PATH="${OMAKUB_SZAMSKI_PATH:-$HOME/.local/share/omakub-szamski}"
-APP_DIR="$OMAKUB_SZAMSKI_PATH/apps/theme-switcher"
+OMAKUB_PATH="${OMAKUB_PATH:-$HOME/.local/share/omakub}"
+APP_DIR="$OMAKUB_PATH/apps/theme-switcher"
 BIN="$APP_DIR/target/release/omakub-theme-switcher"
 DESKTOP_SRC="$APP_DIR/omakub-theme-switcher.desktop"
 DESKTOP_DST="$HOME/.local/share/applications/omakub-theme-switcher.desktop"
-ICON_SRC="$OMAKUB_SZAMSKI_PATH/icons/omacom.png"
-ICON_DST="$HOME/.local/share/icons/hicolor/512x512/apps/omacom.png"
-WRAPPER_SRC="$OMAKUB_SZAMSKI_PATH/bin/omakub-theme-switcher"
+ICON_SRC="$OMAKUB_PATH/icons/omakub-theme-symbolic.svg"
+ICON_DST="$HOME/.local/share/icons/hicolor/scalable/apps/omakub-theme-symbolic.svg"
+WRAPPER_SRC="$OMAKUB_PATH/bin/omakub-theme-switcher"
 WRAPPER_DST="$HOME/.local/bin/omakub-theme-switcher"
 
 if ! command -v cargo >/dev/null 2>&1; then

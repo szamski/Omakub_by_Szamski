@@ -8,10 +8,10 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import * as QuickSettings from 'resource:///org/gnome/shell/ui/quickSettings.js';
 
 function getBasePath() {
-  const envPath = GLib.getenv('OMAKUB_SZAMSKI_PATH');
+  const envPath = GLib.getenv('OMAKUB_PATH');
   if (envPath && envPath.length > 0)
     return envPath;
-  return `${GLib.get_home_dir()}/.local/share/omakub-szamski`;
+  return `${GLib.get_home_dir()}/.local/share/omakub`;
 }
 
 function titleCase(input) {

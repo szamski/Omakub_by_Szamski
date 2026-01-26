@@ -4,11 +4,11 @@ use std::fs;
 use std::process::Command;
 
 fn theme_root() -> String {
-    if let Ok(path) = std::env::var("OMAKUB_SZAMSKI_PATH") {
+    if let Ok(path) = std::env::var("OMAKUB_PATH") {
         return path;
     }
     let home = std::env::var("HOME").unwrap_or_else(|_| String::from("/home"));
-    format!("{}/.local/share/omakub-szamski", home)
+    format!("{}/.local/share/omakub", home)
 }
 
 fn title_case(input: &str) -> String {
@@ -138,7 +138,7 @@ fn build_ui(app: &Application) {
 
 fn main() {
     let app = Application::builder()
-        .application_id("io.omakub.szamski.ThemeSwitcher")
+        .application_id("io.omakub.ThemeSwitcher")
         .build();
 
     app.connect_activate(build_ui);
