@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Omakub Theme Switcher
+Comment=Choose and apply Omakub themes
+Exec=env OMAKUB_SZAMSKI_PATH=%h/.local/share/omakub-szamski %h/.local/share/omakub-szamski/apps/theme-switcher/target/release/omakub-theme-switcher
+Icon=omacom
+Terminal=false
+Categories=Settings;GTK;
+StartupWMClass=io.omakub.szamski.ThemeSwitcher
