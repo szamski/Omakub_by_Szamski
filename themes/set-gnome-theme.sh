@@ -57,10 +57,14 @@ EOF
 set_folder_icon "$HOME/snap" "folder-snap"
 set_folder_icon "$HOME/Dropbox" "folder-dropbox"
 
-WORK_ICON="folder-${PAPIRUS_COLOR}-projects"
-if [[ ! -f "$ICON_BASE/${WORK_ICON}.svg" ]]; then
-  WORK_ICON="folder-${PAPIRUS_COLOR}"
-fi
-if [[ -f "$ICON_BASE/${WORK_ICON}.svg" ]]; then
-  set_folder_icon "$HOME/Work" "$WORK_ICON"
+if [[ -f "$ICON_BASE/folder-code.svg" ]]; then
+  set_folder_icon "$HOME/Work" "folder-code"
+else
+  WORK_ICON="folder-${PAPIRUS_COLOR}-projects"
+  if [[ ! -f "$ICON_BASE/${WORK_ICON}.svg" ]]; then
+    WORK_ICON="folder-${PAPIRUS_COLOR}"
+  fi
+  if [[ -f "$ICON_BASE/${WORK_ICON}.svg" ]]; then
+    set_folder_icon "$HOME/Work" "$WORK_ICON"
+  fi
 fi
