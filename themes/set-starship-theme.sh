@@ -58,8 +58,15 @@ if not background or len(palette) != 16:
     raise SystemExit("Invalid ghostty palette data")
 
 # Map starship palette names to ghostty colors
+def normalize(value):
+    if value.startswith("0x"):
+        return "#" + value[2:]
+    if value.startswith("#"):
+        return value
+    return "#" + value
+
 def pick(idx, fallback):
-    return palette[idx] if idx < len(palette) else fallback
+    return normalize(palette[idx]) if idx < len(palette) else normalize(fallback)
 
 palette_map = {
     "red": pick(1, "#ff0000"),
@@ -68,8 +75,8 @@ palette_map = {
     "green": pick(2, "#00ff00"),
     "sapphire": pick(4, "#00aaff"),
     "lavender": pick(5, "#aa00ff"),
-    "crust": background,
-    "text": foreground or "#ffffff",
+    "crust": normalize(background),
+    "text": normalize(foreground or "#ffffff"),
 }
 
 block_header = f"[palettes.{theme}]"

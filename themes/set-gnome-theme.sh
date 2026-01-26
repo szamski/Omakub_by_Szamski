@@ -2,9 +2,24 @@
 
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 gsettings set org.gnome.desktop.interface cursor-theme 'Yaru'
-gsettings set org.gnome.desktop.interface gtk-theme "Yaru-$OMAKUB_THEME_COLOR-dark"
+gsettings set org.gnome.desktop.interface gtk-theme "Yaru-dark"
 gsettings set org.gnome.desktop.interface icon-theme "Papirus-Dark"
-gsettings set org.gnome.desktop.interface accent-color "$OMAKUB_THEME_COLOR" 2>/dev/null || true
+
+ACCENT_COLOR="blue"
+case "$OMAKUB_THEME" in
+  catppuccin) ACCENT_COLOR="pink" ;;
+  tokyo-night) ACCENT_COLOR="blue" ;;
+  nord) ACCENT_COLOR="blue" ;;
+  everforest) ACCENT_COLOR="green" ;;
+  gruvbox) ACCENT_COLOR="orange" ;;
+  kanagawa) ACCENT_COLOR="red" ;;
+  ristretto) ACCENT_COLOR="red" ;;
+  rose-pine) ACCENT_COLOR="purple" ;;
+  matte-black) ACCENT_COLOR="slate" ;;
+  osaka-jade) ACCENT_COLOR="teal" ;;
+esac
+
+gsettings set org.gnome.desktop.interface accent-color "$ACCENT_COLOR" 2>/dev/null || true
 
 OMAKUB_PATH="${OMAKUB_SZAMSKI_PATH:-${OMAKUB_PATH:-$HOME/.local/share/omakub-szamski}}"
 BACKGROUND_ORG_PATH="$OMAKUB_PATH/themes/$OMAKUB_THEME_BACKGROUND"
