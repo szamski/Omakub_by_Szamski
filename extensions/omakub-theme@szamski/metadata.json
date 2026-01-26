@@ -3,5 +3,6 @@
   "name": "Omakub Theme",
   "description": "Quick Settings theme switcher",
   "shell-version": ["45", "46", "47", "48", "49"],
-  "version": 1
+  "version": 1,
+  "type": "module"
 }
