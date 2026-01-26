@@ -33,6 +33,7 @@ install_extension "just-perfection-desktop@just-perfection"
 install_extension "blur-my-shell@aunetx"
 install_extension "AlphabeticalAppGrid@stuarthayhurst"
 install_extension "tophat@fflewddur.github.io"
+install_extension "caffeine@patapon.info"
 
 find_schema_dir() {
   for dir in "$@"; do
@@ -74,6 +75,7 @@ gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perf
 gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection dash-app-running true
 gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection workspace true
 gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection workspace-popup false
+gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection quick-settings-night-light false
 
 top_hat_schema_dir="$(find_schema_dir \
   "$EXTENSIONS_DIR/tophat@fflewddur.github.io/schemas")"
@@ -114,6 +116,7 @@ if gnome-extensions list >/dev/null 2>&1; then
   enable_extension "alphabetical-app-grid@stuarthayhurst"
   enable_extension "AlphabeticalAppGrid@stuarthayhurst"
   enable_extension "tophat@fflewddur.github.io"
+  enable_extension "caffeine@patapon.info"
   enable_extension "omakub-theme@szamski"
 else
   echo "Warning: GNOME Shell not detected (no DBus session). Skipping extension enable."

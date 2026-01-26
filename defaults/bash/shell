@@ -13,4 +13,4 @@ fi
 export PATH="./bin:$HOME/.local/bin:$HOME/.local/share/omakub-szamski/bin:$PATH"
 set +h
 
-export OMAKUB_SZAMSKI_PATH="$HOME/.local/share/omakub-szamski"
+export OMAKUB_SZAMSKI_PATH="$HOME/.local/share/omakub-szamski"/
