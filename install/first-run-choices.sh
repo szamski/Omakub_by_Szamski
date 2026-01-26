@@ -20,6 +20,24 @@ esac
 
 # Desktop apps (GNOME only)
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
+  THEME_NAMES=(
+    "Tokyo Night"
+    "Catppuccin"
+    "Nord"
+    "Everforest"
+    "Gruvbox"
+    "Kanagawa"
+    "Ristretto"
+    "Rose Pine"
+    "Matte Black"
+    "Osaka Jade"
+  )
+  THEME_SELECTED=$(gum choose "${THEME_NAMES[@]}" --header "Select theme" --selected "Catppuccin")
+  export OMAKUB_THEME=$(echo "$THEME_SELECTED" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')
+  if [[ -z "$OMAKUB_THEME" ]]; then
+    export OMAKUB_THEME="catppuccin"
+  fi
+
   DESKTOP_APPS=(
     "VS Code"
     "Discord"

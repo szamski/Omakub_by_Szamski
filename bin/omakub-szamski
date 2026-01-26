@@ -14,6 +14,7 @@ case "$1" in
     echo "  backup        Create backup of current configs"
     echo "  list-backups  Show available backups"
     echo "  restore       Restore from backup"
+    echo "  theme         Choose and apply a theme"
     ;;
 
   version)
@@ -42,6 +43,10 @@ case "$1" in
     cp ~/.inputrc "$BACKUP_DIR/" 2>/dev/null
 
     echo "✓ Backup created: $BACKUP_DIR"
+    ;;
+
+  theme)
+    source "$OMAKUB_SZAMSKI_PATH/bin/omakub-sub/theme.sh"
     ;;
 
   list-backups)

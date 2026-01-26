@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OMAKUB_SZAMSKI_PATH="$HOME/.local/share/omakub-szamski"
+OMAKUB_SZAMSKI_PATH="${OMAKUB_SZAMSKI_PATH:-$HOME/.local/share/omakub-szamski}"
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "Installing Terminal Tools"

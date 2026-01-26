@@ -36,7 +36,7 @@ rm -rf ~/.config/nvim/.git
 
 mkdir -p ~/.config/nvim/plugin/after
 cp "$OMAKUB_SZAMSKI_PATH/configs/neovim/transparency.lua" ~/.config/nvim/plugin/after/
-cp "$OMAKUB_SZAMSKI_PATH/themes/catppuccin-mocha/neovim.lua" ~/.config/nvim/lua/plugins/theme.lua
+cp "$OMAKUB_SZAMSKI_PATH/themes/catppuccin/neovim.lua" ~/.config/nvim/lua/plugins/theme.lua
 cp "$OMAKUB_SZAMSKI_PATH/configs/neovim/snacks-animated-scrolling-off.lua" ~/.config/nvim/lua/plugins/
 cp "$OMAKUB_SZAMSKI_PATH/configs/neovim/lazyvim.json" ~/.config/nvim/
 

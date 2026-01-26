@@ -9,7 +9,7 @@ fi
 sudo apt install -y btop
 
 mkdir -p ~/.config/btop/themes
-cp "$OMAKUB_SZAMSKI_PATH/themes/catppuccin-mocha/btop.theme" ~/.config/btop/themes/catppuccin-mocha.theme
+cp "$OMAKUB_SZAMSKI_PATH/themes/catppuccin/btop.theme" ~/.config/btop/themes/catppuccin.theme
 
 if [ -f "$HOME/.config/btop/btop.conf" ]; then
   if [[ "$AUTO_BACKUP" == true ]]; then

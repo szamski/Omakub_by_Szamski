@@ -3,12 +3,10 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [[ -z "$OMAKUB_SZAMSKI_PATH" ]]; then
-  if [[ -d "$SCRIPT_DIR/install" ]]; then
-    OMAKUB_SZAMSKI_PATH="$SCRIPT_DIR"
-  else
-    OMAKUB_SZAMSKI_PATH="$HOME/.local/share/omakub-szamski"
-  fi
+if [[ -d "$SCRIPT_DIR/install" ]]; then
+  OMAKUB_SZAMSKI_PATH="$SCRIPT_DIR"
+else
+  OMAKUB_SZAMSKI_PATH="${OMAKUB_SZAMSKI_PATH:-$HOME/.local/share/omakub-szamski}"
 fi
 BACKUP_DATE=$(date +%Y%m%d_%H%M%S)
 export BACKUP_DIR="$HOME/.config-backup-$BACKUP_DATE"
@@ -22,14 +20,25 @@ done
 
 source "$OMAKUB_SZAMSKI_PATH/install/backup-configs.sh"
 
-trap 'echo "Omakub_by_Szamski installation failed! You can retry by running: source $OMAKUB_SZAMSKI_PATH/install.sh"' ERR
+LOG_DIR="$HOME/.local/share/omakub-szamski/logs"
+LOG_FILE="$LOG_DIR/install-$(date +%Y%m%d_%H%M%S).log"
+
+log_info() {
+  if [[ -n "${OMAKUB_STDOUT_FD:-}" ]]; then
+    echo "$@" >&$OMAKUB_STDOUT_FD
+  else
+    echo "$@"
+  fi
+}
+
+trap 'log_info "Omakub_by_Szamski installation failed! You can retry by running: source $OMAKUB_SZAMSKI_PATH/install.sh"' ERR
 
 source "$OMAKUB_SZAMSKI_PATH/install/check-version.sh"
 
-echo "Installing interactive menu system..."
+log_info "Installing interactive menu system..."
 source "$OMAKUB_SZAMSKI_PATH/install/terminal/required/app-gum.sh" >/dev/null
 
-echo "Get ready to make a few choices..."
+log_info "Get ready to make a few choices..."
 source "$OMAKUB_SZAMSKI_PATH/install/first-run-choices.sh"
 
 if [[ "${OMAKUB_SZAMSKI_DRY_RUN}" == "1" || "${OMAKUB_SZAMSKI_DRY_RUN}" == "true" ]]; then
@@ -37,50 +46,60 @@ if [[ "${OMAKUB_SZAMSKI_DRY_RUN}" == "1" || "${OMAKUB_SZAMSKI_DRY_RUN}" == "true
 fi
 
 if [[ "$DRY_RUN" == true ]]; then
-  echo ""
-  echo "Dry-run enabled. Planned actions:"
-  echo "  Terminal tools: fastfetch, btop, neovim, docker, mise, fzf, ripgrep, bat, eza, zoxide"
-  echo "  Terminal UI: lazygit, lazydocker"
+  log_info ""
+  log_info "Dry-run enabled. Planned actions:"
+  log_info "  Terminal tools: fastfetch, btop, neovim, docker, mise, fzf, ripgrep, bat, eza, zoxide"
+  log_info "  Terminal UI: lazygit, lazydocker"
   if [[ "$SETUP_TAILSCALE" == true ]]; then
-    echo "  VPN: tailscale"
+    log_info "  VPN: tailscale"
   fi
   if [[ "$SETUP_NORDVPN" == true ]]; then
-    echo "  VPN: nordvpn"
+    log_info "  VPN: nordvpn"
   fi
   if [[ "$SETUP_TLP" == true ]]; then
-    echo "  Laptop: TLP optimization"
+    log_info "  Laptop: TLP optimization"
   fi
   if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
-    echo "  Desktop: GNOME settings and hotkeys"
+    log_info "  Desktop: GNOME settings and hotkeys"
+    if [[ -n "${OMAKUB_THEME:-}" ]]; then
+      log_info "  Theme: $OMAKUB_THEME"
+    fi
     if [[ "$SETUP_VSCODE" == true ]]; then
-      echo "  Desktop app: VS Code"
+      log_info "  Desktop app: VS Code"
     fi
     if [[ "$SETUP_DISCORD" == true ]]; then
-      echo "  Desktop app: Discord"
+      log_info "  Desktop app: Discord"
     fi
     if [[ "$SETUP_SLACK" == true ]]; then
-      echo "  Desktop app: Slack"
+      log_info "  Desktop app: Slack"
     fi
     if [[ "$SETUP_SPOTIFY" == true ]]; then
-      echo "  Desktop app: Spotify"
+      log_info "  Desktop app: Spotify"
     fi
     if [[ "$SETUP_1PASSWORD" == true ]]; then
-      echo "  Desktop app: 1Password"
+      log_info "  Desktop app: 1Password"
     fi
     if [[ "$SETUP_DROPBOX" == true ]]; then
-      echo "  Desktop app: Dropbox"
+      log_info "  Desktop app: Dropbox"
     fi
     if [[ "$SETUP_CHROME" == true ]]; then
-      echo "  Browser: Google Chrome"
+      log_info "  Browser: Google Chrome"
     fi
     if [[ "$SETUP_CHROMIUM" == true ]]; then
-      echo "  Browser: Chromium"
+      log_info "  Browser: Chromium"
     fi
   fi
-  echo ""
-  echo "Dry-run complete. No changes were made."
+  log_info ""
+  log_info "Dry-run complete. No changes were made."
   return 0
 fi
+
+mkdir -p "$LOG_DIR"
+exec 3>&1 4>&2
+export OMAKUB_STDOUT_FD=3
+exec >>"$LOG_FILE" 2>&1
+log_info ""
+log_info "Logging install output to: $LOG_FILE"
 
 source "$OMAKUB_SZAMSKI_PATH/install/setup-git.sh"
 
@@ -88,28 +107,28 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   gsettings set org.gnome.desktop.screensaver lock-enabled false
   gsettings set org.gnome.desktop.session idle-delay 0
 
-  echo "Installing terminal and desktop tools..."
+  log_info "Installing terminal and desktop tools..."
   source "$OMAKUB_SZAMSKI_PATH/install/terminal.sh"
   source "$OMAKUB_SZAMSKI_PATH/install/desktop.sh"
 
   gsettings set org.gnome.desktop.screensaver lock-enabled true
   gsettings set org.gnome.desktop.session idle-delay 300
 else
-  echo "Only installing terminal tools..."
+  log_info "Only installing terminal tools..."
   source "$OMAKUB_SZAMSKI_PATH/install/terminal.sh"
 fi
 
-echo ""
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "✓ Installation Complete!"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo ""
-echo "Backups saved to: $BACKUP_DIR"
-echo ""
-echo "Next steps:"
-echo "  1. Restart your terminal or run: source ~/.bashrc"
+log_info ""
+log_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+log_info "✓ Installation Complete!"
+log_info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+log_info ""
+log_info "Backups saved to: $BACKUP_DIR"
+log_info ""
+log_info "Next steps:"
+log_info "  1. Restart your terminal or run: source ~/.bashrc"
 if ! command -v ghostty >/dev/null 2>&1; then
-  echo "  2. Install Ghostty manually: sudo snap install ghostty --classic"
+  log_info "  2. Install Ghostty manually: sudo snap install ghostty --classic"
 fi
-echo ""
-echo "Enjoy your new development environment! 🚀"
+log_info ""
+log_info "Enjoy your new development environment! 🚀"

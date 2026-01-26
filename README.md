@@ -58,6 +58,16 @@ bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/ma
 - 1Password
 - Dropbox
 
+### Themes
+
+Motywy obejmuja: GNOME (GTK + wallpaper), Neovim, btop, Ghostty.
+
+Zmien motyw:
+
+```bash
+omakub-szamski theme
+```
+
 ### VPN (opcjonalnie)
 
 - Tailscale

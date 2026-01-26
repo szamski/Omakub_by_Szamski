@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OMAKUB_SZAMSKI_PATH="$HOME/.local/share/omakub-szamski"
+OMAKUB_SZAMSKI_PATH="${OMAKUB_SZAMSKI_PATH:-$HOME/.local/share/omakub-szamski}"
 
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -16,6 +16,11 @@ source "$OMAKUB_SZAMSKI_PATH/install/desktop/gnome-hotkeys.sh"
 if command -v ghostty >/dev/null 2>&1; then
   echo "→ Setting Ghostty as default terminal..."
   source "$OMAKUB_SZAMSKI_PATH/install/desktop/set-ghostty-default.sh"
+fi
+
+if [[ -n "${OMAKUB_THEME:-}" ]]; then
+  echo "→ Applying theme: $OMAKUB_THEME"
+  source "$OMAKUB_SZAMSKI_PATH/themes/apply-theme.sh" "$OMAKUB_THEME"
 fi
 
 if [[ "$SETUP_VSCODE" == true ]]; then
