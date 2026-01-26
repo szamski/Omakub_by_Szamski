@@ -44,6 +44,8 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
     "Slack"
     "Spotify"
     "Riff (Spotify GTK)"
+    "LibreOffice"
+    "LocalSend"
     "1Password"
     "Dropbox"
   )
@@ -56,6 +58,8 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   export SETUP_SLACK=false
   export SETUP_SPOTIFY=false
   export SETUP_RIFF=false
+  export SETUP_LIBREOFFICE=false
+  export SETUP_LOCALSEND=false
   export SETUP_1PASSWORD=false
   export SETUP_DROPBOX=false
 
@@ -73,6 +77,12 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   fi
   if printf '%s\n' "$SELECTED_APPS" | grep -Fxq "Riff (Spotify GTK)"; then
     export SETUP_RIFF=true
+  fi
+  if printf '%s\n' "$SELECTED_APPS" | grep -Fxq "LibreOffice"; then
+    export SETUP_LIBREOFFICE=true
+  fi
+  if printf '%s\n' "$SELECTED_APPS" | grep -Fxq "LocalSend"; then
+    export SETUP_LOCALSEND=true
   fi
   if printf '%s\n' "$SELECTED_APPS" | grep -Fxq "1Password"; then
     export SETUP_1PASSWORD=true

@@ -218,6 +218,12 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   if [[ "$SETUP_RIFF" == true ]]; then
     DESKTOP_STEPS=$((DESKTOP_STEPS+1))
   fi
+  if [[ "$SETUP_LIBREOFFICE" == true ]]; then
+    DESKTOP_STEPS=$((DESKTOP_STEPS+1))
+  fi
+  if [[ "$SETUP_LOCALSEND" == true ]]; then
+    DESKTOP_STEPS=$((DESKTOP_STEPS+1))
+  fi
   if [[ "$SETUP_1PASSWORD" == true ]]; then
     DESKTOP_STEPS=$((DESKTOP_STEPS+1))
   fi

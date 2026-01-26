@@ -69,6 +69,14 @@ if [[ "$SETUP_RIFF" == true ]]; then
   run_step "Install Riff (Spotify GTK)" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/optional/app-riff.sh'"
 fi
 
+if [[ "$SETUP_LIBREOFFICE" == true ]]; then
+  run_step "Install LibreOffice" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/optional/app-libreoffice.sh'"
+fi
+
+if [[ "$SETUP_LOCALSEND" == true ]]; then
+  run_step "Install LocalSend" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/optional/app-localsend.sh'"
+fi
+
 if [[ "$SETUP_1PASSWORD" == true ]]; then
   run_step "Install 1Password" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/optional/app-1password.sh'"
 fi
