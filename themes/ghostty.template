@@ -7,6 +7,8 @@ window-width = {{WINDOW_WIDTH}}
 window-height = {{WINDOW_HEIGHT}}
 background-opacity = 0.95
 background-blur = 20
+cursor-style = block
+cursor-style-blink = true
 
 # Theme colors
 background = {{BACKGROUND}}
