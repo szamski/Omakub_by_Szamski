@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Skip if fastfetch is already installed
+if command -v fastfetch >/dev/null 2>&1; then
+  echo "⏭️  fastfetch already installed, skipping..."
+  return 0
+fi
+
 sudo add-apt-repository -y ppa:zhangsongcui3371/fastfetch
 sudo apt update -y
 sudo apt install -y fastfetch

@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Skip if Docker is already installed
+if command -v docker >/dev/null 2>&1; then
+  echo "⏭️  Docker already installed, skipping..."
+  return 0
+fi
+
 if [ ! -f /etc/apt/sources.list.d/docker.list ]; then
   [ -f /etc/apt/keyrings/docker.asc ] && sudo rm /etc/apt/keyrings/docker.asc
   sudo install -m 0755 -d /etc/apt/keyrings

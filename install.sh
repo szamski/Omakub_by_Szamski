@@ -103,6 +103,16 @@ else
 fi
 
 echo ""
-echo "Installation complete!"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "✓ Installation Complete!"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
 echo "Backups saved to: $BACKUP_DIR"
-echo "Restart your terminal or run: source ~/.bashrc"
+echo ""
+echo "Next steps:"
+echo "  1. Restart your terminal or run: source ~/.bashrc"
+if ! command -v ghostty >/dev/null 2>&1; then
+  echo "  2. Install Ghostty manually: sudo snap install ghostty --classic"
+fi
+echo ""
+echo "Enjoy your new development environment! 🚀"

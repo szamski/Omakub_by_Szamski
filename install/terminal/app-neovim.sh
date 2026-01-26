@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# Skip if Neovim is already installed (check for version 0.9.0 or higher)
+if command -v nvim >/dev/null 2>&1; then
+  NVIM_VERSION=$(nvim --version | head -n1 | grep -oP 'v\K[0-9]+\.[0-9]+' || echo "0.0")
+  MAJOR=$(echo "$NVIM_VERSION" | cut -d. -f1)
+  MINOR=$(echo "$NVIM_VERSION" | cut -d. -f2)
+  if [ "$MAJOR" -gt 0 ] || ([ "$MAJOR" -eq 0 ] && [ "$MINOR" -ge 9 ]); then
+    echo "⏭️  Neovim $NVIM_VERSION already installed, skipping..."
+    return 0
+  fi
+fi
+
 cd /tmp
 wget -O nvim.tar.gz "https://github.com/neovim/neovim/releases/download/stable/nvim-linux-x86_64.tar.gz"
 tar -xf nvim.tar.gz

@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Skip if btop is already installed
+if command -v btop >/dev/null 2>&1; then
+  echo "⏭️  btop already installed, skipping..."
+  return 0
+fi
+
 sudo apt install -y btop
 
 mkdir -p ~/.config/btop/themes
