@@ -1,10 +1,20 @@
 #!/bin/bash
 
 sudo apt install -y gnome-shell-extension-manager gir1.2-gtop-2.0 gir1.2-clutter-1.0
-pipx install gnome-extensions-cli --system-site-packages
+
+if command -v gext >/dev/null 2>&1; then
+  echo "⏭️  gnome-extensions-cli already installed"
+else
+  pipx install gnome-extensions-cli
+fi
 
 # Pause to assure user is ready to accept confirmations
-gum confirm "To install Gnome extensions, you need to accept some confirmations. Ready?"
+if command -v gum >/dev/null 2>&1; then
+  gum confirm "To install Gnome extensions, you need to accept some confirmations. Ready?"
+else
+  read -r -p "To install Gnome extensions, you need to accept some confirmations. Ready? (y/N) " confirm
+  [[ "$confirm" =~ ^[Yy]$ ]] || return 0
+fi
 
 # Install new extensions
 gext install just-perfection-desktop@just-perfection

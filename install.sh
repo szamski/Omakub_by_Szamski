@@ -54,6 +54,19 @@ run_step() {
   fi
 }
 
+run_interactive() {
+  local title="$1"
+  shift
+  local cmd="$*"
+  local out_fd="${OMAKUB_STDOUT_FD:-1}"
+
+  log_info "→ $title"
+  bash -c "$cmd" < /dev/tty \
+    > >(tee -a "$LOG_FILE" >&$out_fd) \
+    2> >(tee -a "$LOG_FILE" >&$out_fd)
+  progress_advance
+}
+
 start_progress() {
   PROGRESS_TOTAL="$1"
   PROGRESS_CURRENT=0

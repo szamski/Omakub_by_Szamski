@@ -12,6 +12,16 @@ if ! declare -f run_step >/dev/null 2>&1; then
   }
 fi
 
+if ! declare -f run_interactive >/dev/null 2>&1; then
+  run_interactive() {
+    local title="$1"
+    shift
+    local cmd="$*"
+    echo "→ $title"
+    bash -c "$cmd"
+  }
+fi
+
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "Configuring Desktop Environment"
@@ -21,7 +31,7 @@ run_step "Apply GNOME settings" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/gn
 
 run_step "Set GNOME hotkeys" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/gnome-hotkeys.sh'"
 
-run_step "Install GNOME extensions" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/set-gnome-extensions.sh'"
+run_interactive "Install GNOME extensions" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/set-gnome-extensions.sh'"
 
 run_step "Set Ghostty as default terminal" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/set-ghostty-default.sh'"
 
