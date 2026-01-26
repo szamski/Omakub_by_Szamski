@@ -42,6 +42,15 @@ find_schema_dir() {
   return 1
 }
 
+compile_schemas_dir() {
+  local dir="$1"
+  if [[ -n "$dir" && -d "$dir" ]]; then
+    if [[ ! -f "$dir/gschemas.compiled" ]]; then
+      glib-compile-schemas "$dir" >/dev/null 2>&1 || true
+    fi
+  fi
+}
+
 gsettings_set() {
   local schema_dir="$1"
   local schema="$2"
@@ -56,6 +65,7 @@ gsettings_set() {
 
 just_perfection_schema_dir="$(find_schema_dir \
   "$EXTENSIONS_DIR/just-perfection-desktop@just-perfection/schemas")"
+compile_schemas_dir "$just_perfection_schema_dir"
 
 # Configure Just Perfection
 gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection animation 2
@@ -65,6 +75,7 @@ gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perf
 
 top_hat_schema_dir="$(find_schema_dir \
   "$EXTENSIONS_DIR/tophat@fflewddur.github.io/schemas")"
+compile_schemas_dir "$top_hat_schema_dir"
 
 # Configure TopHat
 gsettings_set "$top_hat_schema_dir" org.gnome.shell.extensions.tophat show-icons false
@@ -77,6 +88,7 @@ gsettings_set "$top_hat_schema_dir" org.gnome.shell.extensions.tophat network-us
 alphabetical_schema_dir="$(find_schema_dir \
   "$EXTENSIONS_DIR/AlphabeticalAppGrid@stuarthayhurst/schemas" \
   "$EXTENSIONS_DIR/alphabetical-app-grid@stuarthayhurst/schemas")"
+compile_schemas_dir "$alphabetical_schema_dir"
 
 # Configure AlphabeticalAppGrid
 gsettings_set "$alphabetical_schema_dir" org.gnome.shell.extensions.alphabetical-app-grid folder-order-position 'end'
