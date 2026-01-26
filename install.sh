@@ -46,36 +46,54 @@ run_step() {
   if command -v gum >/dev/null 2>&1; then
     local out_fd="${OMAKUB_STDOUT_FD:-1}"
     gum spin --title "$title" -- bash -c "$cmd >>\"$LOG_FILE\" 2>&1" >&$out_fd
-    progress_tick
+    progress_advance
   else
     log_info "→ $title"
     bash -c "$cmd" >>"$LOG_FILE" 2>&1
-    progress_tick
+    progress_advance
   fi
 }
 
 start_progress() {
-  local total="$1"
-  if command -v gum >/dev/null 2>&1; then
-    PROGRESS_FIFO="$(mktemp -u)"
-    mkfifo "$PROGRESS_FIFO"
-    gum progress --total "$total" --title "Installation progress" <"$PROGRESS_FIFO" &
-    PROGRESS_PID=$!
-  fi
+  PROGRESS_TOTAL="$1"
+  PROGRESS_CURRENT=0
+  progress_tick
 }
 
 progress_tick() {
-  if [[ -n "${PROGRESS_FIFO:-}" ]]; then
-    printf '1\n' >"$PROGRESS_FIFO" || true
+  if [[ -z "${PROGRESS_TOTAL:-}" ]]; then
+    return 0
+  fi
+  if [[ -z "${PROGRESS_CURRENT:-}" ]]; then
+    PROGRESS_CURRENT=0
+  fi
+  if [[ "$PROGRESS_CURRENT" -gt "$PROGRESS_TOTAL" ]]; then
+    PROGRESS_CURRENT="$PROGRESS_TOTAL"
+  fi
+
+  local width=20
+  local filled=$(( PROGRESS_CURRENT * width / PROGRESS_TOTAL ))
+  local empty=$(( width - filled ))
+  local percent=$(( PROGRESS_CURRENT * 100 / PROGRESS_TOTAL ))
+  local bar
+  bar="$(printf '%*s' "$filled" '' | tr ' ' '#')"
+  bar+="$(printf '%*s' "$empty" '' | tr ' ' '-')"
+
+  log_info "Progress [${bar}] ${PROGRESS_CURRENT}/${PROGRESS_TOTAL} (${percent}%)"
+}
+
+progress_advance() {
+  if [[ -n "${PROGRESS_TOTAL:-}" ]]; then
+    PROGRESS_CURRENT=$((PROGRESS_CURRENT+1))
+    if [[ "$PROGRESS_CURRENT" -gt "$PROGRESS_TOTAL" ]]; then
+      PROGRESS_CURRENT="$PROGRESS_TOTAL"
+    fi
+    progress_tick
   fi
 }
 
 finish_progress() {
-  if [[ -n "${PROGRESS_FIFO:-}" ]]; then
-    exec 9>"$PROGRESS_FIFO" 2>/dev/null || true
-    rm -f "$PROGRESS_FIFO" || true
-    wait "$PROGRESS_PID" 2>/dev/null || true
-  fi
+  progress_tick
 }
 
 trap 'log_info "Omakub_by_Szamski installation failed! You can retry by running: source $OMAKUB_SZAMSKI_PATH/install.sh"' ERR
@@ -157,7 +175,7 @@ start_progress "$TOTAL_STEPS"
 
 log_info "Configuring git..."
 source "$OMAKUB_SZAMSKI_PATH/install/setup-git.sh"
-progress_tick
+progress_advance
 
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   run_step "Disable screen lock" "gsettings set org.gnome.desktop.screensaver lock-enabled false"
