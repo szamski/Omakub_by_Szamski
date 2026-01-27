@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt install -y gnome-shell-extension-manager gir1.2-gtop-2.0 gir1.2-clutter-1.0
+sudo apt install -y gnome-shell-extension-manager gir1.2-gtop-2.0 gir1.2-clutter-1.0 libgtop2-dev
 
 EXTENSIONS_DIR="$HOME/.local/share/gnome-shell/extensions"
 
@@ -20,11 +20,16 @@ fi
 
 install_extension() {
   local uuid="$1"
-  gext install "$uuid" || true
-  if [[ -d "$EXTENSIONS_DIR/$uuid" ]]; then
-    chmod -R go-w "$EXTENSIONS_DIR/$uuid" >/dev/null 2>&1 || true
+  echo "Installing extension: $uuid..."
+  if gext install "$uuid"; then
+    if [[ -d "$EXTENSIONS_DIR/$uuid" ]]; then
+      chmod -R go-w "$EXTENSIONS_DIR/$uuid" >/dev/null 2>&1 || true
+      echo "✓ Installed: $uuid"
+    else
+      echo "⚠ Warning: Extension not found after install: $uuid"
+    fi
   else
-    echo "Warning: Extension not found after install: $uuid"
+    echo "⚠ Warning: Failed to install extension: $uuid"
   fi
 }
 
@@ -32,23 +37,7 @@ install_extension() {
 install_extension "just-perfection-desktop@just-perfection"
 install_extension "blur-my-shell@aunetx"
 install_extension "AlphabeticalAppGrid@stuarthayhurst"
-install_extension "tophat@fflewddur.github.io"
-
-OMAKUB_PATH="${OMAKUB_PATH:-$HOME/.local/share/omakub}"
-# Install local theme switcher extension
-LOCAL_THEME_EXT_SRC="$OMAKUB_PATH/extensions/omakub-theme@szamski"
-LOCAL_THEME_EXT_DST="$EXTENSIONS_DIR/omakub-theme@szamski"
-THEME_ICON_SRC="$OMAKUB_PATH/icons/omakub-theme-symbolic.svg"
-THEME_ICON_DST="$HOME/.local/share/icons/hicolor/scalable/apps/omakub-theme-symbolic.svg"
-if [[ -d "$LOCAL_THEME_EXT_SRC" ]]; then
-  rm -rf "$LOCAL_THEME_EXT_DST"
-  cp -r "$LOCAL_THEME_EXT_SRC" "$LOCAL_THEME_EXT_DST"
-  chmod -R go-w "$LOCAL_THEME_EXT_DST" >/dev/null 2>&1 || true
-fi
-if [[ -f "$THEME_ICON_SRC" ]]; then
-  mkdir -p "$(dirname "$THEME_ICON_DST")"
-  cp "$THEME_ICON_SRC" "$THEME_ICON_DST"
-fi
+install_extension "tophat@fflewddur.github.io" || echo "Warning: TopHat extension failed to install"
 
 find_schema_dir() {
   for dir in "$@"; do
@@ -111,6 +100,25 @@ compile_schemas_dir "$alphabetical_schema_dir"
 # Configure AlphabeticalAppGrid
 gsettings_set "$alphabetical_schema_dir" org.gnome.shell.extensions.alphabetical-app-grid folder-order-position 'end'
 
+# Install local theme switcher extension BEFORE enabling
+OMAKUB_PATH="${OMAKUB_PATH:-$HOME/.local/share/omakub}"
+LOCAL_THEME_EXT_SRC="$OMAKUB_PATH/extensions/omakub-theme@szamski"
+LOCAL_THEME_EXT_DST="$EXTENSIONS_DIR/omakub-theme@szamski"
+THEME_ICON_SRC="$OMAKUB_PATH/icons/omakub-theme-symbolic.svg"
+THEME_ICON_DST="$HOME/.local/share/icons/hicolor/scalable/apps/omakub-theme-symbolic.svg"
+if [[ -d "$LOCAL_THEME_EXT_SRC" ]]; then
+  echo "Installing Omakub Theme Switcher extension..."
+  rm -rf "$LOCAL_THEME_EXT_DST"
+  cp -r "$LOCAL_THEME_EXT_SRC" "$LOCAL_THEME_EXT_DST"
+  chmod -R go-w "$LOCAL_THEME_EXT_DST" >/dev/null 2>&1 || true
+  # Give GNOME Shell time to detect the new extension
+  sleep 2
+fi
+if [[ -f "$THEME_ICON_SRC" ]]; then
+  mkdir -p "$(dirname "$THEME_ICON_DST")"
+  cp "$THEME_ICON_SRC" "$THEME_ICON_DST"
+fi
+
 enable_extension() {
   local target="$1"
   local installed
@@ -120,6 +128,9 @@ enable_extension() {
   fi
   if [[ -n "$installed" ]]; then
     gnome-extensions enable "$installed" >/dev/null 2>&1 || true
+    echo "✓ Enabled extension: $installed"
+  else
+    echo "⚠ Extension not found: $target"
   fi
 }
 
