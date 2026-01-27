@@ -6,9 +6,9 @@ Watch the introduction video and read more at [omakub.org](https://omakub.org).
 
 ## Install
 
-'''
+```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/feature/theme-switcher/boot.sh)
-'''
+```
 
 ## Contributing to the documentation
 
