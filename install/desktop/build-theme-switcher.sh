@@ -10,19 +10,22 @@ ICON_DST="$HOME/.local/share/icons/hicolor/scalable/apps/omakub-theme-symbolic.s
 WRAPPER_SRC="$OMAKUB_PATH/bin/omakub-theme-switcher"
 WRAPPER_DST="$HOME/.local/bin/omakub-theme-switcher"
 
-if ! command -v cargo >/dev/null 2>&1; then
-  echo "Rust toolchain not found. Skipping GUI build."
-  return 0
-fi
-
-if ! pkg-config --exists gtk4; then
-  echo "GTK4 dev package not found. Skipping GUI build."
-  return 0
-fi
-
 if [[ ! -d "$APP_DIR" ]]; then
   echo "Theme switcher app not found. Skipping GUI build."
   return 0
+fi
+
+# Install Rust toolchain if not present
+if ! command -v cargo >/dev/null 2>&1; then
+  echo "Installing Rust toolchain for theme switcher..."
+  bash -c "$(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs)" -- -y
+  source "$HOME/.cargo/env"
+fi
+
+# Install GTK4 development packages if not present
+if ! pkg-config --exists gtk4; then
+  echo "Installing GTK4 development packages for theme switcher..."
+  sudo apt install -y libgtk-4-dev
 fi
 
 echo "Building theme switcher GUI..."
