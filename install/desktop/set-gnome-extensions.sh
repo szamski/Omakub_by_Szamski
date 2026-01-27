@@ -24,6 +24,10 @@ install_extension() {
   if gext install "$uuid"; then
     if [[ -d "$EXTENSIONS_DIR/$uuid" ]]; then
       chmod -R go-w "$EXTENSIONS_DIR/$uuid" >/dev/null 2>&1 || true
+      # Compile schemas if they exist
+      if [[ -d "$EXTENSIONS_DIR/$uuid/schemas" ]]; then
+        glib-compile-schemas "$EXTENSIONS_DIR/$uuid/schemas" >/dev/null 2>&1 || true
+      fi
       echo "✓ Installed: $uuid"
     else
       echo "⚠ Warning: Extension not found after install: $uuid"
