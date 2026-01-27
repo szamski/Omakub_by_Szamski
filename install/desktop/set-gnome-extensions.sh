@@ -1,13 +1,8 @@
 #!/bin/bash
 
-# Enable debug logging
-set -x
-
 sudo apt install -y gnome-shell-extension-manager gir1.2-gtop-2.0 gir1.2-clutter-1.0 libgtop2-dev
 
 EXTENSIONS_DIR="$HOME/.local/share/gnome-shell/extensions"
-
-echo "=== DEBUG: Extensions directory: $EXTENSIONS_DIR ==="
 
 if command -v gext >/dev/null 2>&1; then
   echo "⏭️  gnome-extensions-cli already installed"
@@ -45,12 +40,6 @@ install_extension "AlphabeticalAppGrid@stuarthayhurst"
 install_extension "tophat@fflewddur.github.io" || echo "Warning: TopHat extension failed to install"
 
 # Give GNOME Shell time to detect all installed extensions
-echo "=== DEBUG: Installed extensions in filesystem ==="
-ls -la "$EXTENSIONS_DIR" 2>/dev/null || echo "Extensions directory not found"
-echo ""
-echo "=== DEBUG: Extensions detected by gnome-extensions ==="
-gnome-extensions list 2>&1 || echo "gnome-extensions command failed"
-echo ""
 echo "Waiting for GNOME Shell to detect extensions..."
 sleep 3
 
@@ -91,138 +80,118 @@ LOCAL_THEME_EXT_SRC="$OMAKUB_PATH/extensions/omakub-theme@szamski"
 LOCAL_THEME_EXT_DST="$EXTENSIONS_DIR/omakub-theme@szamski"
 THEME_ICON_SRC="$OMAKUB_PATH/icons/omakub-theme-symbolic.svg"
 THEME_ICON_DST="$HOME/.local/share/icons/hicolor/scalable/apps/omakub-theme-symbolic.svg"
-echo "=== DEBUG: Installing local Omakub Theme Switcher extension ==="
-echo "  Source: $LOCAL_THEME_EXT_SRC"
-echo "  Destination: $LOCAL_THEME_EXT_DST"
 if [[ -d "$LOCAL_THEME_EXT_SRC" ]]; then
-  echo "  Source directory exists, copying..."
+  echo "Installing Omakub Theme Switcher extension..."
   rm -rf "$LOCAL_THEME_EXT_DST"
   cp -r "$LOCAL_THEME_EXT_SRC" "$LOCAL_THEME_EXT_DST"
   chmod -R go-w "$LOCAL_THEME_EXT_DST" >/dev/null 2>&1 || true
-  echo "  Files copied:"
-  ls -la "$LOCAL_THEME_EXT_DST" 2>/dev/null || echo "  Failed to list destination"
+  echo "✓ Omakub Theme Switcher extension installed"
   # Give GNOME Shell time to detect the new extension
   sleep 2
 else
-  echo "  ⚠ Source directory not found!"
+  echo "⚠ Omakub Theme Switcher source not found, skipping"
 fi
-echo ""
 if [[ -f "$THEME_ICON_SRC" ]]; then
   mkdir -p "$(dirname "$THEME_ICON_DST")"
   cp "$THEME_ICON_SRC" "$THEME_ICON_DST"
 fi
 
-enable_extension() {
-  local target="$1"
-  local installed
-  
-  echo "=== DEBUG: Trying to enable extension: $target ==="
-  
-  # Check if extension exists in filesystem first
-  if [[ -d "$EXTENSIONS_DIR/$target" ]]; then
-    echo "  Found in filesystem: $EXTENSIONS_DIR/$target"
-    installed="$target"
-  else
-    echo "  Not found in filesystem, trying gnome-extensions list..."
-    # Try to find it via gnome-extensions
-    installed=$(gnome-extensions list 2>/dev/null | grep -i "^${target}$" || true)
-    if [[ -z "$installed" ]]; then
-      installed=$(gnome-extensions list 2>/dev/null | grep -i "${target}" | head -1 || true)
-    fi
-    if [[ -n "$installed" ]]; then
-      echo "  Found via gnome-extensions: $installed"
-    fi
-  fi
-  
-  if [[ -n "$installed" ]]; then
-    echo "  Attempting to enable: $installed"
-    if gnome-extensions enable "$installed" 2>&1; then
-      echo "✓ Enabled extension: $installed"
-    else
-      echo "⚠ Failed to enable extension: $installed"
-    fi
-  else
-    echo "⚠ Extension not found: $target"
-  fi
-  echo ""
-}
 
-echo "=== DEBUG: Checking if gnome-extensions command works ==="
-if gnome-extensions list >/dev/null 2>&1; then
-  echo "✓ gnome-extensions command is working"
-  echo ""
-  
-  # Enable extensions (ignore failures if not supported)
-  enable_extension "just-perfection-desktop@just-perfection"
-  enable_extension "blur-my-shell@aunetx"
-  enable_extension "alphabetical-app-grid@stuarthayhurst"
-  enable_extension "AlphabeticalAppGrid@stuarthayhurst"
-  enable_extension "tophat@fflewddur.github.io"
-  enable_extension "omakub-theme@szamski"
-  
-  echo "=== DEBUG: Final state of extensions ==="
-  gnome-extensions list --enabled 2>&1 || echo "Failed to list enabled extensions"
-  echo ""
-  
-  echo "Waiting for extensions to fully load..."
-  sleep 2
-else
-  echo "⚠ Warning: GNOME Shell not detected (no DBus session). Skipping extension enable."
+
+echo "Enabling GNOME Shell extensions..."
+# Get current enabled extensions
+CURRENT_EXTENSIONS=$(gsettings get org.gnome.shell enabled-extensions 2>/dev/null || echo "[]")
+
+# Extensions to enable
+EXTENSIONS_TO_ENABLE=(
+  "just-perfection-desktop@just-perfection"
+  "blur-my-shell@aunetx"
+  "AlphabeticalAppGrid@stuarthayhurst"
+  "tophat@fflewddur.github.io"
+  "omakub-theme@szamski"
+)
+
+# Build new extensions list
+NEW_EXTENSIONS="["
+FIRST=true
+for ext in "${EXTENSIONS_TO_ENABLE[@]}"; do
+  if [[ -d "$EXTENSIONS_DIR/$ext" ]]; then
+    if [[ "$FIRST" == "true" ]]; then
+      NEW_EXTENSIONS+="'$ext'"
+      FIRST=false
+    else
+      NEW_EXTENSIONS+=", '$ext'"
+    fi
+    echo "  ✓ $ext"
+  fi
+done
+
+# Add existing extensions that were already enabled
+if [[ "$CURRENT_EXTENSIONS" != "[]" && "$CURRENT_EXTENSIONS" != "@as []" ]]; then
+  # Parse existing extensions and add them if not already in our list
+  EXISTING=$(echo "$CURRENT_EXTENSIONS" | tr -d "[]'" | tr ',' '\n' | xargs)
+  for ext in $EXISTING; do
+    ext=$(echo "$ext" | xargs)  # trim whitespace
+    if [[ ! " ${EXTENSIONS_TO_ENABLE[@]} " =~ " ${ext} " ]]; then
+      if [[ "$FIRST" == "true" ]]; then
+        NEW_EXTENSIONS+="'$ext'"
+        FIRST=false
+      else
+        NEW_EXTENSIONS+=", '$ext'"
+      fi
+    fi
+  done
 fi
 
+NEW_EXTENSIONS+="]"
+
+gsettings set org.gnome.shell enabled-extensions "$NEW_EXTENSIONS"
+echo "✓ Extensions enabled in GNOME Shell settings"
+echo ""
+echo "Waiting for GNOME Shell to load extensions..."
+sleep 3
+
 # Configure extensions AFTER enabling them
-echo "=== DEBUG: Configuring extensions ==="
+echo "Configuring extensions..."
+
 just_perfection_schema_dir="$(find_schema_dir \
   "$EXTENSIONS_DIR/just-perfection-desktop@just-perfection/schemas")"
-echo "Just Perfection schema dir: $just_perfection_schema_dir"
 compile_schemas_dir "$just_perfection_schema_dir"
 
 if [[ -n "$just_perfection_schema_dir" ]]; then
-  echo "Configuring Just Perfection..."
   gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection animation 2
   gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection dash-app-running true
   gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection workspace true
   gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection workspace-popup false
-  echo "✓ Just Perfection configured"
-else
-  echo "⚠ Just Perfection schema not found, skipping configuration"
+  echo "  ✓ Just Perfection"
 fi
 
 top_hat_schema_dir="$(find_schema_dir \
   "$EXTENSIONS_DIR/tophat@fflewddur.github.io/schemas")"
-echo "TopHat schema dir: $top_hat_schema_dir"
 compile_schemas_dir "$top_hat_schema_dir"
 
 if [[ -n "$top_hat_schema_dir" ]]; then
-  echo "Configuring TopHat..."
   gsettings_set "$top_hat_schema_dir" org.gnome.shell.extensions.tophat show-icons false
   gsettings_set "$top_hat_schema_dir" org.gnome.shell.extensions.tophat show-cpu false
   gsettings_set "$top_hat_schema_dir" org.gnome.shell.extensions.tophat show-disk false
   gsettings_set "$top_hat_schema_dir" org.gnome.shell.extensions.tophat show-mem false
   gsettings_set "$top_hat_schema_dir" org.gnome.shell.extensions.tophat show-fs false
   gsettings_set "$top_hat_schema_dir" org.gnome.shell.extensions.tophat network-usage-unit bits
-  echo "✓ TopHat configured"
-else
-  echo "⚠ TopHat schema not found, skipping configuration"
+  echo "  ✓ TopHat"
 fi
 
 alphabetical_schema_dir="$(find_schema_dir \
   "$EXTENSIONS_DIR/AlphabeticalAppGrid@stuarthayhurst/schemas" \
   "$EXTENSIONS_DIR/alphabetical-app-grid@stuarthayhurst/schemas")"
-echo "AlphabeticalAppGrid schema dir: $alphabetical_schema_dir"
 compile_schemas_dir "$alphabetical_schema_dir"
 
 if [[ -n "$alphabetical_schema_dir" ]]; then
-  echo "Configuring AlphabeticalAppGrid..."
   gsettings_set "$alphabetical_schema_dir" org.gnome.shell.extensions.alphabetical-app-grid folder-order-position 'end'
-  echo "✓ AlphabeticalAppGrid configured"
-else
-  echo "⚠ AlphabeticalAppGrid schema not found, skipping configuration"
+  echo "  ✓ AlphabeticalAppGrid"
 fi
 
 echo ""
-echo "=== DEBUG: Extension setup complete ==="
-set +x
+echo "✓ Extension setup complete"
 
 # Configure Blur My Shell from saved settings
 if [[ -f "$OMAKUB_PATH/configs/gnome/blur-my-shell.dconf" ]]; then
