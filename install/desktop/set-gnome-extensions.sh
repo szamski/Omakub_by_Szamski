@@ -97,6 +97,24 @@ compile_schemas_dir "$alphabetical_schema_dir"
 # Configure AlphabeticalAppGrid
 gsettings_set "$alphabetical_schema_dir" org.gnome.shell.extensions.alphabetical-app-grid folder-order-position 'end'
 
+# Install local theme switcher extension BEFORE enabling extensions
+OMAKUB_SZAMSKI_PATH="${OMAKUB_SZAMSKI_PATH:-$HOME/.local/share/omakub-szamski}"
+LOCAL_THEME_EXT_SRC="$OMAKUB_SZAMSKI_PATH/extensions/omakub-theme@szamski"
+LOCAL_THEME_EXT_DST="$EXTENSIONS_DIR/omakub-theme@szamski"
+THEME_ICON_SRC="$OMAKUB_SZAMSKI_PATH/icons/omakub-theme-symbolic.svg"
+THEME_ICON_DST="$HOME/.local/share/icons/hicolor/scalable/apps/omakub-theme-symbolic.svg"
+if [[ -d "$LOCAL_THEME_EXT_SRC" ]]; then
+  rm -rf "$LOCAL_THEME_EXT_DST"
+  cp -r "$LOCAL_THEME_EXT_SRC" "$LOCAL_THEME_EXT_DST"
+  chmod -R go-w "$LOCAL_THEME_EXT_DST" >/dev/null 2>&1 || true
+  # Give GNOME Shell time to detect the new extension
+  sleep 2
+fi
+if [[ -f "$THEME_ICON_SRC" ]]; then
+  mkdir -p "$(dirname "$THEME_ICON_DST")"
+  cp "$THEME_ICON_SRC" "$THEME_ICON_DST"
+fi
+
 enable_extension() {
   local target="$1"
   local installed
@@ -123,21 +141,6 @@ else
 fi
 
 # Configure Blur My Shell from saved settings
-OMAKUB_SZAMSKI_PATH="${OMAKUB_SZAMSKI_PATH:-$HOME/.local/share/omakub-szamski}"
 if [[ -f "$OMAKUB_SZAMSKI_PATH/configs/gnome/blur-my-shell.dconf" ]]; then
   dconf load /org/gnome/shell/extensions/blur-my-shell/ < "$OMAKUB_SZAMSKI_PATH/configs/gnome/blur-my-shell.dconf"
-fi
-# Install local theme switcher extension
-LOCAL_THEME_EXT_SRC="$OMAKUB_SZAMSKI_PATH/extensions/omakub-theme@szamski"
-LOCAL_THEME_EXT_DST="$EXTENSIONS_DIR/omakub-theme@szamski"
-THEME_ICON_SRC="$OMAKUB_SZAMSKI_PATH/icons/omakub-theme-symbolic.svg"
-THEME_ICON_DST="$HOME/.local/share/icons/hicolor/scalable/apps/omakub-theme-symbolic.svg"
-if [[ -d "$LOCAL_THEME_EXT_SRC" ]]; then
-  rm -rf "$LOCAL_THEME_EXT_DST"
-  cp -r "$LOCAL_THEME_EXT_SRC" "$LOCAL_THEME_EXT_DST"
-  chmod -R go-w "$LOCAL_THEME_EXT_DST" >/dev/null 2>&1 || true
-fi
-if [[ -f "$THEME_ICON_SRC" ]]; then
-  mkdir -p "$(dirname "$THEME_ICON_DST")"
-  cp "$THEME_ICON_SRC" "$THEME_ICON_DST"
 fi
