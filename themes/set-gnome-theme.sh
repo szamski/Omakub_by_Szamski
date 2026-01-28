@@ -48,13 +48,7 @@ case "$OMAKUB_THEME" in
 esac
 
 if command -v papirus-folders >/dev/null 2>&1; then
-  # Try with pkexec for GUI, fallback to sudo for terminal
-  if [[ -n "${DISPLAY:-}" ]] && command -v pkexec >/dev/null 2>&1; then
-    pkexec papirus-folders -C "$PAPIRUS_COLOR" --theme Papirus-Dark -u >/dev/null 2>&1 || \
-    sudo papirus-folders -C "$PAPIRUS_COLOR" --theme Papirus-Dark -u >/dev/null 2>&1 || true
-  else
-    sudo papirus-folders -C "$PAPIRUS_COLOR" --theme Papirus-Dark -u >/dev/null 2>&1 || true
-  fi
+  sudo papirus-folders -C "$PAPIRUS_COLOR" --theme Papirus-Dark -u >/dev/null 2>&1 || true
 fi
 
 ICON_BASE="/usr/share/icons/Papirus-Dark/48x48/places"
