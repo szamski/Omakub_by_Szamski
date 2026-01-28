@@ -39,6 +39,8 @@ run_step "Install GNOME Software (Flatpak/Snap)" "source '$OMAKUB_SZAMSKI_PATH/i
 
 run_step "Install Papirus icon theme" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/app-papirus.sh'"
 
+run_step "Install theme switcher PolicyKit" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/install-theme-polkit.sh'"
+
 run_step "Set Ghostty icon" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/set-ghostty-icon.sh'"
 
 run_step "Set webapp icons (WhatsApp)" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/set-webapp-icons.sh'"

@@ -1,0 +1,24 @@
+#!/bin/bash
+# Root operations for Omakub theme switching
+# Called via pkexec with PolicyKit authentication
+
+PAPIRUS_COLOR="$1"
+BROWSER_COLOR="$2"
+
+if [[ -z "$PAPIRUS_COLOR" ]]; then
+  echo "Usage: omakub-theme-root <papirus_color> <browser_color>"
+  exit 1
+fi
+
+# Change Papirus folder colors
+if command -v papirus-folders >/dev/null 2>&1; then
+  papirus-folders -C "$PAPIRUS_COLOR" --theme Papirus-Dark 2>/dev/null || true
+fi
+
+# Set browser theme policies for apt/deb installations
+if [[ -n "$BROWSER_COLOR" ]]; then
+  POLICY="{\"BrowserThemeColor\": \"$BROWSER_COLOR\"}"
+  for dir in /etc/chromium/policies/managed /etc/chromium-browser/policies/managed /etc/brave/policies/managed /etc/opt/chrome/policies/managed; do
+    mkdir -p "$dir" 2>/dev/null && echo "$POLICY" > "$dir/color.json" 2>/dev/null || true
+  done
+fi

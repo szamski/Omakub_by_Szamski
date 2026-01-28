@@ -1,9 +1,9 @@
 #!/bin/bash
 
-gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-gsettings set org.gnome.desktop.interface cursor-theme 'Yaru'
-gsettings set org.gnome.desktop.interface gtk-theme "Yaru-dark"
-gsettings set org.gnome.desktop.interface icon-theme "Papirus-Dark"
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' 2>/dev/null || true
+gsettings set org.gnome.desktop.interface cursor-theme 'Yaru' 2>/dev/null || true
+gsettings set org.gnome.desktop.interface gtk-theme "Yaru-dark" 2>/dev/null || true
+gsettings set org.gnome.desktop.interface icon-theme "Papirus-Dark" 2>/dev/null || true
 
 ACCENT_COLOR="blue"
 case "$OMAKUB_THEME" in
@@ -28,10 +28,10 @@ BACKGROUND_DEST_PATH="$BACKGROUND_DEST_DIR/$(echo $OMAKUB_THEME_BACKGROUND | tr 
 
 if [ ! -d "$BACKGROUND_DEST_DIR" ]; then mkdir -p "$BACKGROUND_DEST_DIR"; fi
 
-[ ! -f $BACKGROUND_DEST_PATH ] && cp $BACKGROUND_ORG_PATH $BACKGROUND_DEST_PATH
-gsettings set org.gnome.desktop.background picture-uri $BACKGROUND_DEST_PATH
-gsettings set org.gnome.desktop.background picture-uri-dark $BACKGROUND_DEST_PATH
-gsettings set org.gnome.desktop.background picture-options 'zoom'
+[ ! -f "$BACKGROUND_DEST_PATH" ] && cp "$BACKGROUND_ORG_PATH" "$BACKGROUND_DEST_PATH" 2>/dev/null || true
+gsettings set org.gnome.desktop.background picture-uri "$BACKGROUND_DEST_PATH" 2>/dev/null || true
+gsettings set org.gnome.desktop.background picture-uri-dark "$BACKGROUND_DEST_PATH" 2>/dev/null || true
+gsettings set org.gnome.desktop.background picture-options 'zoom' 2>/dev/null || true
 
 PAPIRUS_COLOR="blue"
 case "$OMAKUB_THEME" in
@@ -47,8 +47,25 @@ case "$OMAKUB_THEME" in
   osaka-jade) PAPIRUS_COLOR="teal" ;;
 esac
 
+# Use OMAKUB_BROWSER_COLOR from theme or fallback
+BROWSER_COLOR="${OMAKUB_BROWSER_COLOR:-#1a1b26}"
+
+# Root operations (Papirus + apt/deb browser policies) - single pkexec popup
+# Uses custom PolicyKit action for clear authentication message
 if command -v papirus-folders >/dev/null 2>&1; then
-  papirus-folders -C "$PAPIRUS_COLOR" --theme Papirus-Dark >/dev/null 2>&1 || true
+  if [[ -x /usr/local/bin/omakub-theme-root ]]; then
+    # Use installed helper with PolicyKit policy (shows clear message)
+    pkexec /usr/local/bin/omakub-theme-root "$PAPIRUS_COLOR" "$BROWSER_COLOR" 2>/dev/null || true
+  else
+    # Fallback to inline bash (generic message)
+    pkexec bash -c "
+      papirus-folders -C '$PAPIRUS_COLOR' --theme Papirus-Dark 2>/dev/null || true
+      POLICY='{\"BrowserThemeColor\": \"$BROWSER_COLOR\"}'
+      for dir in /etc/chromium/policies/managed /etc/chromium-browser/policies/managed /etc/brave/policies/managed /etc/opt/chrome/policies/managed; do
+        mkdir -p \"\$dir\" 2>/dev/null && echo \"\$POLICY\" > \"\$dir/color.json\" 2>/dev/null || true
+      done
+    " 2>/dev/null || true
+  fi
 fi
 
 ICON_BASE="/usr/share/icons/Papirus-Dark/48x48/places"
