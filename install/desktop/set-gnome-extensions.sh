@@ -34,6 +34,7 @@ install_extension "blur-my-shell@aunetx"
 install_extension "AlphabeticalAppGrid@stuarthayhurst"
 install_extension "tophat@fflewddur.github.io"
 install_extension "caffeine@patapon.info"
+install_extension "space-bar@luchrioh"
 
 find_schema_dir() {
   for dir in "$@"; do
@@ -97,6 +98,16 @@ compile_schemas_dir "$alphabetical_schema_dir"
 # Configure AlphabeticalAppGrid
 gsettings_set "$alphabetical_schema_dir" org.gnome.shell.extensions.alphabetical-app-grid folder-order-position 'end'
 
+space_bar_schema_dir="$(find_schema_dir \
+  "$EXTENSIONS_DIR/space-bar@luchrioh/schemas")"
+compile_schemas_dir "$space_bar_schema_dir"
+
+# Configure Space Bar
+gsettings_set "$space_bar_schema_dir" org.gnome.shell.extensions.space-bar.behavior smart-workspace-names false
+gsettings_set "$space_bar_schema_dir" org.gnome.shell.extensions.space-bar.shortcuts enable-activate-workspace-shortcuts false
+gsettings_set "$space_bar_schema_dir" org.gnome.shell.extensions.space-bar.shortcuts enable-move-to-workspace-shortcuts true
+gsettings_set "$space_bar_schema_dir" org.gnome.shell.extensions.space-bar.shortcuts open-menu "@as []"
+
 # Install local theme switcher extension BEFORE enabling extensions
 OMAKUB_SZAMSKI_PATH="${OMAKUB_SZAMSKI_PATH:-$HOME/.local/share/omakub-szamski}"
 LOCAL_THEME_EXT_SRC="$OMAKUB_SZAMSKI_PATH/extensions/omakub-theme@szamski"
@@ -135,6 +146,7 @@ if gnome-extensions list >/dev/null 2>&1; then
   enable_extension "AlphabeticalAppGrid@stuarthayhurst"
   enable_extension "tophat@fflewddur.github.io"
   enable_extension "caffeine@patapon.info"
+  enable_extension "space-bar@luchrioh"
   enable_extension "omakub-theme@szamski"
 else
   echo "Warning: GNOME Shell not detected (no DBus session). Skipping extension enable."
