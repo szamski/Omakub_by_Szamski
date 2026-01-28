@@ -21,7 +21,7 @@ echo "Cloning Omakub by Szamski..."
 rm -rf ~/.local/share/omakub
 git clone https://github.com/szamski/Omakub_by_Szamski.git ~/.local/share/omakub >/dev/null
 cd ~/.local/share/omakub
-git fetch origin "${OMAKUB_REF:-main}" && git checkout "${OMAKUB_REF:-main}"
+git fetch origin "${OMAKUB_REF:-master}" && git checkout "${OMAKUB_REF:-master}"
 cd -
 
 echo "Installation starting..."
