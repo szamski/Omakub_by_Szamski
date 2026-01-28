@@ -55,7 +55,8 @@ BROWSER_COLOR="${OMAKUB_BROWSER_COLOR:-#1a1b26}"
 if command -v papirus-folders >/dev/null 2>&1; then
   if [[ -x /usr/local/bin/omakub-theme-root ]]; then
     # Use installed helper with PolicyKit policy (shows clear message)
-    pkexec /usr/local/bin/omakub-theme-root "$PAPIRUS_COLOR" "$BROWSER_COLOR" 2>/dev/null || true
+    echo "DEBUG: Calling pkexec /usr/local/bin/omakub-theme-root $PAPIRUS_COLOR $BROWSER_COLOR"
+    pkexec /usr/local/bin/omakub-theme-root "$PAPIRUS_COLOR" "$BROWSER_COLOR" || echo "DEBUG: pkexec failed with code $?"
   else
     # Fallback to inline bash (generic message)
     pkexec bash -c "
