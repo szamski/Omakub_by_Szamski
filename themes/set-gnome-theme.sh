@@ -48,7 +48,7 @@ case "$OMAKUB_THEME" in
 esac
 
 if command -v papirus-folders >/dev/null 2>&1; then
-  sudo papirus-folders -C "$PAPIRUS_COLOR" --theme Papirus-Dark -u >/dev/null 2>&1 || true
+  papirus-folders -C "$PAPIRUS_COLOR" --theme Papirus-Dark >/dev/null 2>&1 || true
 fi
 
 ICON_BASE="/usr/share/icons/Papirus-Dark/48x48/places"
