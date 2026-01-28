@@ -8,7 +8,7 @@ if [[ -z "$OMAKUB_THEME" ]]; then
   return 1
 fi
 
-OMAKUB_PATH="${OMAKUB_SZAMSKI_PATH:-${OMAKUB_PATH:-$HOME/.local/share/omakub-szamski}}"
+OMAKUB_PATH="${OMAKUB_PATH:-${OMAKUB_SZAMSKI_PATH:-$HOME/.local/share/omakub}}"
 THEME_DIR="$OMAKUB_PATH/themes/$OMAKUB_THEME"
 TEMPLATE_PATH="$OMAKUB_PATH/themes/ghostty.template"
 THEME_COLORS="$THEME_DIR/ghostty.toml"
@@ -25,7 +25,15 @@ fi
 
 mkdir -p "$HOME/.config/ghostty"
 
-TEMPLATE_PATH="$TEMPLATE_PATH" THEME_COLORS="$THEME_COLORS" OMAKUB_THEME="$OMAKUB_THEME" python3 << 'PY'
+SIZE_FILE="$HOME/.config/omakub/ghostty-window-size.env"
+if [[ -f "$SIZE_FILE" ]]; then
+  # shellcheck disable=SC1090
+  source "$SIZE_FILE"
+fi
+
+TEMPLATE_PATH="$TEMPLATE_PATH" THEME_COLORS="$THEME_COLORS" OMAKUB_THEME="$OMAKUB_THEME" \
+GHOSTTY_WINDOW_WIDTH="${GHOSTTY_WINDOW_WIDTH:-}" GHOSTTY_WINDOW_HEIGHT="${GHOSTTY_WINDOW_HEIGHT:-}" \
+python3 << 'PY'
 import os
 import re
 
@@ -74,8 +82,8 @@ if len(palette) != 16:
 
 palette_lines = "\n".join([f"palette = {i}={normalize(color)}" for i, color in enumerate(palette)])
 
-window_width = os.environ.get("GHOSTTY_WINDOW_WIDTH", "150")
-window_height = os.environ.get("GHOSTTY_WINDOW_HEIGHT", "55")
+window_width = os.environ.get("GHOSTTY_WINDOW_WIDTH") or "150"
+window_height = os.environ.get("GHOSTTY_WINDOW_HEIGHT") or "55"
 
 template = template.replace("{{BACKGROUND}}", normalize(background))
 template = template.replace("{{FOREGROUND}}", normalize(foreground))

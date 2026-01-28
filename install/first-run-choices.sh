@@ -41,6 +41,11 @@ case "$GHOSTTY_SIZE" in
     ;;
 esac
 
+GHOSTTY_SIZE_FILE="$HOME/.config/omakub/ghostty-window-size.env"
+mkdir -p "$(dirname "$GHOSTTY_SIZE_FILE")"
+printf "GHOSTTY_WINDOW_WIDTH=%s\nGHOSTTY_WINDOW_HEIGHT=%s\n" \
+  "${GHOSTTY_WINDOW_WIDTH:-150}" "${GHOSTTY_WINDOW_HEIGHT:-55}" > "$GHOSTTY_SIZE_FILE"
+
 # Desktop apps (GNOME only)
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   THEME_NAMES=(

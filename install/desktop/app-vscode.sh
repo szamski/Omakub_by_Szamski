@@ -21,7 +21,8 @@ sudo apt install -y code
 # Configure VS Code settings (fonts for Nerd Font icons)
 mkdir -p ~/.config/Code/User
 
-if [ -f "$OMAKUB_SZAMSKI_PATH/configs/vscode/settings.json" ]; then
+OMAKUB_PATH="${OMAKUB_PATH:-${OMAKUB_SZAMSKI_PATH:-$HOME/.local/share/omakub}}"
+if [ -f "$OMAKUB_PATH/configs/vscode/settings.json" ]; then
   if [ -f "$HOME/.config/Code/User/settings.json" ]; then
     # Merge settings - update font-related settings
     echo "Updating VS Code font settings..."
@@ -33,19 +34,23 @@ if [ -f "$OMAKUB_SZAMSKI_PATH/configs/vscode/settings.json" ]; then
     
     # Use jq to merge if available, otherwise use Python
     if command -v jq >/dev/null 2>&1; then
-      jq -s '.[0] * .[1]' "$HOME/.config/Code/User/settings.json" "$OMAKUB_SZAMSKI_PATH/configs/vscode/settings.json" > /tmp/vscode-settings-merged.json
+      jq -s '.[0] * .[1]' "$HOME/.config/Code/User/settings.json" "$OMAKUB_PATH/configs/vscode/settings.json" > /tmp/vscode-settings-merged.json
       mv /tmp/vscode-settings-merged.json "$HOME/.config/Code/User/settings.json"
       echo "✓ VS Code settings merged"
     else
       # Fallback: just copy font settings
-      cp "$OMAKUB_SZAMSKI_PATH/configs/vscode/settings.json" "$HOME/.config/Code/User/settings.json"
+      cp "$OMAKUB_PATH/configs/vscode/settings.json" "$HOME/.config/Code/User/settings.json"
       echo "✓ VS Code settings updated"
     fi
   else
     # No existing settings, just copy
-    cp "$OMAKUB_SZAMSKI_PATH/configs/vscode/settings.json" "$HOME/.config/Code/User/settings.json"
+    cp "$OMAKUB_PATH/configs/vscode/settings.json" "$HOME/.config/Code/User/settings.json"
     echo "✓ VS Code settings installed"
   fi
+fi
+
+if [ -f "$OMAKUB_PATH/themes/set-vscode-theme.sh" ] && [[ -n "${OMAKUB_THEME:-}" ]]; then
+  source "$OMAKUB_PATH/themes/set-vscode-theme.sh" "$OMAKUB_THEME" || true
 fi
 
 echo "✓ VS Code installed with Nerd Font support"

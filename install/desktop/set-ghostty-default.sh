@@ -16,3 +16,21 @@ fi
 
 sudo update-alternatives --set x-terminal-emulator "$GHOSTTY_BIN" || true
 echo "✓ Ghostty set as default terminal"
+
+# Prefer Ghostty for GNOME/Nautilus via xdg-terminal-exec
+if command -v xdg-terminal-exec >/dev/null 2>&1; then
+  mkdir -p ~/.config
+  printf "com.mitchellh.ghostty.desktop\n" > ~/.config/xdg-terminals.list
+  gsettings set org.gnome.desktop.default-applications.terminal exec "xdg-terminal-exec"
+  gsettings set org.gnome.desktop.default-applications.terminal exec-arg ""
+  echo "✓ GNOME terminal set to xdg-terminal-exec"
+else
+  sudo apt install -y xdg-terminal-exec || true
+  if command -v xdg-terminal-exec >/dev/null 2>&1; then
+    mkdir -p ~/.config
+    printf "com.mitchellh.ghostty.desktop\n" > ~/.config/xdg-terminals.list
+    gsettings set org.gnome.desktop.default-applications.terminal exec "xdg-terminal-exec"
+    gsettings set org.gnome.desktop.default-applications.terminal exec-arg ""
+    echo "✓ GNOME terminal set to xdg-terminal-exec"
+  fi
+fi
