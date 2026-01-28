@@ -31,10 +31,20 @@ THEME_ICON_DST="$HOME/.local/share/icons/hicolor/scalable/apps/omakub-theme-symb
 
 if [[ -d "$LOCAL_THEME_EXT_SRC" ]]; then
   echo "Installing Omakub Theme Switcher extension..."
+  mkdir -p "$EXTENSIONS_DIR"
   rm -rf "$LOCAL_THEME_EXT_DST"
   cp -r "$LOCAL_THEME_EXT_SRC" "$LOCAL_THEME_EXT_DST"
   chmod -R go-w "$LOCAL_THEME_EXT_DST" >/dev/null 2>&1 || true
-  gnome-extensions enable omakub-theme@szamski
+  # Enable extension via gsettings (works before GNOME Shell detects it)
+  CURRENT_EXTENSIONS=$(gsettings get org.gnome.shell enabled-extensions)
+  if [[ "$CURRENT_EXTENSIONS" != *"omakub-theme@szamski"* ]]; then
+    if [[ "$CURRENT_EXTENSIONS" == "@as []" ]]; then
+      gsettings set org.gnome.shell enabled-extensions "['omakub-theme@szamski']"
+    else
+      NEW_EXTENSIONS=$(echo "$CURRENT_EXTENSIONS" | sed "s/]$/, 'omakub-theme@szamski']/")
+      gsettings set org.gnome.shell enabled-extensions "$NEW_EXTENSIONS"
+    fi
+  fi
   echo "✓ Omakub Theme Switcher extension installed"
 fi
 
