@@ -28,7 +28,7 @@ case "$1" in
 
   update)
     cd "$OMAKUB_SZAMSKI_PATH" || exit 1
-    git pull origin master
+    git pull --rebase --autostash origin master
     ;;
 
   reinstall)

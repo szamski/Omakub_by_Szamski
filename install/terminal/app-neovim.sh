@@ -22,6 +22,9 @@ cd - >/dev/null
 
 sudo apt install -y luarocks tree-sitter-cli
 
+# Clipboard providers for Neovim (Wayland + X11)
+sudo apt install -y wl-clipboard xclip
+
 # Ensure Node.js/npm are available for Mason LSP installs and markdownlint-cli2
 if ! command -v node >/dev/null 2>&1 && ! command -v nodejs >/dev/null 2>&1; then
   sudo apt install -y nodejs npm
@@ -54,6 +57,11 @@ cp "$OMAKUB_SZAMSKI_PATH/configs/neovim/snacks-animated-scrolling-off.lua" ~/.co
 cp "$OMAKUB_SZAMSKI_PATH/configs/neovim/lazyvim.json" ~/.config/nvim/
 
 echo "vim.opt.relativenumber = false" >>~/.config/nvim/lua/config/options.lua
+
+# Prefer Polish + English spell dictionaries to avoid underlining Polish text
+if ! grep -q "spelllang" ~/.config/nvim/lua/config/options.lua; then
+  echo "vim.opt.spelllang = { 'pl', 'en' }" >>~/.config/nvim/lua/config/options.lua
+fi
 
 # Create Neovim desktop entry that launches in fullscreen Ghostty
 # Note: --gtk-single-instance=false ensures new window opens (required for Snap Ghostty)
