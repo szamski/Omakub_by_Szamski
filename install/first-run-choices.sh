@@ -147,6 +147,32 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   fi
 fi
 
+# AI Tools choice
+AI_TOOLS=(
+  "Claude Code (Anthropic CLI)"
+  "OpenCode"
+)
+
+SELECTED_AI=$(gum choose "${AI_TOOLS[@]}" --no-limit --header "Select AI coding tools to install (optional)")
+
+export SETUP_CLAUDE_CODE=false
+export SETUP_OPENCODE=false
+
+if printf '%s\n' "$SELECTED_AI" | grep -Fxq "Claude Code (Anthropic CLI)"; then
+  export SETUP_CLAUDE_CODE=true
+fi
+if printf '%s\n' "$SELECTED_AI" | grep -Fxq "OpenCode"; then
+  export SETUP_OPENCODE=true
+fi
+
+# Gaming choice
+GAMING_CHOICE=$(gum choose "Install Steam" "Skip Gaming" --header "Gaming setup")
+if [[ "$GAMING_CHOICE" == "Install Steam" ]]; then
+  export SETUP_STEAM=true
+else
+  export SETUP_STEAM=false
+fi
+
 # VPN choice
 VPN_SELECTED=$(gum choose "Both (Tailscale + NordVPN)" "Only Tailscale" "Only NordVPN" "None" --header "Select VPN setup")
 

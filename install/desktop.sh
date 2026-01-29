@@ -97,4 +97,12 @@ if [[ "$SETUP_DROPBOX" == true ]]; then
   run_step "Install Dropbox" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/optional/app-dropbox.sh'"
 fi
 
+if [[ "$SETUP_STEAM" == true ]]; then
+  run_step "Install Steam (Gaming)" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/optional/app-steam.sh'"
+fi
+
+run_step "Install GNOME Calendar" "sudo apt install -y gnome-calendar"
+
+run_step "Configure App Drawer folders" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/set-app-folders.sh'"
+
 run_step "Set GNOME Dash favorites" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/set-dock.sh'"

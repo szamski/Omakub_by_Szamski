@@ -61,3 +61,11 @@ fi
 if [[ "$SETUP_TLP" == true ]]; then
   run_step "Configure TLP" "source '$OMAKUB_SZAMSKI_PATH/install/laptop/tlp.sh'"
 fi
+
+if [[ "$SETUP_CLAUDE_CODE" == true ]]; then
+  run_step "Install Claude Code" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/optional/app-claude-code.sh'"
+fi
+
+if [[ "$SETUP_OPENCODE" == true ]]; then
+  run_step "Install OpenCode" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/optional/app-opencode.sh'"
+fi

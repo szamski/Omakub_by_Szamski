@@ -77,6 +77,8 @@ gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perf
 gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection workspace true
 gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection workspace-popup false
 gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection quick-settings-night-light false
+gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection calendar false
+gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection world-clock false
 
 top_hat_schema_dir="$(find_schema_dir \
   "$EXTENSIONS_DIR/tophat@fflewddur.github.io/schemas")"
@@ -107,6 +109,10 @@ gsettings_set "$space_bar_schema_dir" org.gnome.shell.extensions.space-bar.behav
 gsettings_set "$space_bar_schema_dir" org.gnome.shell.extensions.space-bar.shortcuts enable-activate-workspace-shortcuts false
 gsettings_set "$space_bar_schema_dir" org.gnome.shell.extensions.space-bar.shortcuts enable-move-to-workspace-shortcuts true
 gsettings_set "$space_bar_schema_dir" org.gnome.shell.extensions.space-bar.shortcuts open-menu "@as []"
+
+# Configure Auto Move Windows (built-in GNOME extension)
+# Move apps to specific workspaces automatically
+gsettings set org.gnome.shell.extensions.auto-move-windows application-list "['code.desktop:6', 'spotify_spotify.desktop:5', 'com.slack.Slack.desktop:2', 'whatsapp-linux-desktop_whatsapp-linux-desktop.desktop:3', 'org.gnome.Calendar.desktop:2']" 2>/dev/null || true
 
 # Install local theme switcher extension BEFORE enabling extensions
 OMAKUB_SZAMSKI_PATH="${OMAKUB_SZAMSKI_PATH:-$HOME/.local/share/omakub-szamski}"
@@ -147,6 +153,7 @@ if gnome-extensions list >/dev/null 2>&1; then
   enable_extension "tophat@fflewddur.github.io"
   enable_extension "caffeine@patapon.info"
   enable_extension "space-bar@luchrioh"
+  enable_extension "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
   enable_extension "omakub-theme@szamski"
 else
   echo "Warning: GNOME Shell not detected (no DBus session). Skipping extension enable."

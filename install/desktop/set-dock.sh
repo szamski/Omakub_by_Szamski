@@ -1,15 +1,18 @@
 #!/bin/bash
 
 # Desired order of applications in Dash (stable across apt/snap/flatpak/source)
+# Apps not installed are automatically skipped
 app_order=(
   "ghostty"
   "files"
   "chromium"
+  "calendar"
   "vscode"
   "spotify"
-  "riff"
+  "whatsapp"
   "discord"
   "slack"
+  "steam"
 )
 
 # Search directories for .desktop files
@@ -54,38 +57,46 @@ declare -A app_name_regex
 app_id_variants["ghostty"]="ghostty_ghostty.desktop,ghostty.desktop,com.mitchellh.ghostty.desktop"
 app_id_variants["files"]="org.gnome.Nautilus.desktop"
 app_id_variants["chromium"]="chromium_chromium.desktop,org.chromium.Chromium.desktop,chromium-browser.desktop,chromium.desktop,google-chrome.desktop,google-chrome-stable.desktop"
+app_id_variants["calendar"]="org.gnome.Calendar.desktop,gnome-calendar.desktop"
 app_id_variants["vscode"]="code.desktop,code_code.desktop,com.visualstudio.code.desktop,com.visualstudio.code.oss.desktop"
 app_id_variants["spotify"]="spotify_spotify.desktop,spotify.desktop,com.spotify.Client.desktop"
-app_id_variants["riff"]="dev.diegovsky.Riff.desktop"
+app_id_variants["whatsapp"]="whatsapp-linux-desktop_whatsapp-linux-desktop.desktop,webapp-WhatsApp.desktop,whatsapp.desktop,com.github.nickvergessen.whatsapp.desktop"
 app_id_variants["discord"]="discord.desktop,com.discordapp.Discord.desktop"
 app_id_variants["slack"]="slack_slack.desktop,slack.desktop,com.slack.Slack.desktop"
+app_id_variants["steam"]="steam-wayland.desktop,steam.desktop,com.valvesoftware.Steam.desktop"
 
 app_exec_regex["ghostty"]="ghostty"
 app_exec_regex["files"]="nautilus"
 app_exec_regex["chromium"]="chromium|google-chrome"
+app_exec_regex["calendar"]="gnome-calendar"
 app_exec_regex["vscode"]="code|code-oss"
 app_exec_regex["spotify"]="spotify"
-app_exec_regex["riff"]="riff"
+app_exec_regex["whatsapp"]="whatsapp"
 app_exec_regex["discord"]="discord"
 app_exec_regex["slack"]="slack"
+app_exec_regex["steam"]="steam"
 
 app_wmclass_regex["ghostty"]="ghostty"
 app_wmclass_regex["files"]="nautilus"
 app_wmclass_regex["chromium"]="chromium|google-chrome"
+app_wmclass_regex["calendar"]="gnome-calendar"
 app_wmclass_regex["vscode"]="code|code-oss"
 app_wmclass_regex["spotify"]="spotify"
-app_wmclass_regex["riff"]="riff"
+app_wmclass_regex["whatsapp"]="whatsapp"
 app_wmclass_regex["discord"]="discord"
 app_wmclass_regex["slack"]="slack"
+app_wmclass_regex["steam"]="steam"
 
 app_name_regex["ghostty"]="ghostty"
 app_name_regex["files"]="files|nautilus"
 app_name_regex["chromium"]="chromium|chrome"
+app_name_regex["calendar"]="calendar"
 app_name_regex["vscode"]="code|visual studio code"
 app_name_regex["spotify"]="spotify"
-app_name_regex["riff"]="riff"
+app_name_regex["whatsapp"]="whatsapp"
 app_name_regex["discord"]="discord"
 app_name_regex["slack"]="slack"
+app_name_regex["steam"]="steam"
 
 match_by_regex() {
   local value="$1"

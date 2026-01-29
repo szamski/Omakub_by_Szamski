@@ -1,8 +1,9 @@
 {
   "uuid": "omakub-theme@szamski",
-  "name": "Omakub Theme",
-  "description": "Quick Settings theme switcher",
+  "name": "Omakub Theme Switcher",
+  "description": "Switch between Omakub themes directly from Quick Settings panel. Applies consistent theming across GNOME Shell, Ghostty, Neovim, VS Code, btop, Starship prompt, and Papirus icon colors. Part of Omakub by Szamski desktop environment.",
   "shell-version": ["45", "46", "47", "48", "49"],
   "version": 1,
+  "url": "https://github.com/szamski/Omakub_by_Szamski",
   "type": "module"
 }

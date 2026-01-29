@@ -41,3 +41,22 @@ cp "$OMAKUB_SZAMSKI_PATH/configs/neovim/snacks-animated-scrolling-off.lua" ~/.co
 cp "$OMAKUB_SZAMSKI_PATH/configs/neovim/lazyvim.json" ~/.config/nvim/
 
 echo "vim.opt.relativenumber = false" >>~/.config/nvim/lua/config/options.lua
+
+# Create Neovim desktop entry that launches in fullscreen Ghostty
+mkdir -p ~/.local/share/applications
+cat > ~/.local/share/applications/nvim.desktop << 'EOF'
+[Desktop Entry]
+Name=Neovim
+GenericName=Text Editor
+Comment=Edit text files in fullscreen terminal
+Exec=ghostty --fullscreen -e nvim %F
+Icon=nvim
+Terminal=false
+Type=Application
+Categories=Utility;TextEditor;Development;IDE;
+Keywords=text;editor;vim;neovim;nvim;
+MimeType=text/plain;text/x-c;text/x-c++;text/x-python;text/x-java;text/x-makefile;text/x-shellscript;application/x-shellscript;text/x-markdown;
+StartupWMClass=com.mitchellh.ghostty
+EOF
+
+echo "✓ Neovim desktop entry created (launches in fullscreen Ghostty)"
