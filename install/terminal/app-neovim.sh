@@ -25,6 +25,40 @@ sudo apt install -y luarocks tree-sitter-cli
 # Clipboard providers for Neovim (Wayland + X11)
 sudo apt install -y wl-clipboard xclip
 
+# Polish + English spell dictionaries for Neovim spell checking
+sudo apt install -y vim-runtime
+SPELL_DIR="$HOME/.config/nvim/spell"
+mkdir -p "$SPELL_DIR"
+
+PL_DIC="$SPELL_DIR/pl.dic"
+EN_DIC="$SPELL_DIR/en.dic"
+
+if ! [[ -f "$SPELL_DIR/pl.utf-8.spl" ]]; then
+  curl -fsSL https://raw.githubusercontent.com/wooorm/dictionaries/main/dictionaries/pl/index.dic -o "$PL_DIC"
+fi
+
+if ! [[ -f "$SPELL_DIR/en.utf-8.spl" ]]; then
+  curl -fsSL https://raw.githubusercontent.com/wooorm/dictionaries/main/dictionaries/en/index.dic -o "$EN_DIC"
+fi
+
+if [[ -f "$PL_DIC" || -f "$EN_DIC" ]]; then
+  SPELL_DIR="$SPELL_DIR" nvim --headless -u NONE -U NONE -N \
+    +"lua local d=os.getenv('SPELL_DIR') local function build(src,out) local lines=vim.fn.readfile(src) if #lines==0 then return end local start=1 if tonumber(lines[1]) then start=2 end local out_lines={} for i=start,#lines do local line=lines[i] local word=line:gsub('/.*',''):gsub('%s.*','') if word~='' then table.insert(out_lines, word) end end vim.fn.writefile(out_lines,out) end if vim.fn.filereadable(d..'/pl.dic')==1 then build(d..'/pl.dic', d..'/pl.utf-8.add') end if vim.fn.filereadable(d..'/en.dic')==1 then build(d..'/en.dic', d..'/en.utf-8.add') end" \
+    +"qa"
+
+  if [[ -f "$SPELL_DIR/pl.utf-8.add" ]]; then
+    nvim --headless -u NONE -U NONE -N \
+      +"mkspell! $SPELL_DIR/pl.utf-8 $SPELL_DIR/pl.utf-8.add" \
+      +"qa"
+  fi
+
+  if [[ -f "$SPELL_DIR/en.utf-8.add" ]]; then
+    nvim --headless -u NONE -U NONE -N \
+      +"mkspell! $SPELL_DIR/en.utf-8 $SPELL_DIR/en.utf-8.add" \
+      +"qa"
+  fi
+fi
+
 # Ensure Node.js/npm are available for Mason LSP installs and markdownlint-cli2
 if ! command -v node >/dev/null 2>&1 && ! command -v nodejs >/dev/null 2>&1; then
   sudo apt install -y nodejs npm
