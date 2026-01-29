@@ -22,13 +22,4 @@ for desktop_file in /usr/share/applications/ghostty.desktop /usr/local/share/app
   fi
 done
 
-if [[ -f "/var/lib/snapd/desktop/applications/ghostty_ghostty.desktop" ]]; then
-  cp "/var/lib/snapd/desktop/applications/ghostty_ghostty.desktop" "$LOCAL_APPS/ghostty_ghostty.desktop"
-  if grep -q '^Icon=' "$LOCAL_APPS/ghostty_ghostty.desktop"; then
-    sed -i "s/^Icon=.*/Icon=${ICON_NAME}/" "$LOCAL_APPS/ghostty_ghostty.desktop"
-  else
-    echo "Icon=${ICON_NAME}" >> "$LOCAL_APPS/ghostty_ghostty.desktop"
-  fi
-fi
-
 echo "✓ Ghostty icon set to Papirus"

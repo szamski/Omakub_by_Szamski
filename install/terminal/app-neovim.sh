@@ -102,10 +102,6 @@ fi
 # Using --fullscreen instead of --maximize for better Wayland compatibility
 GHOSTTY_BIN="ghostty"
 GHOSTTY_WMCLASS="com.mitchellh.ghostty"
-if [[ -x "/snap/bin/ghostty" ]]; then
-  GHOSTTY_BIN="/snap/bin/ghostty"
-  GHOSTTY_WMCLASS="ghostty"
-fi
 
 mkdir -p ~/.local/share/applications
 cat > ~/.local/share/applications/nvim.desktop << 'EOF'

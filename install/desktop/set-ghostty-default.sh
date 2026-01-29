@@ -3,15 +3,8 @@
 GHOSTTY_BIN="$(command -v ghostty 2>/dev/null || true)"
 GHOSTTY_DESKTOP=""
 
-# Check for snap version first
-if [[ -x "/snap/bin/ghostty" ]]; then
-  GHOSTTY_BIN="/snap/bin/ghostty"
-  GHOSTTY_DESKTOP="ghostty_ghostty.desktop"
-# Check for flatpak version
-elif [[ -f "/var/lib/flatpak/exports/share/applications/com.mitchellh.ghostty.desktop" ]]; then
-  GHOSTTY_DESKTOP="com.mitchellh.ghostty.desktop"
 # Fallback to system/local desktop file
-elif [[ -f "/usr/share/applications/com.mitchellh.ghostty.desktop" ]] || [[ -f "$HOME/.local/share/applications/com.mitchellh.ghostty.desktop" ]]; then
+if [[ -f "/usr/share/applications/com.mitchellh.ghostty.desktop" ]] || [[ -f "$HOME/.local/share/applications/com.mitchellh.ghostty.desktop" ]]; then
   GHOSTTY_DESKTOP="com.mitchellh.ghostty.desktop"
 fi
 
@@ -21,12 +14,7 @@ if [[ -z "$GHOSTTY_BIN" ]]; then
 fi
 
 if [[ -z "$GHOSTTY_DESKTOP" ]]; then
-  # Try to detect desktop file
-  if [[ -f "/var/lib/snapd/desktop/applications/ghostty_ghostty.desktop" ]]; then
-    GHOSTTY_DESKTOP="ghostty_ghostty.desktop"
-  else
-    GHOSTTY_DESKTOP="com.mitchellh.ghostty.desktop"
-  fi
+  GHOSTTY_DESKTOP="com.mitchellh.ghostty.desktop"
 fi
 
 # Register alternative if needed, then set it

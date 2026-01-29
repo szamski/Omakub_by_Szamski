@@ -1,20 +1,14 @@
 #!/bin/bash
 
 # Browser choice
-BROWSER_SELECTED=$(gum choose "Google Chrome" "Chromium" "None - Skip" --header "Select browser to install")
+BROWSER_SELECTED=$(gum choose "Google Chrome" "None - Skip" --header "Select browser to install")
 
 case "$BROWSER_SELECTED" in
   "Google Chrome")
     export SETUP_CHROME=true
-    export SETUP_CHROMIUM=false
-    ;;
-  "Chromium")
-    export SETUP_CHROME=false
-    export SETUP_CHROMIUM=true
     ;;
   *)
     export SETUP_CHROME=false
-    export SETUP_CHROMIUM=false
     ;;
 esac
 
@@ -71,9 +65,7 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
     "Discord"
     "Slack"
     "Spotify"
-    "Riff (Spotify GTK)"
     "LibreOffice"
-    "LocalSend"
     "1Password"
     "Dropbox"
     "Bambu Studio (3D Printing)"
@@ -86,9 +78,7 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   export SETUP_DISCORD=false
   export SETUP_SLACK=false
   export SETUP_SPOTIFY=false
-  export SETUP_RIFF=false
   export SETUP_LIBREOFFICE=false
-  export SETUP_LOCALSEND=false
   export SETUP_1PASSWORD=false
   export SETUP_DROPBOX=false
   export SETUP_BAMBUSTUDIO=false
@@ -105,14 +95,8 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   if printf '%s\n' "$SELECTED_APPS" | grep -Fxq "Spotify"; then
     export SETUP_SPOTIFY=true
   fi
-  if printf '%s\n' "$SELECTED_APPS" | grep -Fxq "Riff (Spotify GTK)"; then
-    export SETUP_RIFF=true
-  fi
   if printf '%s\n' "$SELECTED_APPS" | grep -Fxq "LibreOffice"; then
     export SETUP_LIBREOFFICE=true
-  fi
-  if printf '%s\n' "$SELECTED_APPS" | grep -Fxq "LocalSend"; then
-    export SETUP_LOCALSEND=true
   fi
   if printf '%s\n' "$SELECTED_APPS" | grep -Fxq "1Password"; then
     export SETUP_1PASSWORD=true
@@ -142,14 +126,6 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
     fi
   fi
 
-  if [[ "$SETUP_SPOTIFY" == true ]] && snap list spotify >/dev/null 2>&1; then
-    SPOTIFY_SWITCH=$(gum choose "Switch to .deb" "Keep snap" --header "Spotify source")
-    if [[ "$SPOTIFY_SWITCH" == "Switch to .deb" ]]; then
-      export SPOTIFY_REMOVE_SNAP=true
-    else
-      export SPOTIFY_REMOVE_SNAP=false
-    fi
-  fi
 fi
 
 # AI Tools choice

@@ -61,10 +61,6 @@ if [[ "$SETUP_CHROME" == true ]]; then
   run_step "Install Google Chrome" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/app-chrome.sh'"
 fi
 
-if [[ "$SETUP_CHROMIUM" == true ]]; then
-  run_step "Install Chromium" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/app-chromium.sh'"
-fi
-
 if [[ "$SETUP_DISCORD" == true ]]; then
   run_step "Install Discord" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/optional/app-discord.sh'"
 fi
@@ -77,16 +73,8 @@ if [[ "$SETUP_SPOTIFY" == true ]]; then
   run_step "Install Spotify" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/optional/app-spotify.sh'"
 fi
 
-if [[ "$SETUP_RIFF" == true ]]; then
-  run_step "Install Riff (Spotify GTK)" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/optional/app-riff.sh'"
-fi
-
 if [[ "$SETUP_LIBREOFFICE" == true ]]; then
   run_step "Install LibreOffice" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/optional/app-libreoffice.sh'"
-fi
-
-if [[ "$SETUP_LOCALSEND" == true ]]; then
-  run_step "Install LocalSend" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/optional/app-localsend.sh'"
 fi
 
 if [[ "$SETUP_1PASSWORD" == true ]]; then

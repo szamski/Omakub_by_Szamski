@@ -166,9 +166,6 @@ if [[ "$DRY_RUN" == true ]]; then
     if [[ "$SETUP_CHROME" == true ]]; then
       log_info "  Browser: Google Chrome"
     fi
-    if [[ "$SETUP_CHROMIUM" == true ]]; then
-      log_info "  Browser: Chromium"
-    fi
   fi
   log_info ""
   log_info "Dry-run complete. No changes were made."
@@ -203,9 +200,6 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   if [[ "$SETUP_CHROME" == true ]]; then
     DESKTOP_STEPS=$((DESKTOP_STEPS+1))
   fi
-  if [[ "$SETUP_CHROMIUM" == true ]]; then
-    DESKTOP_STEPS=$((DESKTOP_STEPS+1))
-  fi
   if [[ "$SETUP_DISCORD" == true ]]; then
     DESKTOP_STEPS=$((DESKTOP_STEPS+1))
   fi
@@ -215,13 +209,7 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   if [[ "$SETUP_SPOTIFY" == true ]]; then
     DESKTOP_STEPS=$((DESKTOP_STEPS+1))
   fi
-  if [[ "$SETUP_RIFF" == true ]]; then
-    DESKTOP_STEPS=$((DESKTOP_STEPS+1))
-  fi
   if [[ "$SETUP_LIBREOFFICE" == true ]]; then
-    DESKTOP_STEPS=$((DESKTOP_STEPS+1))
-  fi
-  if [[ "$SETUP_LOCALSEND" == true ]]; then
     DESKTOP_STEPS=$((DESKTOP_STEPS+1))
   fi
   if [[ "$SETUP_1PASSWORD" == true ]]; then

@@ -9,24 +9,16 @@ if command -v ghostty >/dev/null 2>&1; then
   fi
 fi
 
-# Install Ghostty using official Snap package
+# Install Ghostty using the Ubuntu community package (no snap/flatpak)
 if ! command -v ghostty >/dev/null 2>&1; then
-  echo "Installing Ghostty via Snap..."
-  
-  # Try to install, but don't let errors stop the whole installation
-  if sudo snap install ghostty --classic 2>/dev/null; then
+  echo "Installing Ghostty (community Ubuntu package)..."
+
+  if /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/mkasberg/ghostty-ubuntu/HEAD/install.sh)"; then
     echo "✓ Ghostty installed"
   else
-    # Installation failed - could be sudo password, network, or snap not available
     echo "❌ Ghostty installation failed"
-    echo "   This could be due to:"
-    echo "   - sudo password not provided"
-    echo "   - snap not installed or not available"
-    echo "   - network connection issues"
-    echo ""
     echo "   Please install manually:"
-    echo "   sudo snap install ghostty --classic"
-    echo "   Or visit: https://ghostty.org/docs/install/binary"
+    echo "   https://github.com/mkasberg/ghostty-ubuntu"
     echo ""
     return 0
   fi

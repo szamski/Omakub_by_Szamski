@@ -1,14 +1,8 @@
 #!/bin/bash
 
 browser_command="google-chrome --new-window"
-if [[ "$SETUP_CHROMIUM" == true ]]; then
-  browser_command="flatpak run org.chromium.Chromium"
-elif flatpak info org.chromium.Chromium >/dev/null 2>&1; then
-  browser_command="flatpak run org.chromium.Chromium"
-elif command -v chromium-browser >/dev/null 2>&1; then
-  browser_command="chromium-browser --new-window"
-elif command -v chromium >/dev/null 2>&1; then
-  browser_command="chromium --new-window"
+if ! command -v google-chrome >/dev/null 2>&1; then
+  browser_command="xdg-open https://www.google.com"
 fi
 
 # Alt+F4 is very cumbersome
