@@ -76,6 +76,7 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
     "LocalSend"
     "1Password"
     "Dropbox"
+    "Bambu Studio (3D Printing)"
   )
 
   DEFAULT_APPS="VS Code"
@@ -90,6 +91,7 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   export SETUP_LOCALSEND=false
   export SETUP_1PASSWORD=false
   export SETUP_DROPBOX=false
+  export SETUP_BAMBUSTUDIO=false
 
   if printf '%s\n' "$SELECTED_APPS" | grep -Fxq "VS Code"; then
     export SETUP_VSCODE=true
@@ -117,6 +119,9 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   fi
   if printf '%s\n' "$SELECTED_APPS" | grep -Fxq "Dropbox"; then
     export SETUP_DROPBOX=true
+  fi
+  if printf '%s\n' "$SELECTED_APPS" | grep -Fxq "Bambu Studio (3D Printing)"; then
+    export SETUP_BAMBUSTUDIO=true
   fi
 
   if [[ "$SETUP_VSCODE" == true ]] && snap list code >/dev/null 2>&1; then

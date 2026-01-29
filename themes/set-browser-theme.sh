@@ -17,21 +17,21 @@ set_user_policy() {
 [[ -d "$HOME/snap/chromium" ]] && set_user_policy "$HOME/snap/chromium/current/.config/chromium/policies/managed" || true
 [[ -d "$HOME/snap/brave" ]] && set_user_policy "$HOME/snap/brave/current/.config/BraveSoftware/Brave-Browser/policies/managed" || true
 
-# Flatpak installations - use extension point paths
-# Chromium Flatpak reads policies from extension points, not config directory
-ARCH="$(flatpak --default-arch 2>/dev/null || echo x86_64)"
+# Flatpak installations - use filesystem override to expose host policies
+# Create policy in ~/.config and give flatpak read access
 
+# Flatpak installations use ~/.var/app/<app-id>/config/ as XDG_CONFIG_HOME
 # Chromium Flatpak
 if flatpak list --app 2>/dev/null | grep -q "org.chromium.Chromium"; then
-  set_user_policy "$HOME/.local/share/flatpak/extension/org.chromium.Chromium.Policy/$ARCH/1/policies/managed"
+  set_user_policy "$HOME/.var/app/org.chromium.Chromium/config/chromium/policies/managed"
 fi
 
 # Brave Flatpak
 if flatpak list --app 2>/dev/null | grep -q "com.brave.Browser"; then
-  set_user_policy "$HOME/.local/share/flatpak/extension/com.brave.Browser.Policy/$ARCH/1/policies/managed"
+  set_user_policy "$HOME/.var/app/com.brave.Browser/config/BraveSoftware/Brave-Browser/policies/managed"
 fi
 
 # Google Chrome Flatpak
 if flatpak list --app 2>/dev/null | grep -q "com.google.Chrome"; then
-  set_user_policy "$HOME/.local/share/flatpak/extension/com.google.Chrome.Policy/$ARCH/1/policies/managed"
+  set_user_policy "$HOME/.var/app/com.google.Chrome/config/google-chrome/policies/managed"
 fi

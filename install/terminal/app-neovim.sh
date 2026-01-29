@@ -22,6 +22,19 @@ cd - >/dev/null
 
 sudo apt install -y luarocks tree-sitter-cli
 
+# Ensure Node.js/npm are available for Mason LSP installs and markdownlint-cli2
+if ! command -v node >/dev/null 2>&1 && ! command -v nodejs >/dev/null 2>&1; then
+  sudo apt install -y nodejs npm
+fi
+
+if ! command -v npm >/dev/null 2>&1; then
+  sudo apt install -y npm
+fi
+
+if command -v npm >/dev/null 2>&1 && ! command -v markdownlint-cli2 >/dev/null 2>&1; then
+  sudo npm install -g markdownlint-cli2
+fi
+
 if [ -d "$HOME/.config/nvim" ]; then
   if [[ "$AUTO_BACKUP" == true ]]; then
     backup_config "$HOME/.config/nvim"
@@ -43,20 +56,32 @@ cp "$OMAKUB_SZAMSKI_PATH/configs/neovim/lazyvim.json" ~/.config/nvim/
 echo "vim.opt.relativenumber = false" >>~/.config/nvim/lua/config/options.lua
 
 # Create Neovim desktop entry that launches in fullscreen Ghostty
+# Note: --gtk-single-instance=false ensures new window opens (required for Snap Ghostty)
+# Using --fullscreen instead of --maximize for better Wayland compatibility
+GHOSTTY_BIN="ghostty"
+GHOSTTY_WMCLASS="com.mitchellh.ghostty"
+if [[ -x "/snap/bin/ghostty" ]]; then
+  GHOSTTY_BIN="/snap/bin/ghostty"
+  GHOSTTY_WMCLASS="ghostty"
+fi
+
 mkdir -p ~/.local/share/applications
 cat > ~/.local/share/applications/nvim.desktop << 'EOF'
 [Desktop Entry]
 Name=Neovim
 GenericName=Text Editor
 Comment=Edit text files in fullscreen terminal
-Exec=ghostty --fullscreen -e nvim %F
+Exec=GHOSTTY_BIN_PLACEHOLDER --gtk-single-instance=false --fullscreen -e nvim %F
 Icon=nvim
 Terminal=false
 Type=Application
 Categories=Utility;TextEditor;Development;IDE;
 Keywords=text;editor;vim;neovim;nvim;
 MimeType=text/plain;text/x-c;text/x-c++;text/x-python;text/x-java;text/x-makefile;text/x-shellscript;application/x-shellscript;text/x-markdown;
-StartupWMClass=com.mitchellh.ghostty
+StartupWMClass=GHOSTTY_WMCLASS_PLACEHOLDER
 EOF
+
+sed -i "s|GHOSTTY_BIN_PLACEHOLDER|$GHOSTTY_BIN|" ~/.local/share/applications/nvim.desktop
+sed -i "s|GHOSTTY_WMCLASS_PLACEHOLDER|$GHOSTTY_WMCLASS|" ~/.local/share/applications/nvim.desktop
 
 echo "✓ Neovim desktop entry created (launches in fullscreen Ghostty)"

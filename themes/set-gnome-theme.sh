@@ -2,24 +2,32 @@
 
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' 2>/dev/null || true
 gsettings set org.gnome.desktop.interface cursor-theme 'Yaru' 2>/dev/null || true
-gsettings set org.gnome.desktop.interface gtk-theme "Yaru-dark" 2>/dev/null || true
 gsettings set org.gnome.desktop.interface icon-theme "Papirus-Dark" 2>/dev/null || true
 
+# Map theme to GNOME accent color and Yaru GTK theme variant
 ACCENT_COLOR="blue"
+YARU_VARIANT="blue"
 case "$OMAKUB_THEME" in
-  catppuccin) ACCENT_COLOR="pink" ;;
-  tokyo-night) ACCENT_COLOR="blue" ;;
-  nord) ACCENT_COLOR="blue" ;;
-  everforest) ACCENT_COLOR="green" ;;
-  gruvbox) ACCENT_COLOR="orange" ;;
-  kanagawa) ACCENT_COLOR="red" ;;
-  ristretto) ACCENT_COLOR="red" ;;
-  rose-pine) ACCENT_COLOR="purple" ;;
-  matte-black) ACCENT_COLOR="slate" ;;
-  osaka-jade) ACCENT_COLOR="teal" ;;
+  catppuccin) ACCENT_COLOR="pink"; YARU_VARIANT="magenta" ;;
+  tokyo-night) ACCENT_COLOR="blue"; YARU_VARIANT="blue" ;;
+  nord) ACCENT_COLOR="blue"; YARU_VARIANT="blue" ;;
+  everforest) ACCENT_COLOR="green"; YARU_VARIANT="sage" ;;
+  gruvbox) ACCENT_COLOR="orange"; YARU_VARIANT="" ;;  # Default Yaru is orange
+  kanagawa) ACCENT_COLOR="red"; YARU_VARIANT="red" ;;
+  ristretto) ACCENT_COLOR="red"; YARU_VARIANT="red" ;;
+  rose-pine) ACCENT_COLOR="purple"; YARU_VARIANT="purple" ;;
+  matte-black) ACCENT_COLOR="slate"; YARU_VARIANT="prussiangreen" ;;
+  osaka-jade) ACCENT_COLOR="teal"; YARU_VARIANT="prussiangreen" ;;
 esac
 
 gsettings set org.gnome.desktop.interface accent-color "$ACCENT_COLOR" 2>/dev/null || true
+
+# Set Yaru GTK theme with color variant for consistent accent colors
+if [[ -n "$YARU_VARIANT" ]]; then
+  gsettings set org.gnome.desktop.interface gtk-theme "Yaru-${YARU_VARIANT}-dark" 2>/dev/null || true
+else
+  gsettings set org.gnome.desktop.interface gtk-theme "Yaru-dark" 2>/dev/null || true
+fi
 
 OMAKUB_PATH="${OMAKUB_SZAMSKI_PATH:-${OMAKUB_PATH:-$HOME/.local/share/omakub-szamski}}"
 BACKGROUND_ORG_PATH="$OMAKUB_PATH/themes/$OMAKUB_THEME_BACKGROUND"
@@ -106,3 +114,21 @@ else
     set_folder_icon "$HOME/Work" "$WORK_ICON"
   fi
 fi
+
+# Set Games folder icon
+GAMES_ICON="folder-${PAPIRUS_COLOR}-games"
+if [[ ! -f "$ICON_BASE/${GAMES_ICON}.svg" ]]; then
+  GAMES_ICON="folder-games"
+fi
+set_folder_icon "$HOME/Games" "$GAMES_ICON"
+
+# Set SteamLibrary folder icon (common locations)
+STEAM_ICON="folder-${PAPIRUS_COLOR}-steam"
+if [[ ! -f "$ICON_BASE/${STEAM_ICON}.svg" ]]; then
+  STEAM_ICON="folder-steam"
+fi
+for steam_path in "$HOME/.steam/steam" "$HOME/SteamLibrary" /media/*/Games/SteamLibrary; do
+  if [[ -d "$steam_path" ]]; then
+    set_folder_icon "$steam_path" "$STEAM_ICON"
+  fi
+done

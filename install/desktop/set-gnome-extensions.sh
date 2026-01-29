@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt install -y gnome-shell-extension-manager gir1.2-gtop-2.0 gir1.2-clutter-1.0
+sudo apt install -y gnome-shell-extension-manager gir1.2-gtop-2.0 gir1.2-clutter-1.0 gnome-shell-extension-auto-move-windows
 
 EXTENSIONS_DIR="$HOME/.local/share/gnome-shell/extensions"
 
@@ -72,7 +72,7 @@ just_perfection_schema_dir="$(find_schema_dir \
 compile_schemas_dir "$just_perfection_schema_dir"
 
 # Configure Just Perfection
-gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection animation 2
+gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection animation 1
 gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection dash-app-running true
 gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection workspace true
 gsettings_set "$just_perfection_schema_dir" org.gnome.shell.extensions.just-perfection workspace-popup false
@@ -140,7 +140,9 @@ enable_extension() {
     installed=$(gnome-extensions list 2>/dev/null | grep -i "${target}" | head -1 || true)
   fi
   if [[ -n "$installed" ]]; then
-    gnome-extensions enable "$installed" >/dev/null 2>&1 || true
+    if gnome-extensions enable "$installed" 2>/dev/null; then
+      echo "✓ Enabled: $installed"
+    fi
   fi
 }
 

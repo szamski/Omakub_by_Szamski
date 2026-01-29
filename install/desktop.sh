@@ -101,7 +101,13 @@ if [[ "$SETUP_STEAM" == true ]]; then
   run_step "Install Steam (Gaming)" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/optional/app-steam.sh'"
 fi
 
+if [[ "$SETUP_BAMBUSTUDIO" == true ]]; then
+  run_step "Install Bambu Studio (3D Printing)" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/optional/app-bambustudio.sh'"
+fi
+
 run_step "Install GNOME Calendar" "sudo apt install -y gnome-calendar"
+
+run_step "Install Geary email client" "sudo apt install -y geary"
 
 run_step "Configure App Drawer folders" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/set-app-folders.sh'"
 
