@@ -42,6 +42,8 @@ run_step "Install zoxide" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-zox
 
 run_step "Install lazygit" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-lazygit.sh'"
 
+run_step "Install GitHub CLI" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-github-cli.sh'"
+
 run_step "Install lazydocker" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-lazydocker.sh'"
 
 run_step "Install Docker" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/docker.sh'"
