@@ -66,5 +66,5 @@ set_theme() {
   fi
 }
 
-set_theme "codium" "$HOME/.config/VSCodium/User/settings.json" "$HOME/.local/state/omakub/toggles/skip-codium-theme-changes"
+set_theme "code" "$HOME/.config/Code/User/settings.json" "$HOME/.local/state/omakub/toggles/skip-vscode-theme-changes"
 set_theme "cursor" "$HOME/.config/Cursor/User/settings.json" "$HOME/.local/state/omakub/toggles/skip-cursor-theme-changes"
