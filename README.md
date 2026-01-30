@@ -50,7 +50,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/ma
 
 ### Desktop (optional, via gum)
 
-- VS Code (.deb)
+- VSCodium (.deb, GitHub releases)
 - Discord (snap or .deb)
 - Slack (snap)
 - Spotify (snap or .deb)

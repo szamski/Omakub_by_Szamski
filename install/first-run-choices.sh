@@ -61,7 +61,7 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   fi
 
   DESKTOP_APPS=(
-    "VS Code"
+    "VSCodium"
     "Discord"
     "Slack"
     "Spotify"
@@ -71,10 +71,10 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
     "Bambu Studio (3D Printing)"
   )
 
-  DEFAULT_APPS="VS Code"
+  DEFAULT_APPS="VSCodium"
   SELECTED_APPS=$(gum choose "${DESKTOP_APPS[@]}" --no-limit --selected "$DEFAULT_APPS" --header "Select desktop apps to install")
 
-  export SETUP_VSCODE=false
+  export SETUP_CODIUM=false
   export SETUP_DISCORD=false
   export SETUP_SLACK=false
   export SETUP_SPOTIFY=false
@@ -83,8 +83,8 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   export SETUP_DROPBOX=false
   export SETUP_BAMBUSTUDIO=false
 
-  if printf '%s\n' "$SELECTED_APPS" | grep -Fxq "VS Code"; then
-    export SETUP_VSCODE=true
+  if printf '%s\n' "$SELECTED_APPS" | grep -Fxq "VSCodium"; then
+    export SETUP_CODIUM=true
   fi
   if printf '%s\n' "$SELECTED_APPS" | grep -Fxq "Discord"; then
     export SETUP_DISCORD=true
@@ -108,12 +108,12 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
     export SETUP_BAMBUSTUDIO=true
   fi
 
-  if [[ "$SETUP_VSCODE" == true ]] && snap list code >/dev/null 2>&1; then
-    VSCODE_SWITCH=$(gum choose "Switch to .deb (recommended)" "Keep snap" --header "VS Code source")
-    if [[ "$VSCODE_SWITCH" == "Switch to .deb (recommended)" ]]; then
-      export VSCODE_REMOVE_SNAP=true
+  if [[ "$SETUP_CODIUM" == true ]] && snap list codium >/dev/null 2>&1; then
+    CODIUM_SWITCH=$(gum choose "Switch to .deb (recommended)" "Keep snap" --header "VSCodium source")
+    if [[ "$CODIUM_SWITCH" == "Switch to .deb (recommended)" ]]; then
+      export CODIUM_REMOVE_SNAP=true
     else
-      export VSCODE_REMOVE_SNAP=false
+      export CODIUM_REMOVE_SNAP=false
     fi
   fi
 

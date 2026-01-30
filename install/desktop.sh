@@ -53,8 +53,8 @@ if [[ -n "${OMAKUB_THEME:-}" ]]; then
   run_step "Apply theme: $OMAKUB_THEME" "source '$OMAKUB_SZAMSKI_PATH/themes/apply-theme.sh' '$OMAKUB_THEME'"
 fi
 
-if [[ "$SETUP_VSCODE" == true ]]; then
-  run_step "Install VS Code" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/app-vscode.sh'"
+if [[ "$SETUP_CODIUM" == true ]]; then
+  run_step "Install VSCodium" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/app-codium.sh'"
 fi
 
 if [[ "$SETUP_CHROME" == true ]]; then

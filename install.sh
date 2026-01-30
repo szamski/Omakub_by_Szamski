@@ -145,8 +145,8 @@ if [[ "$DRY_RUN" == true ]]; then
     if [[ -n "${OMAKUB_THEME:-}" ]]; then
       log_info "  Theme: $OMAKUB_THEME"
     fi
-    if [[ "$SETUP_VSCODE" == true ]]; then
-      log_info "  Desktop app: VS Code"
+    if [[ "$SETUP_CODIUM" == true ]]; then
+      log_info "  Desktop app: VSCodium"
     fi
     if [[ "$SETUP_DISCORD" == true ]]; then
       log_info "  Desktop app: Discord"
@@ -194,7 +194,7 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   if [[ -n "${OMAKUB_THEME:-}" ]]; then
     DESKTOP_STEPS=$((DESKTOP_STEPS+1))
   fi
-  if [[ "$SETUP_VSCODE" == true ]]; then
+  if [[ "$SETUP_CODIUM" == true ]]; then
     DESKTOP_STEPS=$((DESKTOP_STEPS+1))
   fi
   if [[ "$SETUP_CHROME" == true ]]; then
