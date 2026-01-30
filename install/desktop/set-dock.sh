@@ -6,13 +6,10 @@ app_order=(
   "ghostty"
   "files"
   "google-chrome"
-  "calendar"
-  "codium"
-  "spotify"
   "whatsapp"
-  "discord"
   "slack"
-  "steam"
+  "spotify"
+  "codium"
 )
 
 # Search directories for .desktop files

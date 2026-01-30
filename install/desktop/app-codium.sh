@@ -25,7 +25,8 @@ deb_path="$tmp_dir/$deb_name"
 
 curl -fL "$deb_url" -o "$deb_path"
 sudo apt update
-sudo apt install -y "$deb_path"
+sudo dpkg -i "$deb_path"
+sudo apt-get install -f -y
 rm -rf "$tmp_dir"
 
 # Configure VSCodium settings (fonts for Nerd Font icons)
