@@ -2,7 +2,7 @@
 
 # Skip if lazygit is already installed
 if command -v lazygit >/dev/null 2>&1; then
-  echo "⏭️  lazygit already installed, skipping..."
+  echo "Skip: lazygit already installed"
   return 0
 fi
 

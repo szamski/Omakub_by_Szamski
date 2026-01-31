@@ -9,7 +9,7 @@ if [[ -f "/usr/share/applications/com.mitchellh.ghostty.desktop" ]] || [[ -f "$H
 fi
 
 if [[ -z "$GHOSTTY_BIN" ]]; then
-  echo "⚠️  Ghostty not found, skipping default terminal"
+  echo "Warning: Ghostty not found, skipping default terminal"
   return 0
 fi
 
@@ -23,7 +23,7 @@ if ! update-alternatives --display x-terminal-emulator >/dev/null 2>&1; then
 fi
 
 sudo update-alternatives --set x-terminal-emulator "$GHOSTTY_BIN" || true
-echo "✓ Ghostty set as default terminal"
+echo "Done: Ghostty set as default terminal"
 
 # Prefer Ghostty for GNOME/Nautilus via xdg-terminal-exec
 if ! command -v xdg-terminal-exec >/dev/null 2>&1; then
@@ -35,5 +35,5 @@ if command -v xdg-terminal-exec >/dev/null 2>&1; then
   printf "%s\n" "$GHOSTTY_DESKTOP" > ~/.config/xdg-terminals.list
   gsettings set org.gnome.desktop.default-applications.terminal exec "xdg-terminal-exec"
   gsettings set org.gnome.desktop.default-applications.terminal exec-arg ""
-  echo "✓ GNOME terminal set to xdg-terminal-exec (using $GHOSTTY_DESKTOP)"
+  echo "Done: GNOME terminal set to xdg-terminal-exec (using $GHOSTTY_DESKTOP)"
 fi

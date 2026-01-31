@@ -2,7 +2,7 @@
 
 # Install Bambu Studio (3D printing slicer) via Flatpak
 if flatpak list --app 2>/dev/null | grep -q "com.bambulab.BambuStudio"; then
-  echo "⏭️  Bambu Studio already installed"
+  echo "Skip: Bambu Studio already installed"
 else
   echo "Installing Bambu Studio..."
   flatpak install -y flathub com.bambulab.BambuStudio
@@ -25,7 +25,7 @@ if [[ -n "$PAPIRUS_ICON" && -f "$FLATPAK_DESKTOP" ]]; then
   mkdir -p "$(dirname "$DESKTOP_FILE")"
   cp "$FLATPAK_DESKTOP" "$DESKTOP_FILE"
   sed -i "s/^Icon=.*/Icon=$PAPIRUS_ICON/" "$DESKTOP_FILE"
-  echo "✓ Bambu Studio installed with Papirus icon ($PAPIRUS_ICON)"
+  echo "Done: Bambu Studio installed with Papirus icon ($PAPIRUS_ICON)"
 else
-  echo "✓ Bambu Studio installed"
+  echo "Done: Bambu Studio installed"
 fi

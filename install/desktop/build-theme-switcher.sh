@@ -29,21 +29,21 @@ echo "Building theme switcher GUI..."
 (cd "$APP_DIR" && cargo build --release)
 
 if [[ -x "$BIN" ]]; then
-  echo "✓ Theme switcher GUI built"
+echo "Done: Theme switcher GUI built"
   if [[ -f "$DESKTOP_SRC" ]]; then
     mkdir -p "$(dirname "$DESKTOP_DST")"
     cp "$DESKTOP_SRC" "$DESKTOP_DST"
-    echo "✓ Theme switcher desktop entry installed"
+    echo "Done: Theme switcher desktop entry installed"
   fi
   if [[ -f "$ICON_SRC" ]]; then
     mkdir -p "$(dirname "$ICON_DST")"
     cp "$ICON_SRC" "$ICON_DST"
-    echo "✓ Theme switcher icon installed"
+  echo "Done: Theme switcher icon installed"
   fi
   if [[ -f "$WRAPPER_SRC" ]]; then
     mkdir -p "$(dirname "$WRAPPER_DST")"
     cp "$WRAPPER_SRC" "$WRAPPER_DST"
     chmod +x "$WRAPPER_DST"
-    echo "✓ Theme switcher launcher installed"
+  echo "Done: Theme switcher launcher installed"
   fi
 fi

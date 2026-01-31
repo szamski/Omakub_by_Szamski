@@ -5,22 +5,16 @@ sudo apt install -y gnome-shell-extension-manager gir1.2-gtop-2.0 gir1.2-clutter
 EXTENSIONS_DIR="$HOME/.local/share/gnome-shell/extensions"
 
 if command -v gext >/dev/null 2>&1; then
-  echo "⏭️  gnome-extensions-cli already installed"
+  echo "Skipping: gnome-extensions-cli already installed"
 else
   pipx install gnome-extensions-cli
 fi
 
-# Pause to assure user is ready to accept confirmations
-if command -v gum >/dev/null 2>&1; then
-  gum confirm "To install Gnome extensions, you need to accept some confirmations. Ready?"
-else
-  read -r -p "To install Gnome extensions, you need to accept some confirmations. Ready? (y/N) " confirm
-  [[ "$confirm" =~ ^[Yy]$ ]] || return 0
-fi
+# Install extensions without prompting
 
 install_extension() {
   local uuid="$1"
-  gext install "$uuid" || true
+  gext install "$uuid" >/dev/null 2>&1 || true
   if [[ -d "$EXTENSIONS_DIR/$uuid" ]]; then
     chmod -R go-w "$EXTENSIONS_DIR/$uuid" >/dev/null 2>&1 || true
   else
@@ -141,7 +135,7 @@ enable_extension() {
   fi
   if [[ -n "$installed" ]]; then
     if gnome-extensions enable "$installed" 2>/dev/null; then
-      echo "✓ Enabled: $installed"
+      echo "Enabled: $installed"
     fi
   fi
 }

@@ -12,49 +12,81 @@ if ! declare -f run_step >/dev/null 2>&1; then
   }
 fi
 
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "Installing Terminal Tools"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
+# Core dependencies (keep mandatory)
 run_step "Update apt" "sudo apt update -y"
 run_step "Upgrade apt packages" "sudo apt upgrade -y"
 run_step "Install base packages" "sudo apt install -y curl git unzip"
-
 run_step "Install libraries" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/libraries.sh'"
-
-run_step "Install terminal apps" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/apps-terminal.sh'"
-
+run_step "Install core terminal apps" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/apps-terminal.sh'"
 run_step "Configure shell" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/a-shell.sh'"
-
 run_step "Install Nerd Fonts" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-nerd-fonts.sh'"
 
-run_step "Install fastfetch" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-fastfetch.sh'"
+# Optional tools
+if [[ "$SETUP_FASTFETCH" == true ]]; then
+  run_step "Install fastfetch" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-fastfetch.sh'"
+fi
 
-run_step "Install btop" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-btop.sh'"
+if [[ "$SETUP_BTOP" == true ]]; then
+  run_step "Install btop" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-btop.sh'"
+fi
 
-run_step "Install Neovim" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-neovim.sh'"
+if [[ "$SETUP_NEOVIM" == true ]]; then
+  run_step "Install Neovim" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-neovim.sh'"
+fi
 
-run_step "Install Ghostty" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-ghostty.sh'"
+if [[ "$SETUP_GHOSTTY" == true ]]; then
+  run_step "Install Ghostty" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-ghostty.sh'"
+fi
 
-run_step "Install Starship" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-starship.sh'"
+if [[ "$SETUP_STARSHIP" == true ]]; then
+  run_step "Install Starship" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-starship.sh'"
+fi
 
-run_step "Install zoxide" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-zoxide.sh'"
+if [[ "$SETUP_ZOXIDE" == true ]]; then
+  run_step "Install zoxide" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-zoxide.sh'"
+fi
 
-run_step "Install lazygit" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-lazygit.sh'"
+if [[ "$SETUP_LAZYGIT" == true ]]; then
+  run_step "Install lazygit" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-lazygit.sh'"
+fi
 
-run_step "Install GitHub CLI" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-github-cli.sh'"
+if [[ "$SETUP_GH_CLI" == true ]]; then
+  run_step "Install GitHub CLI" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-github-cli.sh'"
+fi
 
-run_step "Install lazydocker" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-lazydocker.sh'"
+if [[ "$SETUP_LAZYDOCKER" == true ]]; then
+  run_step "Install lazydocker" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-lazydocker.sh'"
+fi
 
-run_step "Install Docker" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/docker.sh'"
+if [[ "$SETUP_DOCKER" == true ]]; then
+  run_step "Install Docker" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/docker.sh'"
+fi
 
-run_step "Install mise" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/mise.sh'"
+if [[ "$SETUP_MISE" == true ]]; then
+  run_step "Install mise" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/mise.sh'"
+fi
 
-run_step "Install Rust toolchain" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-rust.sh'"
+if [[ "$SETUP_RUST" == true ]]; then
+  run_step "Install Rust toolchain" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-rust.sh'"
+fi
 
 if [[ "$SETUP_TAILSCALE" == true ]]; then
   run_step "Install Tailscale" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/optional/app-tailscale.sh'"
 fi
+
+if [[ "$SETUP_WL_CLIPBOARD" == true ]]; then
+  run_step "Install wl-clipboard" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-wl-clipboard.sh'"
+fi
+
+# Developer Stack
+if [[ -n "$SELECTED_LANGUAGES" ]]; then
+  run_step "Install Programming Languages" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/select-dev-language.sh'"
+fi
+
+if [[ -n "$SELECTED_DBS" ]]; then
+  run_step "Install Databases" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/select-dev-databases.sh'"
+fi
+
 
 if [[ "$SETUP_NORDVPN" == true ]]; then
   run_step "Install NordVPN" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/optional/app-nordvpn.sh'"

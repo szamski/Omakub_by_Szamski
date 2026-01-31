@@ -6,3 +6,5 @@ export SUDO_EDITOR="$EDITOR"
 
 # OpenCode
 export PATH=/home/szamski/.opencode/bin:$PATH
+
+export LC_MESSAGES=en_US.UTF-8

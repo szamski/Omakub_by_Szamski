@@ -93,7 +93,27 @@ if [[ "$SETUP_BAMBUSTUDIO" == true ]]; then
   run_step "Install Bambu Studio (3D Printing)" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/optional/app-bambustudio.sh'"
 fi
 
-run_step "Install GNOME Calendar" "sudo apt install -y gnome-calendar"
+if [[ "$SETUP_OBS" == true ]]; then
+  run_step "Install OBS Studio" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/optional/app-obs-studio.sh'"
+fi
+
+if [[ "$SETUP_VIRTUALBOX" == true ]]; then
+  run_step "Install VirtualBox" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/optional/app-virtualbox.sh'"
+fi
+
+if [[ "$SETUP_VLC" == true ]]; then
+  run_step "Install VLC" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/optional/app-vlc.sh'"
+fi
+
+if [[ "$SETUP_SUSHI" == true ]]; then
+  run_step "Install GNOME Sushi" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/app-gnome-sushi.sh'"
+fi
+
+if [[ -n "$SELECTED_WEB_APPS" ]]; then
+  run_step "Install Web Apps" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/select-web-apps.sh'"
+fi
+
+# run_step "Install GNOME Calendar" "sudo apt install -y gnome-calendar"
 
 # run_step "Install Geary email client" "sudo apt install -y geary"
 

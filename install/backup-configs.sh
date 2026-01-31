@@ -8,7 +8,7 @@ backup_config() {
     local backup_path="$BACKUP_DIR/${path#$HOME/}"
     mkdir -p "$(dirname "$backup_path")"
     cp -r "$path" "$backup_path"
-    echo "  ✓ Backed up: $path"
+    echo "  Backed up: $path"
   fi
 }
 

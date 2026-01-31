@@ -1,34 +1,18 @@
 #!/bin/bash
 
-# Check if Starship is already installed AND configured - skip if both are done
-if command -v starship >/dev/null 2>&1 && [ -f "$HOME/.config/starship.toml" ]; then
-  echo "⏭️  Starship already installed and configured, skipping..."
-  return 0
-fi
+source "$OMAKUB_SZAMSKI_PATH/install/terminal/utils.sh"
 
-# Install Starship prompt via official installer (not apt/pacman)
+# Install Starship prompt via official installer
 if ! command -v starship >/dev/null 2>&1; then
   echo "Installing Starship prompt..."
   curl -sS https://starship.rs/install.sh | sh -s -- -y
-  echo "✓ Starship installed"
-else
-  echo "✓ Starship already installed"
+  echo "Done: Starship installed"
 fi
 
-mkdir -p ~/.config
+# Configure using smart install
+install_config "$OMAKUB_SZAMSKI_PATH/configs/starship.toml" "$HOME/.config/starship.toml" "Starship"
 
-# Copy configuration
-if [ -f "$HOME/.config/starship.toml" ]; then
-  if [[ "$AUTO_BACKUP" == true ]]; then
-    backup_config "$HOME/.config/starship.toml"
-    cp "$OMAKUB_SZAMSKI_PATH/configs/starship.toml" ~/.config/starship.toml
-    echo "✓ Starship config updated (backup created)"
-  else
-    echo "⏭️  Starship config already exists (skipping update)"
-  fi
-else
-  cp "$OMAKUB_SZAMSKI_PATH/configs/starship.toml" ~/.config/starship.toml
-  echo "✓ Starship config installed"
+# Theme setup
+if [[ -n "${OMAKUB_THEME:-}" ]]; then
+  source "$OMAKUB_SZAMSKI_PATH/themes/set-starship-theme.sh" "$OMAKUB_THEME"
 fi
-
-echo "✓ Starship configured with Catppuccin theme"

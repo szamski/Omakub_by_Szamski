@@ -25,11 +25,11 @@ if command -v 1password >/dev/null 2>&1; then
 [Desktop Entry]
 Type=Application
 Name=1Password
-Exec=sh -c 'if 1password --help 2>&1 | grep -q -- "--silent"; then exec 1password --silent; elif 1password --help 2>&1 | grep -q -- "--background"; then exec 1password --background; else exec 1password; fi'
+Exec=1password --silent
 X-GNOME-Autostart-enabled=true
 X-GNOME-Autostart-Delay=5
 NoDisplay=true
 EOF
 fi
 
-echo "✓ 1Password and 1Password CLI installed"
+echo "Done: 1Password and 1Password CLI installed"

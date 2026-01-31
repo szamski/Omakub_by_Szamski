@@ -31,7 +31,7 @@ for snap_file in "$SNAP_APPS"/*whatsapp*.desktop "$SNAP_APPS"/*WhatsApp*.desktop
     local_copy="$LOCAL_APPS/$(basename "$snap_file")"
     cp "$snap_file" "$local_copy"
     set_icon_for_desktop "$local_copy" "whatsapp"
-    echo "✓ WhatsApp (snap) icon set to Papirus"
+    echo "Done: WhatsApp (snap) icon set to Papirus"
     WHATSAPP_SET=true
     break
   fi
@@ -42,7 +42,7 @@ if [[ "$WHATSAPP_SET" == false ]]; then
   for desktop_file in "$LOCAL_APPS"/*WhatsApp*.desktop "$LOCAL_APPS"/*whatsapp*.desktop; do
     if [[ -f "$desktop_file" ]]; then
       set_icon_for_desktop "$desktop_file" "whatsapp"
-      echo "✓ WhatsApp icon set to Papirus"
+      echo "Done: WhatsApp icon set to Papirus"
       break
     fi
   done

@@ -25,4 +25,4 @@ if [[ -n "$GIT_EMAIL" ]]; then
   git config --global user.email "$GIT_EMAIL"
 fi
 
-echo "✓ Git configured"
+echo "Done: Git configured"

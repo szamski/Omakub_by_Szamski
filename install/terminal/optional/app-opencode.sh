@@ -4,7 +4,7 @@
 # https://github.com/opencode-ai/opencode
 
 if command -v opencode >/dev/null 2>&1; then
-  echo "⏭️  OpenCode already installed"
+  echo "Skip: OpenCode already installed"
   exit 0
 fi
 
@@ -21,10 +21,10 @@ else
     sudo mv /tmp/opencode /usr/local/bin/
     sudo chmod +x /usr/local/bin/opencode
   else
-    echo "⚠ Could not determine OpenCode version, skipping..."
+    echo "Warning: Could not determine OpenCode version, skipping"
     exit 1
   fi
 fi
 
-echo "✓ OpenCode installed"
+echo "Done: OpenCode installed"
 echo "  Run 'opencode' to start"

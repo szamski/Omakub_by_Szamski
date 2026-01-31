@@ -2,7 +2,7 @@
 
 # Skip if Docker is already installed
 if command -v docker >/dev/null 2>&1; then
-  echo "⏭️  Docker already installed, skipping..."
+  echo "Skip: Docker already installed"
   return 0
 fi
 

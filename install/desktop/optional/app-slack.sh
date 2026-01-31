@@ -1,13 +1,15 @@
 #!/bin/bash
 
+source "$OMAKUB_SZAMSKI_PATH/install/terminal/utils.sh"
+
+# Consistency check
+ensure_no_snap "slack"
+ensure_no_flatpak "com.slack.Slack"
+
 # Install Slack via apt repository (no snap/flatpak)
 if command -v slack >/dev/null 2>&1; then
-  echo "⏭️  Slack already installed, skipping..."
+  echo "Skip: Slack already installed"
   return 0
-fi
-
-if snap list slack >/dev/null 2>&1; then
-  sudo snap remove slack >/dev/null 2>&1 || true
 fi
 
 echo "Installing Slack via apt..."
@@ -22,4 +24,4 @@ fi
 
 sudo apt update
 sudo apt install -y slack-desktop
-echo "✓ Slack installed via apt"
+echo "Done: Slack installed via apt"

@@ -2,7 +2,7 @@
 
 # Skip if Chrome is already installed
 if command -v google-chrome >/dev/null 2>&1; then
-  echo "⏭️  Google Chrome already installed, skipping..."
+  echo "Skip: Google Chrome already installed"
   return 0
 fi
 

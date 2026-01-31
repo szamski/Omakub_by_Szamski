@@ -22,4 +22,4 @@ for desktop_file in /usr/share/applications/ghostty.desktop /usr/local/share/app
   fi
 done
 
-echo "✓ Ghostty icon set to Papirus"
+echo "Done: Ghostty icon set to Papirus"

@@ -2,7 +2,7 @@
 
 # Skip if lazydocker is already installed
 if command -v lazydocker >/dev/null 2>&1; then
-  echo "⏭️  lazydocker already installed, skipping..."
+  echo "Skip: lazydocker already installed"
   return 0
 fi
 

@@ -42,14 +42,34 @@ run_step() {
   local title="$1"
   shift
   local cmd="$*"
+  local display_title="$title"
+
+  if [[ -n "${PROGRESS_TOTAL:-}" ]]; then
+    local next_step=$((PROGRESS_CURRENT+1))
+    if [[ "$next_step" -gt "$PROGRESS_TOTAL" ]]; then
+      next_step="$PROGRESS_TOTAL"
+    fi
+    display_title="[$next_step/$PROGRESS_TOTAL] $title"
+  fi
 
   if command -v gum >/dev/null 2>&1; then
     local out_fd="${OMAKUB_STDOUT_FD:-1}"
-    gum spin --title "$title" -- bash -c "$cmd >>\"$LOG_FILE\" 2>&1" >&$out_fd
+    if ! gum spin --spinner dot --show-output --show-error --title "$display_title" -- \
+      bash -c "$cmd" > >(tee -a "$LOG_FILE") 2> >(tee -a "$LOG_FILE" >&2); then
+      gum style --border normal --foreground 196 "ERROR: $title failed!" >&$out_fd
+      gum style --foreground 196 "Check log for details: $LOG_FILE" >&$out_fd
+      # Optional: Ask to continue or exit? For now, we log and continue (or let set -e handle it if critical)
+      # But since we are in a subshell or wrapped, set -e might not kill the parent.
+      # Let's rely on set -e at top level, but gum spin captures exit code.
+      return 1
+    fi
     progress_advance
   else
-    log_info "→ $title"
-    bash -c "$cmd" >>"$LOG_FILE" 2>&1
+    log_info "→ $display_title"
+    if ! bash -c "$cmd" > >(tee -a "$LOG_FILE") 2> >(tee -a "$LOG_FILE" >&2); then
+      echo "ERROR: $title failed!"
+      return 1
+    fi
     progress_advance
   fi
 }
@@ -233,17 +253,16 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   run_step "Disable screen lock" "gsettings set org.gnome.desktop.screensaver lock-enabled false"
   run_step "Disable idle timeout" "gsettings set org.gnome.desktop.session idle-delay 0"
 
-  log_info "Installing terminal tools..."
+  gum style --border normal --margin "1" --padding "1 2" --border-foreground 212 "Installing Terminal Tools"
   source "$OMAKUB_SZAMSKI_PATH/install/terminal.sh"
 
-  log_info "Configuring desktop..."
+  gum style --border normal --margin "1" --padding "1 2" --border-foreground 212 "Configuring Desktop"
   source "$OMAKUB_SZAMSKI_PATH/install/desktop.sh"
 
   run_step "Restore screen lock" "gsettings set org.gnome.desktop.screensaver lock-enabled true"
   run_step "Restore idle timeout" "gsettings set org.gnome.desktop.session idle-delay 300"
 else
-  log_info "Only installing terminal tools..."
-  log_info "Installing terminal tools..."
+  gum style --border normal --margin "1" --padding "1 2" --border-foreground 212 "Installing Terminal Tools"
   source "$OMAKUB_SZAMSKI_PATH/install/terminal.sh"
 fi
 

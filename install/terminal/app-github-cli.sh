@@ -2,7 +2,7 @@
 
 # Skip if gh is already installed
 if command -v gh >/dev/null 2>&1; then
-  echo "⏭️  GitHub CLI already installed, skipping..."
+  echo "Skip: GitHub CLI already installed"
   return 0
 fi
 

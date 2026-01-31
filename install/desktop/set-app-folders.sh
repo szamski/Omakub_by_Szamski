@@ -27,4 +27,4 @@ gsettings set org.gnome.desktop.app-folders.folder:/org/gnome/desktop/app-folder
 gsettings set org.gnome.desktop.app-folders.folder:/org/gnome/desktop/app-folders/folders/Web-Apps/ name 'Web Apps'
 gsettings set org.gnome.desktop.app-folders.folder:/org/gnome/desktop/app-folders/folders/Web-Apps/ apps "['webapp-WhatsApp.desktop', 'whatsapp-linux-desktop_whatsapp-linux-desktop.desktop']"
 
-echo "✓ App Drawer folders configured"
+echo "Done: App Drawer folders configured"

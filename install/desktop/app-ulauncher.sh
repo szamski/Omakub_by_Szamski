@@ -5,7 +5,7 @@ if command -v ulauncher >/dev/null 2>&1; then
   if [ ! -f ~/.config/autostart/ulauncher.desktop ]; then
     cp /usr/share/applications/ulauncher.desktop ~/.config/autostart/ulauncher.desktop 2>/dev/null || true
   fi
-  echo "✓ Ulauncher already installed"
+echo "Done: Ulauncher already installed"
   return 0
 fi
 

@@ -3,7 +3,7 @@
 # Install Steam with Wayland fix
 
 if command -v steam >/dev/null 2>&1; then
-  echo "⏭️  Steam already installed"
+  echo "Skip: Steam already installed"
 else
   echo "Installing Steam..."
   sudo apt install -y steam
@@ -53,5 +53,5 @@ update-desktop-database ~/.local/share/applications/ 2>/dev/null || true
 rm -rf ~/.local/share/Steam/config/htmlcache 2>/dev/null || true
 rm -rf ~/.local/share/Steam/config/cef_cache 2>/dev/null || true
 
-echo "✓ Steam installed with Wayland support"
+echo "Done: Steam installed with Wayland support"
 echo "  Use 'Steam (Wayland)' from application menu"

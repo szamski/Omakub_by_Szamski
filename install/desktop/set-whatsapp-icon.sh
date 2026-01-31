@@ -16,12 +16,12 @@ mkdir -p "$LOCAL_APPS"
 if [[ -f "/var/lib/snapd/desktop/applications/whatsapp-linux-desktop_whatsapp-linux-desktop.desktop" ]]; then
   cp "/var/lib/snapd/desktop/applications/whatsapp-linux-desktop_whatsapp-linux-desktop.desktop" "$LOCAL_APPS/"
   sed -i "s/^Icon=.*/Icon=${ICON_NAME}/" "$LOCAL_APPS/whatsapp-linux-desktop_whatsapp-linux-desktop.desktop"
-  echo "✓ WhatsApp icon set to Papirus"
+  echo "Done: WhatsApp icon set to Papirus"
 fi
 
 # whatsapp-for-linux snap (alternative)
 if [[ -f "/var/lib/snapd/desktop/applications/whatsapp-for-linux_whatsapp-for-linux.desktop" ]]; then
   cp "/var/lib/snapd/desktop/applications/whatsapp-for-linux_whatsapp-for-linux.desktop" "$LOCAL_APPS/"
   sed -i "s/^Icon=.*/Icon=${ICON_NAME}/" "$LOCAL_APPS/whatsapp-for-linux_whatsapp-for-linux.desktop"
-  echo "✓ WhatsApp icon set to Papirus"
+  echo "Done: WhatsApp icon set to Papirus"
 fi
