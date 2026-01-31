@@ -4,6 +4,27 @@ GUM_HEIGHT_DEFAULT=12
 GUM_HEIGHT_SHORT=6
 GUM_HEIGHT_TALL=15
 
+# Progress tracking for configuration steps (dynamically calculated)
+CHOICE_TOTAL=10  # Base: Browser, Ghostty, Terminal Tools, Languages, Databases, AI Tools, Gaming, NordVPN, Config Strategy, Pre-flight
+if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
+  CHOICE_TOTAL=$((CHOICE_TOTAL + 3))  # Theme, Desktop Apps, Web Apps
+fi
+CHASSIS_TYPE=$(cat /sys/class/dmi/id/chassis_type 2>/dev/null || echo "0")
+if [[ "$CHASSIS_TYPE" =~ ^(8|9|10|14)$ ]]; then
+  CHOICE_TOTAL=$((CHOICE_TOTAL + 1))  # TLP for laptops
+fi
+CHOICE_CURRENT=0
+
+show_choice_progress() {
+  CHOICE_CURRENT=$((CHOICE_CURRENT+1))
+  if command -v gum >/dev/null 2>&1; then
+    gum style --border rounded --padding "0 2" --border-foreground 99 \
+      "Configuration Step $CHOICE_CURRENT/$CHOICE_TOTAL"
+  else
+    echo "Configuration Step $CHOICE_CURRENT/$CHOICE_TOTAL"
+  fi
+}
+
 gum_choose() {
   local header="$1"
   local default_value="$2"
@@ -28,6 +49,7 @@ gum_choose_multi() {
 # Browser choice
 gum style --border normal --margin "1" --padding "1 2" --border-foreground 212 "Welcome to Omakub by Szamski Installer"
 
+show_choice_progress
 BROWSER_SELECTED=$(gum_choose "Select browser to install" "None - Skip" "Google Chrome" "None - Skip")
 
 case "$BROWSER_SELECTED" in
@@ -40,6 +62,7 @@ case "$BROWSER_SELECTED" in
 esac
 
 # Ghostty window size
+show_choice_progress
 GHOSTTY_SIZE=$(gum_choose "Ghostty window size" "Full HD (150x45)" "Full HD (150x45)" "1440p (170x50)" "4K (200x60)" "Custom")
 case "$GHOSTTY_SIZE" in
   "Full HD (150x45)")
@@ -70,6 +93,7 @@ printf "GHOSTTY_WINDOW_WIDTH=%s\nGHOSTTY_WINDOW_HEIGHT=%s\n" \
 # Terminal Tools Choice (Granular)
 gum style --border normal --margin "1" --padding "1 2" --border-foreground 212 "Terminal Tools"
 
+show_choice_progress
 TERMINAL_TOOLS=(
   "Fastfetch (System info)"
   "Btop (Resource monitor)"
@@ -125,6 +149,7 @@ if printf '%s\n' "$SELECTED_TERMINAL_TOOLS" | grep -Fq "wl-clipboard"; then expo
 # Developer Stack (Languages & Databases)
 gum style --border normal --margin "1" --padding "1 2" --border-foreground 212 "Developer Stack"
 
+show_choice_progress
 # Languages
 AVAILABLE_LANGUAGES=("Ruby" "Node.js" "Go" "PHP" "Python" "Elixir" "Java" "Rust")
 SELECTED_LANGUAGES_RAW=$(gum choose "${AVAILABLE_LANGUAGES[@]}" --no-limit --height "$GUM_HEIGHT_TALL" --header "Select programming languages to install (via mise)" || true)
@@ -132,6 +157,7 @@ SELECTED_LANGUAGES_RAW=$(gum choose "${AVAILABLE_LANGUAGES[@]}" --no-limit --hei
 export SELECTED_LANGUAGES=$(echo "$SELECTED_LANGUAGES_RAW" | tr '\n' ',')
 
 # Databases
+show_choice_progress
 AVAILABLE_DBS=("MySQL" "PostgreSQL" "Redis" "MongoDB" "MariaDB")
 SELECTED_DBS_RAW=$(gum choose "${AVAILABLE_DBS[@]}" --no-limit --height "$GUM_HEIGHT_DEFAULT" --header "Select databases to install (via Docker)" || true)
 export SELECTED_DBS=$(echo "$SELECTED_DBS_RAW" | tr '\n' ',')
@@ -140,6 +166,7 @@ export SELECTED_DBS=$(echo "$SELECTED_DBS_RAW" | tr '\n' ',')
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   gum style --border normal --margin "1" --padding "1 2" --border-foreground 212 "Desktop Environment"
 
+  show_choice_progress
   THEME_NAMES=(
     "Tokyo Night"
     "Catppuccin"
@@ -161,6 +188,7 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
     export OMAKUB_THEME="catppuccin"
   fi
 
+  show_choice_progress
   DESKTOP_APPS=(
     "VS Code"
     "Discord"
@@ -216,12 +244,14 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   fi
 
   # Web Apps
+  show_choice_progress
   AVAILABLE_WEB_APPS=("Chat GPT" "Google Photos" "Google Contacts" "Tailscale")
   SELECTED_WEB_APPS_RAW=$(gum choose "${AVAILABLE_WEB_APPS[@]}" --no-limit --height "$GUM_HEIGHT_DEFAULT" --header "Select Web Apps (PWAs) to install" || true)
   export SELECTED_WEB_APPS=$(echo "$SELECTED_WEB_APPS_RAW" | tr '\n' ',')
 fi
 
 # AI Tools choice
+show_choice_progress
 AI_TOOLS=(
   "Claude Code (Anthropic CLI)"
   "OpenCode"
@@ -240,6 +270,7 @@ if printf '%s\n' "$SELECTED_AI" | grep -Fxq "OpenCode"; then
 fi
 
 # Gaming choice
+show_choice_progress
 GAMING_CHOICE=$(gum_choose "Gaming setup" "Skip Gaming" "Install Steam" "Skip Gaming")
 if [[ "$GAMING_CHOICE" == "Install Steam" ]]; then
   export SETUP_STEAM=true
@@ -248,6 +279,7 @@ else
 fi
 
 # VPN choice (NordVPN)
+show_choice_progress
 VPN_SELECTED=$(gum_choose "NordVPN Setup (Tailscale is in terminal tools)" "Skip NordVPN" "Install NordVPN" "Skip NordVPN")
 
 if [[ "$VPN_SELECTED" == "Install NordVPN" ]]; then
@@ -260,6 +292,7 @@ fi
 CHASSIS_TYPE=$(cat /sys/class/dmi/id/chassis_type 2>/dev/null || echo "0")
 if [[ "$CHASSIS_TYPE" =~ ^(8|9|10|14)$ ]]; then
   export IS_LAPTOP=true
+  show_choice_progress
   gum format -- "**TLP** is a feature-rich command line utility for Linux that saves laptop battery power."
 
   if command -v tlp >/dev/null 2>&1; then
@@ -293,6 +326,7 @@ else
 fi
 
 # Config overwrite strategy
+show_choice_progress
 gum format -- "**Auto Backup**: If enabled, existing config files will be backed up to ~/.config-backup-<date> before being overwritten."
 CONFIG_STRATEGY=$(gum_choose "Config file strategy" "Keep existing configs" "Auto backup and overwrite" "Keep existing configs")
 if [[ "$CONFIG_STRATEGY" == "Auto backup and overwrite" ]]; then
@@ -408,6 +442,7 @@ fi
 add_summary_row "VPN" "$([[ "$SETUP_NORDVPN" == true ]] && echo "NordVPN" || echo "None")"
 add_summary_row "Laptop" "$([[ "$SETUP_TLP" == true ]] && echo "TLP Optimized" || echo "None")"
 
+show_choice_progress
 gum style --border normal --margin "1" --padding "1 2" --border-foreground 212 "Pre-flight Check: Installation Summary"
 gum table --print --columns "Category" --columns "Selected Option" --widths 20,60 --height 20 < "$SUMMARY_FILE"
 rm "$SUMMARY_FILE"

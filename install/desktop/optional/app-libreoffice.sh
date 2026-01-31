@@ -7,7 +7,7 @@ if command -v libreoffice >/dev/null 2>&1; then
 fi
 
 echo "Installing LibreOffice..."
-sudo apt update
+apt_update_once
 sudo apt install -y libreoffice
 
 echo "Done: LibreOffice installed"

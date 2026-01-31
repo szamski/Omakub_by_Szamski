@@ -20,8 +20,12 @@ SLACK_LIST="/etc/apt/sources.list.d/slack.list"
 if [ ! -f "$SLACK_LIST" ]; then
   curl -fsSL https://packagecloud.io/slacktechnologies/slack/gpgkey | sudo gpg --dearmor --yes -o "$SLACK_KEYRING"
   echo "deb [signed-by=$SLACK_KEYRING] https://packagecloud.io/slacktechnologies/slack/debian/ jessie main" | sudo tee "$SLACK_LIST"
+  # Force apt update after adding Slack repository
+  sudo apt update -y
+  export APT_UPDATED=true
+else
+  apt_update_once
 fi
 
-sudo apt update
 sudo apt install -y slack-desktop
 echo "Done: Slack installed via apt"

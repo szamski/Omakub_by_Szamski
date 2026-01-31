@@ -2,24 +2,18 @@
 
 OMAKUB_SZAMSKI_PATH="${OMAKUB_SZAMSKI_PATH:-$HOME/.local/share/omakub-szamski}"
 
-if ! declare -f run_step >/dev/null 2>&1; then
-  run_step() {
-    local title="$1"
-    shift
-    local cmd="$*"
-    echo "→ $title"
-    bash -c "$cmd"
-  }
-fi
-
 # Core dependencies (keep mandatory)
-run_step "Update apt" "sudo apt update -y"
+if [[ "$APT_UPDATED" != "true" ]]; then
+  run_step "Update package lists" "sudo apt update -y && export APT_UPDATED=true"
+else
+  echo "Skip: Package lists already updated"
+fi
 run_step "Upgrade apt packages" "sudo apt upgrade -y"
 run_step "Install base packages" "sudo apt install -y curl git unzip"
 run_step "Install libraries" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/libraries.sh'"
 run_step "Install core terminal apps" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/apps-terminal.sh'"
 run_step "Configure shell" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/a-shell.sh'"
-run_step "Install Nerd Fonts" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-nerd-fonts.sh'"
+run_step_with_estimate "Install Nerd Fonts" "1-2 minutes" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/app-nerd-fonts.sh'"
 
 # Optional tools
 if [[ "$SETUP_FASTFETCH" == true ]]; then
@@ -59,11 +53,11 @@ if [[ "$SETUP_LAZYDOCKER" == true ]]; then
 fi
 
 if [[ "$SETUP_DOCKER" == true ]]; then
-  run_step "Install Docker" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/docker.sh'"
+  run_step_with_estimate "Install Docker" "5-8 minutes" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/docker.sh'"
 fi
 
 if [[ "$SETUP_MISE" == true ]]; then
-  run_step "Install mise" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/mise.sh'"
+  run_step_with_estimate "Install mise" "2-3 minutes" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/mise.sh'"
 fi
 
 if [[ "$SETUP_RUST" == true ]]; then
@@ -80,7 +74,7 @@ fi
 
 # Developer Stack
 if [[ -n "$SELECTED_LANGUAGES" ]]; then
-  run_step "Install Programming Languages" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/select-dev-language.sh'"
+  run_step_with_estimate "Install Programming Languages" "3-10 minutes" "source '$OMAKUB_SZAMSKI_PATH/install/terminal/select-dev-language.sh'"
 fi
 
 if [[ -n "$SELECTED_DBS" ]]; then

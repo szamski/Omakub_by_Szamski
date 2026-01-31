@@ -2,30 +2,14 @@
 
 OMAKUB_SZAMSKI_PATH="${OMAKUB_SZAMSKI_PATH:-$HOME/.local/share/omakub-szamski}"
 
-if ! declare -f run_step >/dev/null 2>&1; then
-  run_step() {
-    local title="$1"
-    shift
-    local cmd="$*"
-    echo "→ $title"
-    bash -c "$cmd"
-  }
+if command -v gum >/dev/null 2>&1; then
+  gum style --border double --margin "1" --padding "1 2" --border-foreground 212 --align center "Configuring Desktop Environment"
+else
+  echo ""
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "Configuring Desktop Environment"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 fi
-
-if ! declare -f run_interactive >/dev/null 2>&1; then
-  run_interactive() {
-    local title="$1"
-    shift
-    local cmd="$*"
-    echo "→ $title"
-    bash -c "$cmd"
-  }
-fi
-
-echo ""
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "Configuring Desktop Environment"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 run_step "Apply GNOME settings" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/gnome-settings.sh'"
 
@@ -47,18 +31,18 @@ run_step "Set webapp icons (WhatsApp)" "source '$OMAKUB_SZAMSKI_PATH/install/des
 
 run_step "Install GTK4 development libraries" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/app-gtk4-dev.sh'"
 
-run_step "Build theme switcher GUI" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/build-theme-switcher.sh'"
+run_step_with_estimate "Build theme switcher GUI" "2-3 minutes" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/build-theme-switcher.sh'"
 
 if [[ -n "${OMAKUB_THEME:-}" ]]; then
   run_step "Apply theme: $OMAKUB_THEME" "source '$OMAKUB_SZAMSKI_PATH/themes/apply-theme.sh' '$OMAKUB_THEME'"
 fi
 
 if [[ "$SETUP_VSCODE" == true ]]; then
-  run_step "Install VS Code" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/app-vscode.sh'"
+  run_step_with_estimate "Install VS Code" "2-3 minutes" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/app-vscode.sh'"
 fi
 
 if [[ "$SETUP_CHROME" == true ]]; then
-  run_step "Install Google Chrome" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/app-chrome.sh'"
+  run_step_with_estimate "Install Google Chrome" "1-2 minutes" "source '$OMAKUB_SZAMSKI_PATH/install/desktop/app-chrome.sh'"
 fi
 
 if [[ "$SETUP_DISCORD" == true ]]; then

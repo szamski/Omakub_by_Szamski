@@ -17,6 +17,7 @@ export OMAKUB_SZAMSKI_PATH
 BACKUP_DATE=$(date +%Y%m%d_%H%M%S)
 export BACKUP_DIR="$HOME/.config-backup-$BACKUP_DATE"
 export DRY_RUN=false
+export APT_UPDATED=false
 
 for arg in "$@"; do
   if [[ "$arg" == "--dry-run" ]]; then
@@ -36,6 +37,28 @@ log_info() {
   else
     echo "$@"
   fi
+}
+
+apt_update_once() {
+  if [[ "$APT_UPDATED" != "true" ]]; then
+    sudo apt update -y
+    export APT_UPDATED=true
+  fi
+}
+
+run_step_with_estimate() {
+  local title="$1"
+  local estimate="$2"
+  shift 2
+  local cmd="$*"
+
+  if command -v gum >/dev/null 2>&1; then
+    gum style --foreground 99 "⏱ Estimated time: $estimate"
+  else
+    log_info "⏱ Estimated time: $estimate"
+  fi
+
+  run_step "$title" "$cmd"
 }
 
 run_step() {

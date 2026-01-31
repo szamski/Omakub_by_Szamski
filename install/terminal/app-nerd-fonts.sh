@@ -14,7 +14,7 @@ echo "Installing Nerd Fonts"
 # Make sure unzip is installed
 if ! command -v unzip >/dev/null 2>&1; then
   echo "Installing unzip"
-  sudo apt update -y
+  apt_update_once
   sudo apt install -y unzip
 fi
 

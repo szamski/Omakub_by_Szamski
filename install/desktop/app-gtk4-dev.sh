@@ -7,7 +7,7 @@ if pkg-config --exists gtk4; then
 fi
 
 echo "Installing GTK4 development libraries..."
-sudo apt update
+apt_update_once
 sudo apt install -y libgtk-4-dev pkg-config
 
 echo "Done: GTK4 development libraries installed"

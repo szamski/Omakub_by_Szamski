@@ -8,7 +8,9 @@ fi
 
 echo "Installing Papirus icon theme and folders..."
 sudo add-apt-repository -y ppa:papirus/papirus
-sudo apt update
+# Force apt update after adding Papirus PPA
+sudo apt update -y
+export APT_UPDATED=true
 sudo apt install -y papirus-icon-theme papirus-folders
 
 echo "Done: Papirus icon theme installed"

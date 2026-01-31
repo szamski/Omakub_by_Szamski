@@ -7,7 +7,9 @@ if command -v fastfetch >/dev/null 2>&1; then
   echo "Skip: fastfetch already installed"
 else
   sudo add-apt-repository -y ppa:zhangsongcui3371/fastfetch
+  # Force apt update after adding PPA
   sudo apt update -y
+  export APT_UPDATED=true
   sudo apt install -y fastfetch
 fi
 
