@@ -14,7 +14,7 @@ A simplified, streamlined Ubuntu 25.04+ development environment installer.
 ## Quick Install
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/simple-installer/boot.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/rework/boot.sh)
 ```
 
 ## What Gets Installed
@@ -22,8 +22,10 @@ bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/si
 ### Core Tools (Always Installed)
 
 **Terminal Tools:**
+- `neovim` - Modern text editor with LazyVim + Gruvbox theme
 - `mise` - Runtime version manager (with Python & Node.js latest)
-- `fzf`, `ripgrep`, `bat`, `eza`, `zoxide` - Modern CLI tools
+- `fzf`, `ripgrep`, `bat`, `eza`, `zoxide`, `fd-find`, `plocate` - Modern CLI tools
+- `tldr` - Community-driven man pages
 - `starship` - Beautiful shell prompt
 - `fastfetch` - System information display
 - `gh` - GitHub CLI
@@ -69,11 +71,12 @@ Select languages to install via `mise`:
 ## GNOME Configuration
 
 Automatically configured:
-- **Terminal**: Ptyxis with CaskaydiaCove Nerd Font Mono 11, block cursor, Vs Code palette
+- **Terminal**: Ptyxis with CaskaydiaCove Nerd Font Mono 11, block cursor
 - **Text Editor**: GNOME Text Editor with line numbers, current line highlight, and minimap
 - **Theme**: Yaru Dark
-- **Dock**: Chrome, Ptyxis, Files, Slack, Spotify, VS Code
+- **Dock**: Chrome, Ptyxis, Files, Slack, Spotify (snap), VS Code
 - **Firefox**: Removed (snap version from Ubuntu 25.10)
+- **Neovim**: LazyVim with Gruvbox theme, Polish & English spell checking
 
 ## File Structure
 
@@ -86,6 +89,7 @@ Omakub_by_Szamski/
 ├── apps/                # Application installers
 │   ├── terminal/        # Terminal/CLI tools
 │   │   ├── gum.sh
+│   │   ├── neovim.sh
 │   │   ├── mise.sh
 │   │   ├── starship.sh
 │   │   ├── fastfetch.sh
@@ -110,6 +114,11 @@ Omakub_by_Szamski/
 │   │   ├── bashrc
 │   │   ├── inputrc
 │   │   └── defaults/    # Aliases, functions, prompt, etc.
+│   ├── neovim/
+│   │   ├── theme.lua              # Gruvbox theme
+│   │   ├── transparency.lua
+│   │   ├── lazyvim.json
+│   │   └── snacks-animated-scrolling-off.lua
 │   ├── starship.toml
 │   └── fastfetch.jsonc
 │
@@ -126,7 +135,7 @@ Omakub_by_Szamski/
 ### Install from GitHub
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/simple-installer/boot.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/rework/boot.sh)
 ```
 
 ### Install from Local Clone
@@ -134,7 +143,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/si
 ```bash
 git clone https://github.com/szamski/Omakub_by_Szamski.git
 cd Omakub_by_Szamski
-git checkout simple-installer
+git checkout rework
 ./install.sh
 ```
 
