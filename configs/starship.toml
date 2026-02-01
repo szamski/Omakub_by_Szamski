@@ -1,182 +1,165 @@
-"$schema" = 'https://starship.rs/config-schema.json'
-
-format = """
-[](pink)\
-$os\
+format = """\
+[╭╴](fg:arrow)\
 $username\
-[](bg:teal fg:pink)\
-$directory\
-[](bg:peach fg:teal)\
+$os\
 $git_branch\
-$git_status\
-[](fg:peach bg:green)\
-$c\
-$rust\
-$golang\
-$nodejs\
-$php\
-$java\
-$kotlin\
-$haskell\
-$python\
-[](fg:green bg:sapphire)\
-$conda\
-[](fg:sapphire bg:mauve)\
-$time\
-[ ](fg:mauve)\
+(\
+    at \
+    $directory\
+)\
 $cmd_duration\
-$line_break\
-$character"""
+(\
+    via \
+    $python\
+    $conda\
+    $nodejs\
+    $c\
+    $rust\
+    $java\
+)
+[╰─](fg:arrow)$character\
+"""
+# Add the modules you need
 
-palette = 'ptyxis_dark'
+# Disable the blank line at the start of the prompt
+add_newline = true
 
-[os]
-disabled = false
-style = "bg:pink fg:base"
 
-[os.symbols]
-Windows = ""
-Ubuntu = "󰕈"
-SUSE = ""
-Raspbian = "󰐿"
-Mint = "󰣭"
-Macos = "󰀵"
-Manjaro = ""
-Linux = "󰌽"
-Gentoo = "󰣨"
-Fedora = "󰣛"
-Alpine = ""
-Amazon = ""
-Android = ""
-AOSC = ""
-Arch = "󰣇"
-Artix = "󰣇"
-CentOS = ""
-Debian = "󰣚"
-Redhat = "󱄛"
-RedHatEnterprise = "󱄛"
+palette = "normal"
+
+
+[palettes.normal]
+arrow = "#333533"
+os = "#16f4d0"
+os_admin = "#e4ff1a"
+directory = "#9ffff5"
+time = "#bdfffd"
+node = "#a5e6ba"
+git = "#f17f29"
+git_status = "#DFEBED"
+python = "#edf67d"
+conda = "#70e000"
+java = "#F86279"
+rust = "#ffdac6"
+clang = "#caf0f8"
+duration = "#ce4257"
+text_color = "#EDF2F4"
+text_light = "#26272A"
+
+# I disabled some modules (Rust, Java...) since some things aren't installed in my machine, enable them if you need.
 
 [username]
-show_always = true
-style_user = "bg:pink fg:base"
-style_root = "bg:pink fg:base"
-format = '[ $user]($style)'
-
-[directory]
-style = "bg:teal fg:base"
-format = "[ $path ]($style)"
-truncation_length = 3
-truncation_symbol = "…/"
-
-[directory.substitutions]
-"Documents" = "󰈙 "
-"Downloads" = " "
-"Music" = "󰝚 "
-"Pictures" = " "
-"Developer" = "󰲋 "
-
-[git_branch]
-symbol = ""
-style = "bg:peach"
-format = '[[ $symbol $branch ](fg:base bg:peach)]($style)'
-
-[git_status]
-style = "bg:peach"
-format = '[[($all_status$ahead_behind )](fg:base bg:peach)]($style)'
-
-[nodejs]
-symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:base bg:green)]($style)'
-
-[c]
-symbol = " "
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:base bg:green)]($style)'
-
-[rust]
-symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:base bg:green)]($style)'
-
-[golang]
-symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:base bg:green)]($style)'
-
-[php]
-symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:base bg:green)]($style)'
-
-[java]
-symbol = " "
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:base bg:green)]($style)'
-
-[kotlin]
-symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:base bg:green)]($style)'
-
-[haskell]
-symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:base bg:green)]($style)'
-
-[python]
-symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version)(\(#$virtualenv\)) ](fg:base bg:green)]($style)'
-
-[docker_context]
-symbol = ""
-style = "bg:sapphire"
-format = '[[ $symbol( $context) ](fg:base bg:sapphire)]($style)'
-
-[conda]
-symbol = "  "
-style = "fg:base bg:sapphire"
-format = '[$symbol$environment ]($style)'
-ignore_base = false
-
-[time]
+style_user = 'bold os'
+style_root = 'bold os_admin'
+format = '[  $user](fg:$style) '
 disabled = false
-time_format = "%R"
-style = "bg:mauve"
-format = '[[  $time ](fg:base bg:mauve)]($style)'
+show_always = true
 
-[line_break]
+[os]
+format = "on [($name)]($style) "
+style = "bold blue"
 disabled = true
 
+[os.symbols]
+Alpine = " "
+Arch = " "
+Debian = " "
+EndeavourOS = " "
+Fedora = " "
+Linux = " "
+Macos = " "
+Manjaro = " "
+Mint = " "
+NixOS = " "
+openSUSE = " "
+Pop = " "
+SUSE = " "
+Ubuntu = " "
+Windows = " "
+
 [character]
-disabled = false
-success_symbol = '[❯](bold fg:green)'
-error_symbol = '[❯](bold fg:pink)'
-vimcmd_symbol = '[❮](bold fg:green)'
-vimcmd_replace_one_symbol = '[❮](bold fg:mauve)'
-vimcmd_replace_symbol = '[❮](bold fg:mauve)'
-vimcmd_visual_symbol = '[❮](bold fg:peach)'
+success_symbol = "[󰍟](fg:arrow)"
+error_symbol = "[󰍟](fg:red)"
+
+[directory]
+format = "[$path](bold $style)[$read_only]($read_only_style) "
+truncation_length = 2
+style = "fg:directory"
+read_only_style = "fg:directory"
+before_repo_root_style = "fg:directory"
+truncation_symbol = "…/"
+truncate_to_repo = true
+read_only ="  "
+
+[time]
+disabled = true
+format = "at [󱑈 $time]($style)"
+time_format = "%H:%M"
+style = "bold fg:time"
 
 [cmd_duration]
-show_milliseconds = true
-format = " in $duration "
-style = "fg:mauve"
+format = "took [ $duration]($style) "
+style = "bold fg:duration"
+min_time = 500
+
+[git_branch]
+format = "via [$symbol$branch]($style) "
+style = "bold fg:git"
+symbol = " "
+
+[git_status]
+format = '[ $all_status$ahead_behind ]($style)'
+style = "fg:text_color bg:git"
+disabled = true
+
+[docker_context]
+disabled=true
+symbol = " "
+
+[package]
+disabled=true
+
+[fill]
+symbol = " "
+
+[nodejs]
+format = "[ $symbol$version ]($style)"
+style = "bg:node fg:text_light"
+symbol = " "
+version_format = "${raw}"
+disabled=false
+
+[python]
+disabled=false
+format = '[ ${symbol}${pyenv_prefix}(${version})( \($virtualenv\)) ]($style)'
+symbol = " "
+version_format = "${raw}"
+style = "bg:python fg:text_light"
+
+[conda]
+format = "[ $symbol$environment ]($style)"
+style = "bg:conda fg:text_light"
+ignore_base = false
 disabled = false
-show_notifications = true
-min_time_to_notify = 45000
+symbol = " "
 
-# Custom Ptyxis Dark palette - balanced colors for dark purple background
-[palettes.ptyxis_dark]
-# Balanced colors with good contrast but not overly bright
-pink = "#f5c2e7"           # Soft pink for username (more pastel)
-mauve = "#cba6f7"          # Purple for time
-teal = "#94e2d5"           # Teal/cyan for directory
-peach = "#f9e2af"          # Soft yellow for git (not orange!)
-green = "#a6e3a1"          # Soft green for languages
-sapphire = "#89dceb"       # Sky blue for conda/docker
-red = "#f38ba8"            # Soft red for errors
+[java]
+format = "[ $symbol$version ]($style)"
+style = "bg:java fg:text_light"
+version_format = "${raw}"
+symbol = " "
+disabled = true
 
-# Dark background (matching Ptyxis purple theme)
-base = "#11111b"           # Very dark (crust from catppuccin)
-crust = "#11111b"          # Very dark
+[c]
+format = "[ $symbol($version(-$name)) ]($style)"
+style = "bg:clang fg:text_light"
+symbol = " "
+version_format = "${raw}"
+disabled=true
+
+[rust]
+format ="[ $symbol$version ]($style)"
+style = "bg:rust fg:text_light"
+symbol = " "
+version_format = "${raw}"
+disabled=true
