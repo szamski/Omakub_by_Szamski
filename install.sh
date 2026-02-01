@@ -179,6 +179,9 @@ run_step "Installing build essentials" "source '$SIMPLE_PATH/system/libraries.sh
 # Install terminal tools
 run_step "Installing terminal tools" "source '$SIMPLE_PATH/apps/terminal/terminal-tools.sh'"
 
+# Install Neovim
+run_step "Installing Neovim" "source '$SIMPLE_PATH/apps/terminal/neovim.sh'"
+
 # Install mise
 run_step "Installing mise" "source '$SIMPLE_PATH/apps/terminal/mise.sh'"
 
@@ -300,7 +303,7 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
     dconf write /org/gnome/TextEditor/style-scheme \"'Adwaita'\"
 
     # Set dock favorites (Chrome, Ptyxis, Files, Slack, Spotify, VS Code)
-    gsettings set org.gnome.shell favorite-apps \"['google-chrome.desktop', 'org.gnome.Ptyxis.desktop', 'org.gnome.Nautilus.desktop', 'slack.desktop', 'spotify.desktop', 'code.desktop']\"
+    gsettings set org.gnome.shell favorite-apps \"['google-chrome.desktop', 'org.gnome.Ptyxis.desktop', 'org.gnome.Nautilus.desktop', 'slack.desktop', 'spotify_spotify.desktop', 'code.desktop']\"
 
     # Set default terminal to Ptyxis
     gsettings set org.gnome.desktop.default-applications.terminal exec 'ptyxis'
