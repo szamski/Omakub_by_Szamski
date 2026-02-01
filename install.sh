@@ -121,7 +121,7 @@ if command -v gum >/dev/null 2>&1; then
     "NordVPN" \
     "Tailscale" \
     "LocalSend" \
-    "Claude Desktop" \
+    "Claude Code CLI" \
     "OnlyOffice" || echo "")
 
   # Dev language selection
@@ -266,8 +266,8 @@ if [[ -n "$SELECTED_APPS" ]]; then
       "LocalSend")
         run_step "Installing LocalSend" "source '$SIMPLE_PATH/apps/desktop/localsend.sh'"
         ;;
-      "Claude Desktop")
-        run_step "Installing Claude Desktop" "source '$SIMPLE_PATH/apps/desktop/claude.sh'"
+      "Claude Code CLI")
+        run_step "Installing Claude Code CLI" "source '$SIMPLE_PATH/apps/desktop/claude.sh'"
         ;;
       "OnlyOffice")
         run_step "Installing OnlyOffice" "source '$SIMPLE_PATH/apps/desktop/onlyoffice.sh'"

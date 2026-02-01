@@ -1,36 +1,22 @@
 #!/bin/bash
 
-# Install Claude Desktop
-# AI assistant desktop application
+# Install Claude Code CLI
+# AI-powered coding assistant from Anthropic
 
 if command -v claude >/dev/null 2>&1; then
-  echo "Skip: Claude Desktop already installed"
+  echo "Skip: Claude Code already installed"
   exit 0
 fi
 
-echo "Installing Claude Desktop..."
+echo "Installing Claude Code CLI..."
 
-# Download and install Claude Desktop
-cd /tmp
-wget -q https://storage.googleapis.com/osprey-downloads-c02f6a0d-347c-492b-a752-3e0651722e97/nest-linux-x64/Claude-x86_64.AppImage -O claude.appimage
+# Install via npm (requires Node.js from mise)
+if command -v npm >/dev/null 2>&1; then
+  npm install -g @anthropic-ai/claude-code
+else
+  echo "Warning: npm not found. Install mise and Node.js first."
+  exit 1
+fi
 
-# Make it executable and move to /usr/local/bin
-chmod +x claude.appimage
-sudo mv claude.appimage /usr/local/bin/claude
-
-# Create desktop entry
-mkdir -p ~/.local/share/applications
-cat > ~/.local/share/applications/claude.desktop <<'EOF'
-[Desktop Entry]
-Name=Claude
-Comment=AI Assistant
-Exec=/usr/local/bin/claude
-Icon=claude
-Terminal=false
-Type=Application
-Categories=Office;Utility;
-EOF
-
-cd - >/dev/null
-
-echo "Done: Claude Desktop installed"
+echo "Done: Claude Code installed"
+echo "Run 'claude --help' to get started"
