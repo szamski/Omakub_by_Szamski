@@ -258,31 +258,19 @@ if [[ -n "$SELECTED_APPS" ]]; then
         run_step "Installing Dropbox" "source '$SIMPLE_PATH/apps/desktop/dropbox.sh'"
         ;;
       "NordVPN")
-        run_step "Installing NordVPN" "sh <(wget -qO - https://downloads.nordcdn.com/apps/linux/install.sh) -p nordvpn-gui"
+        run_step "Installing NordVPN" "source '$SIMPLE_PATH/apps/desktop/nordvpn.sh'"
         ;;
       "Tailscale")
-        run_step "Installing Tailscale" "curl -fsSL https://tailscale.com/install.sh | sh"
+        run_step "Installing Tailscale" "source '$SIMPLE_PATH/apps/desktop/tailscale.sh'"
         ;;
       "LocalSend")
-        run_step "Installing LocalSend" "
-          cd /tmp
-          wget -q https://github.com/localsend/localsend/releases/download/v1.17.0/LocalSend-1.17.0-linux-x86-64.deb
-          sudo dpkg -i LocalSend-1.17.0-linux-x86-64.deb || sudo apt-get install -f -y
-          rm LocalSend-1.17.0-linux-x86-64.deb
-          cd - >/dev/null
-        "
+        run_step "Installing LocalSend" "source '$SIMPLE_PATH/apps/desktop/localsend.sh'"
         ;;
       "Claude Desktop")
-        run_step "Installing Claude Desktop" "curl -fsSL https://claude.ai/install.sh | bash"
+        run_step "Installing Claude Desktop" "source '$SIMPLE_PATH/apps/desktop/claude.sh'"
         ;;
       "OnlyOffice")
-        run_step "Installing OnlyOffice" "
-          cd /tmp
-          wget -q https://github.com/ONLYOFFICE/DesktopEditors/releases/latest/download/onlyoffice-desktopeditors_amd64.deb
-          sudo dpkg -i onlyoffice-desktopeditors_amd64.deb || sudo apt-get install -f -y
-          rm onlyoffice-desktopeditors_amd64.deb
-          cd - >/dev/null
-        "
+        run_step "Installing OnlyOffice" "source '$SIMPLE_PATH/apps/desktop/onlyoffice.sh'"
         ;;
     esac
   done
