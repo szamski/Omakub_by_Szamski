@@ -166,17 +166,17 @@ disabled = false
 show_notifications = true
 min_time_to_notify = 45000
 
-# Custom Ptyxis Dark palette - vibrant colors for dark purple background
+# Custom Ptyxis Dark palette - balanced colors for dark purple background
 [palettes.ptyxis_dark]
-# Bright, vibrant colors for better contrast
-pink = "#ff6ec7"           # Hot pink for username
-mauve = "#c49dff"          # Light purple for time
-teal = "#5ce6d4"           # Bright cyan for directory
-peach = "#ffb454"          # Orange for git
-green = "#7de88e"          # Bright green for languages
-sapphire = "#6ec9ff"       # Bright blue for conda/docker
-red = "#ff6b7f"            # Bright red for errors
+# Balanced colors with good contrast but not overly bright
+pink = "#f5c2e7"           # Soft pink for username (more pastel)
+mauve = "#cba6f7"          # Purple for time
+teal = "#94e2d5"           # Teal/cyan for directory
+peach = "#f9e2af"          # Soft yellow for git (not orange!)
+green = "#a6e3a1"          # Soft green for languages
+sapphire = "#89dceb"       # Sky blue for conda/docker
+red = "#f38ba8"            # Soft red for errors
 
 # Dark background (matching Ptyxis purple theme)
-base = "#1a0d2e"           # Very dark purple
-crust = "#0f0519"          # Almost black purple
+base = "#11111b"           # Very dark (crust from catppuccin)
+crust = "#11111b"          # Very dark
