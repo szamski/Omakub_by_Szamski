@@ -69,7 +69,8 @@ Select languages to install via `mise`:
 ## GNOME Configuration
 
 Automatically configured:
-- **Terminal**: Ptyxis with CaskaydiaCove Nerd Font Mono 10
+- **Terminal**: Ptyxis with CaskaydiaCove Nerd Font Mono 11, block cursor, Vs Code palette
+- **Text Editor**: GNOME Text Editor with line numbers, current line highlight, and minimap
 - **Theme**: Yaru Dark
 - **Dock**: Chrome, Ptyxis, Files, Slack, Spotify, VS Code
 - **Firefox**: Removed (snap version from Ubuntu 25.10)

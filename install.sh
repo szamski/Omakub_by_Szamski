@@ -284,8 +284,20 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
     gsettings set org.gnome.desktop.interface gtk-theme 'Yaru-dark'
 
     # Configure Ptyxis terminal
-    dconf write /org/gnome/Ptyxis/font-name \"'CaskaydiaCove Nerd Font Mono 10'\"
+    dconf write /org/gnome/Ptyxis/font-name \"'CaskaydiaCove Nerd Font Mono 11'\"
     dconf write /org/gnome/Ptyxis/use-system-font false
+    dconf write /org/gnome/Ptyxis/cursor-shape \"'block'\"
+    dconf write /org/gnome/Ptyxis/cursor-blink-mode \"'system'\"
+    dconf write /org/gnome/Ptyxis/restore-session false
+    dconf write /org/gnome/Ptyxis/interface-style \"'dark'\"
+
+    # Configure GNOME Text Editor
+    dconf write /org/gnome/TextEditor/custom-font \"'CaskaydiaCove Nerd Font Mono 11'\"
+    dconf write /org/gnome/TextEditor/use-system-font false
+    dconf write /org/gnome/TextEditor/show-line-numbers true
+    dconf write /org/gnome/TextEditor/highlight-current-line true
+    dconf write /org/gnome/TextEditor/show-map true
+    dconf write /org/gnome/TextEditor/style-scheme \"'Adwaita'\"
 
     # Set dock favorites (Chrome, Ptyxis, Files, Slack, Spotify, VS Code)
     gsettings set org.gnome.shell favorite-apps \"['google-chrome.desktop', 'org.gnome.Ptyxis.desktop', 'org.gnome.Nautilus.desktop', 'slack.desktop', 'spotify.desktop', 'code.desktop']\"
