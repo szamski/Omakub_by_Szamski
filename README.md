@@ -51,7 +51,7 @@ Choose from interactive menu:
 - NordVPN
 - Tailscale
 - LocalSend
-- Claude Desktop
+- Claude Code CLI
 - OnlyOffice
 
 ### Programming Languages

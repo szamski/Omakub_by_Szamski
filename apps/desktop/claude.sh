@@ -10,13 +10,8 @@ fi
 
 echo "Installing Claude Code CLI..."
 
-# Install via npm (requires Node.js from mise)
-if command -v npm >/dev/null 2>&1; then
-  npm install -g @anthropic-ai/claude-code
-else
-  echo "Warning: npm not found. Install mise and Node.js first."
-  exit 1
-fi
+# Install via official installer
+curl -fsSL https://claude.ai/install.sh | bash
 
 echo "Done: Claude Code installed"
 echo "Run 'claude --help' to get started"
