@@ -1,141 +1,245 @@
-# Omakub_by_Szamski
+# Omakub_by_Szamski - Simple Edition
 
-My Ubuntu setup, inspired by Omakub but tailored to my workflow (Ghostty, Starship, GNOME, Papirus). It installs the tools I actually use and keeps the rest of the system out of the way.
+A simplified, streamlined Ubuntu 25.04+ development environment installer.
 
-## Requirements
+## Features
 
-- Ubuntu 22.04+
-- GNOME (optional, only for desktop tweaks)
+- 🚀 **Fast & Simple** - No complex configuration, just the essentials
+- 🎨 **Interactive Menu** - Choose what you want using beautiful `gum` UI
+- 🐍 **Python & Node** - Pre-configured with latest versions via `mise`
+- 🛠️ **Essential Tools** - Terminal tools, dev languages, and desktop apps
+- 🎯 **GNOME Ready** - Auto-configured Ptyxis terminal, dock, and dark theme
+- ⚡ **Dry-Run Mode** - Test installation without making changes
 
-## Install
-
-```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/rework/boot.sh)
-```
-
-### Dry run (no changes)
+## Quick Install
 
 ```bash
-OMAKUB_SZAMSKI_DRY_RUN=1 bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/rework/boot.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/simple-installer/boot.sh)
 ```
 
-Local dry run:
+## What Gets Installed
+
+### Core Tools (Always Installed)
+
+**Terminal Tools:**
+- `mise` - Runtime version manager (with Python & Node.js latest)
+- `fzf`, `ripgrep`, `bat`, `eza`, `zoxide` - Modern CLI tools
+- `starship` - Beautiful shell prompt
+- `fastfetch` - System information display
+- `gh` - GitHub CLI
+- `wl-clipboard` - Wayland clipboard utilities
+- Nerd Fonts (CaskaydiaCove)
+
+**System:**
+- Build essentials and development libraries
+- Dark theme (Yaru-dark)
+- Configured bash with custom aliases and functions
+
+### Optional Desktop Applications
+
+Choose from interactive menu:
+- Google Chrome
+- VS Code
+- 1Password
+- Slack
+- Spotify
+- Discord
+- OBS Studio
+- VirtualBox
+- Steam
+- Dropbox
+- NordVPN
+- Tailscale
+- LocalSend
+- Claude Desktop
+- OnlyOffice
+
+### Programming Languages
+
+Select languages to install via `mise`:
+- **Python** (always installed - latest version)
+- **Node.js** (always installed - latest version)
+- Ruby (with Rails)
+- Go
+- PHP (with Composer)
+- Elixir (with Erlang)
+- Rust
+- Java
+
+## GNOME Configuration
+
+Automatically configured:
+- **Terminal**: Ptyxis with CaskaydiaCove Nerd Font Mono 10
+- **Theme**: Yaru Dark
+- **Dock**: Chrome, Ptyxis, Files, Slack, Spotify, VS Code
+- **Firefox**: Removed (snap version from Ubuntu 25.10)
+
+## File Structure
+
+```
+Omakub_by_Szamski/
+├── boot.sh              # Remote bootstrap script
+├── install.sh           # Main installer (supports --dry-run)
+├── README.md            # This file
+│
+├── apps/                # Application installers
+│   ├── terminal/        # Terminal/CLI tools
+│   │   ├── gum.sh
+│   │   ├── mise.sh
+│   │   ├── starship.sh
+│   │   ├── fastfetch.sh
+│   │   ├── github-cli.sh
+│   │   ├── nerd-fonts.sh
+│   │   ├── wl-clipboard.sh
+│   │   └── terminal-tools.sh
+│   └── desktop/         # Desktop applications
+│       ├── chrome.sh
+│       ├── vscode.sh
+│       ├── 1password.sh
+│       ├── slack.sh
+│       ├── spotify.sh
+│       ├── discord.sh
+│       ├── obs-studio.sh
+│       ├── virtualbox.sh
+│       ├── steam.sh
+│       └── dropbox.sh
+│
+├── configs/             # Configuration files
+│   ├── bash/
+│   │   ├── bashrc
+│   │   ├── inputrc
+│   │   └── defaults/    # Aliases, functions, prompt, etc.
+│   ├── starship.toml
+│   └── fastfetch.jsonc
+│
+├── system/              # System configuration
+│   ├── libraries.sh     # Build essentials & libraries
+│   └── languages.sh     # Programming language installer
+│
+└── lib/                 # Shared utilities
+    └── utils.sh         # Helper functions
+```
+
+## Usage
+
+### Install from GitHub
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/simple-installer/boot.sh)
+```
+
+### Install from Local Clone
+
+```bash
+git clone https://github.com/szamski/Omakub_by_Szamski.git
+cd Omakub_by_Szamski
+git checkout simple-installer
+./install.sh
+```
+
+### Dry-Run Mode
+
+Preview what will be installed without making any changes:
 
 ```bash
 ./install.sh --dry-run
 ```
 
-Use a different repo or branch:
+## Post-Installation
+
+1. **Reload terminal:**
+   ```bash
+   source ~/.bashrc
+   ```
+
+2. **Log out and back in** (for GNOME extensions to load)
+
+3. **Verify installation:**
+   ```bash
+   mise --version
+   python --version
+   node --version
+   starship --version
+   ```
+
+## Customization
+
+### Bash Configuration
+
+Edit these files in `~/.local/share/omakub-simple/configs/bash/defaults/`:
+- `aliases` - Custom command aliases
+- `functions` - Bash functions
+- `prompt` - Shell prompt customization
+- `shell` - Shell options
+- `rc` - Sourced on shell start
+- `init` - Initialization script
+
+### Starship Prompt
+
+Edit `~/.config/starship.toml`
+
+### Fastfetch
+
+Edit `~/.config/fastfetch/config.jsonc`
+
+## Why Simple Edition?
+
+**This Edition:**
+- ✅ Clean, organized structure
+- ✅ Single branch, simple installation
+- ✅ Dry-run mode supported
+- ✅ Focus on Ubuntu 25.04+
+- ✅ Auto Python & Node.js
+- ✅ Ptyxis terminal integration
+- ✅ No theme complexity
+- ✅ Faster installation
+
+**vs Full Omakub:**
+- Multiple theme support
+- GNOME extensions system
+- Ghostty terminal
+- More customization options
+- Desktop-specific optimizations
+
+## Requirements
+
+- Ubuntu 25.04+ (or compatible)
+- GNOME Desktop (recommended)
+- Internet connection
+- Sudo access
+
+## Troubleshooting
+
+### Mise not working
 
 ```bash
-OMAKUB_SZAMSKI_REPO="https://github.com/szamski/Omakub_by_Szamski.git" \
-OMAKUB_SZAMSKI_REF="master" \
-bash <(curl -fsSL https://raw.githubusercontent.com/szamski/Omakub_by_Szamski/master/boot.sh)
+# Add to ~/.bashrc if missing:
+eval "$(mise activate bash)"
 ```
 
-## What it installs
-
-### Terminal (always)
-
-- Ghostty
-- Starship
-- Zoxide
-- Neovim + LazyVim
-- Fastfetch
-- btop
-- Docker + Compose
-- mise
-- fzf, ripgrep, bat, eza, fd-find, plocate, apache2-utils
-- lazygit, lazydocker
-
-### Desktop (optional, via gum)
-
-- VSCodium (.deb, GitHub releases)
-- Discord (snap or .deb)
-- Slack (snap)
-- Spotify (snap or .deb)
-- Riff (Spotify GTK, Flatpak)
-- LibreOffice
-- LocalSend (Flatpak)
-- Google Chrome or Chromium (Flatpak + Google Sync)
-- 1Password
-- Dropbox
-
-### GNOME extras
-
-- Papirus icon theme with color variants
-- Extensions: Just Perfection, Blur My Shell, Alphabetical App Grid, TopHat
-- Hotkeys and GNOME settings
-
-### Themes
-
-Themes apply to GNOME (GTK + wallpaper), Ghostty, Neovim, btop, and Starship.
-
-Change theme (GTK app):
+### Fonts not showing
 
 ```bash
-omakub-szamski theme
+# Refresh font cache:
+fc-cache -fv
 ```
 
-### VPN (optional)
+### GNOME settings not applied
 
-- Tailscale
-- NordVPN
-
-### Laptop
-
-- TLP with laptop-friendly defaults
-
-## Configs and backups
-
-All settings live in `configs/` and are copied into `~/.config`. Before overwriting, the installer creates a backup in `~/.config-backup-YYYYMMDD_HHMMSS/`.
-
-## Post-install
-
-### GNOME
-
-Log out and back in so GNOME extensions apply.
-
-### Tailscale
-
+Log out and back in, or run:
 ```bash
-sudo tailscale up
+gnome-shell --replace &
 ```
 
-### NordVPN
+## Contributing
 
-```bash
-nordvpn login
-nordvpn set technology nordlynx
-nordvpn set killswitch on
-```
+Contributions welcome! This is a simplified, standalone edition.
 
-### Docker
+## License
 
-Log out and back in so the `docker` group takes effect.
+MIT License - See main repository for details
 
-## Helper command
+## Credits
 
-After install you get `omakub-szamski`:
-
-```bash
-omakub-szamski help
-omakub-szamski update
-omakub-szamski reinstall
-omakub-szamski backup
-omakub-szamski list-backups
-omakub-szamski restore ~/.config-backup-YYYYMMDD_HHMMSS
-```
-
-## Project layout
-
-```
-Omakub_by_Szamski/
-├── boot.sh
-├── install.sh
-├── install/
-├── configs/
-├── themes/
-├── defaults/
-└── bin/
-```
+Based on [Omakub](https://github.com/basecamp/omakub) by Basecamp
+Simplified and customized by [@szamski](https://github.com/szamski)
